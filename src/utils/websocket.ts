@@ -15,7 +15,7 @@ function prepareWebsocket() {
   };
 
   if (window["enmity_debug"] === true) {
-    connectWebsocket("192.168.1.150:9090");
+    connectWebsocket(`${window["enmity_debug_ip"]}:9090`);
   }
 }
 
