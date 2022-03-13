@@ -13,7 +13,7 @@ export const section = {
   id: "enmity",
   type: 1,
   name: "Enmity",
-  icon: "https://cdn.discordapp.com/icons/811255666990907402/912861e37f0efa5c77729592ea8f7b8f.png?size=256"
+  icon: "https://files.enmity.app/icon.png"
 };
 
 Patcher.after(Commands, "getBuiltInCommands", (_, args, res) => {
