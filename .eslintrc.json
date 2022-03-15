@@ -104,7 +104,7 @@
       "objects": "always-multiline",
       "imports": "always-multiline",
       "exports": "always-multiline",
-      "functions": "never",
+      "functions": "always-multiline",
       "enums": "always-multiline"
     }],
     "@typescript-eslint/comma-spacing": ["error"],
@@ -126,6 +126,26 @@
       {
         "selector": "variable",
         "format": ["camelCase", "PascalCase", "UPPER_CASE"]
+      },
+      {
+        "selector": "interface",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "enum",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "enumMember",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "property",
+        "format": ["camelCase", "PascalCase", "snake_case"]
+      },
+      {
+        "selector": "typeAlias",
+        "format": ["camelCase", "PascalCase"]
       }
     ],
     "@typescript-eslint/no-array-constructor": ["error"],
