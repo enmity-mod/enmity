@@ -18,6 +18,7 @@
   "plugins": [
     "@typescript-eslint"
   ],
+  "ignorePatterns": ["dist/", "rollup.config.ts"],
   "rules": {
     /* Suggestions */
     "arrow-body-style": ["error", "as-needed"],
@@ -75,7 +76,10 @@
     "no-duplicate-imports": "off",
     "no-extra-semi": "off",
     "no-multi-spaces": "error",
-    "no-multiple-empty-lines": "error",
+    "no-multiple-empty-lines": ["error", {
+      "max": 2,
+      "maxEOF": 0
+    }],
     "no-trailing-spaces": "error",
     "no-use-before-define": "off",
     "no-useless-constructor": "off",
@@ -84,6 +88,7 @@
     "object-property-newline": ["error", {
       "allowAllPropertiesOnSameLine": true
     }],
+    "prefer-rest-params": "off",
     "quotes": "off",
     "rest-spread-spacing": ["error", "never"],
     "semi": "off",
@@ -98,6 +103,7 @@
     "@typescript-eslint/array-type": ["error", {
       "default": "array"
     }],
+    "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/brace-style": ["error"],
     "@typescript-eslint/comma-dangle": ["error", {
       "arrays": "always-multiline",
@@ -125,7 +131,8 @@
       },
       {
         "selector": "variable",
-        "format": ["camelCase", "PascalCase", "UPPER_CASE"]
+        "format": ["camelCase", "PascalCase", "UPPER_CASE"],
+        "leadingUnderscore": "allowSingleOrDouble"
       },
       {
         "selector": "interface",
@@ -141,17 +148,22 @@
       },
       {
         "selector": "property",
-        "format": ["camelCase", "PascalCase", "snake_case"]
+        "format": ["camelCase", "PascalCase", "snake_case"],
+        "leadingUnderscore": "allowSingleOrDouble"
       },
       {
         "selector": "typeAlias",
         "format": ["camelCase", "PascalCase"]
+      },
+      {
+        "selector": "parameter",
+        "format": ["camelCase"],
+        "leadingUnderscore": "allow"
       }
     ],
     "@typescript-eslint/no-array-constructor": ["error"],
     "@typescript-eslint/no-dupe-class-members": ["error"],
     "@typescript-eslint/no-duplicate-imports": ["error"],
-    "@typescript-eslint/no-dynamic-delete": ["error"],
     "@typescript-eslint/no-extra-semi": ["error"],
     "@typescript-eslint/no-require-imports": ["error"],
     "@typescript-eslint/no-use-before-define": ["error"],
