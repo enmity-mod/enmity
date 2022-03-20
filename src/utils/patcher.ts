@@ -11,9 +11,6 @@ interface Patch {
   patches: Patcher[];
 }
 
-interface Unpatchable {
-  unpatch: () => void;
-}
 interface Patcher {
   caller: string;
   type: Type;
@@ -146,25 +143,16 @@ function patch(caller: string, mdl: Mdl, func: string, callback: PatchCallback, 
   return patch.unpatch;
 }
 
-function before(caller: string, mdl: Mdl, func: string, callback: PatchCallback): Unpatchable {
-  const unpatch = patch(caller, mdl, func, callback, Type.Before);
-  return {
-    unpatch,
-  };
+function before(caller: string, mdl: Mdl, func: string, callback: PatchCallback): () => void {
+  return patch(caller, mdl, func, callback, Type.Before);
 }
 
-function instead(caller: string, mdl: Mdl, func: string, callback: PatchCallback): Unpatchable {
-  const unpatch = patch(caller, mdl, func, callback, Type.Instead);
-  return {
-    unpatch,
-  };
+function instead(caller: string, mdl: Mdl, func: string, callback: PatchCallback): () => void {
+  return patch(caller, mdl, func, callback, Type.Instead);
 }
 
-function after(caller: string, mdl: Mdl, func: string, callback: PatchCallback): Unpatchable {
-  const unpatch = patch(caller, mdl, func, callback, Type.After);
-  return {
-    unpatch,
-  };
+function after(caller: string, mdl: Mdl, func: string, callback: PatchCallback): () => void {
+  return patch(caller, mdl, func, callback, Type.After);
 }
 
 function create(name: string): Record<string, any> {
