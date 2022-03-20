@@ -1,11 +1,7 @@
-import { patchNavigator } from "./navigator";
-import { patchSettings } from "./settings";
+// import { patchNavigator } from "./navigator";
+import { patchSettings } from './settings';
 
-function applyPatches() {
-  patchNavigator();
+export function applyPatches(): void {
+  // patchNavigator();
   patchSettings();
-}
-
-export {
-  applyPatches
 }

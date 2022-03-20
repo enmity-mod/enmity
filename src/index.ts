@@ -1,8 +1,8 @@
-import { prepareApi } from "./api";
-import { applyPatches } from "./patches";
-import { prepareWebsocket } from "./utils/websocket";
-import { prepareCommands } from "./commands";
-import "./utils/themes";
+import './utils/themes';
+import { applyPatches } from './patches';
+import { prepareApi } from './api';
+import { prepareCommands } from './commands';
+import { prepareWebsocket } from './utils/websocket';
 
 try {
   prepareApi();

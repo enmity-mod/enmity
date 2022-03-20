@@ -1,21 +1,15 @@
-import { getModule } from "../utils/modules";
+import { getModule } from '../utils/modules';
 
 const storageModule = getModule(m => m.getItem);
 
-async function getItem(name) {
+export async function getItem(name): Promise<string | null> {
   return storageModule.getItem(name);
 }
 
-async function setItem(name, value) {
+export async function setItem(name, value): Promise<string | null> {
   return storageModule.setItem(name, value);
 }
 
-async function removeItem(name: string) {
+export async function removeItem(name: string): Promise<void> {
   return storageModule.removeItem(name);
-}
-
-export {
-  getItem,
-  setItem,
-  removeItem
 }

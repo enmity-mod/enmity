@@ -1,45 +1,40 @@
-import { getModule } from "./modules";
+import { getModule } from './modules';
 
 const assetsModule = getModule(m => m.registerAsset);
 
-function getAssetByName(name: string) {
+export function getAssetByName(name: string): Record<string, any> {
   let asset;
 
   let counter = 1;
-  while(true) {
+  while (true) {
     asset = assetsModule.getAssetByID(counter);
 
     if (asset === undefined) break;
     if (asset.name === name) break;
-    counter++;
+    counter += 1;
   }
 
   return {
     id: counter,
-    ...asset
+    ...asset,
   };
 }
 
-function getAssets(): Record<string, string>[] {
+export function getAssets(): Record<string, string>[] {
   const assets = [];
 
   let counter = 1;
-  while(true) {
+  while (true) {
     const asset = assetsModule.getAssetByID(counter);
     if (asset === undefined) break;
 
     assets.push({
       id: counter,
-      ...asset
+      ...asset,
     });
-    
-    counter++;
+
+    counter += 1;
   }
 
   return assets;
-}
-
-export {
-  getAssetByName,
-  getAssets
 }

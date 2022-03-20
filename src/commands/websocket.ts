@@ -1,36 +1,38 @@
-import { ApplicationCommandOptionType, ApplicationCommandInputType, ApplicationCommandType, Command } from "enmity-api/commands";
-import { sendReply } from "../api/clyde";
-import { section } from "../api/commands";
-import { connectWebsocket, sendMessage } from "../utils/websocket";
+import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from 'enmity-api/commands';
+import { connectWebsocket, sendMessage } from '../utils/websocket';
+import { section } from '../api/commands';
+import { sendReply } from '../api/clyde';
 
 /**
  * Connect to the websocket server
  */
 const connect: Command = {
-  id: "websocket-devtools",
+  id: 'websocket-devtools',
   applicationId: section.id,
-  
-  name: "websocket",
-  displayName: "websocket",
 
-  description: "Connect to the websocket server",
-  displayDescription: "Connect to the websocket server",
+  name: 'websocket',
+  displayName: 'websocket',
+
+  description: 'Connect to the websocket server',
+  displayDescription: 'Connect to the websocket server',
 
   type: ApplicationCommandType.Chat,
   inputType: ApplicationCommandInputType.BuiltIn,
 
-  options: [{
-    name: "host",
-    displayName: "host",
+  options: [
+    {
+      name: 'host',
+      displayName: 'host',
 
-    description: "Host of the debugger",
-    displayDescription: "Host of the debugger",
-    
-    type: ApplicationCommandOptionType.String,
-    required: true,
-  }],
+      description: 'Host of the debugger',
+      displayDescription: 'Host of the debugger',
 
-  execute: (args) => {
+      type: ApplicationCommandOptionType.String,
+      required: true,
+    },
+  ],
+
+  execute: args => {
     const host = args[0].value;
     connectWebsocket(host);
   },
@@ -40,11 +42,11 @@ const connect: Command = {
  * Dump Discord's modules
  */
 const dump: Command = {
-  id: "dump-command",
+  id: 'dump-command',
   applicationId: section.id,
 
-  name: "dump",
-  displayName: "dump",
+  name: 'dump',
+  displayName: 'dump',
 
   description: "Dump Discord's modules",
   displayDescription: "Dump Discord's modules",
@@ -52,16 +54,16 @@ const dump: Command = {
   type: ApplicationCommandType.Chat,
   inputType: ApplicationCommandInputType.BuiltIn,
 
-  execute: function (args, message) {
+  execute: function(args, message) {
     const channeld = message.channel.id;
-    const modules = window["modules"];
+    const modules = window['modules'];
 
-    function parseValue(value) {
-      if (typeof value === "function") {
+    function parseValue(value): any {
+      if (typeof value === 'function') {
         return value.toString();
       } else if (Array.isArray(value)) {
         return value.map(parseValue);
-      } else if (typeof value === "object") {
+      } else if (typeof value === 'object') {
         const output = {};
 
         for (const key in value) {
@@ -87,18 +89,18 @@ const dump: Command = {
           dumpedModule[key] = parseValue(exports[key]);
         }
 
-        sendMessage(JSON.stringify(dumpedModule, null, "\t"));
+        sendMessage(JSON.stringify(dumpedModule, null, '\t'));
       } catch (err) {
         console.log(`Couldn't dump module ${m}`);
         console.log(err);
       }
     }
 
-    sendReply(channeld, "Modules has been dumped.");
-  }
+    sendReply(channeld, 'Modules has been dumped.');
+  },
 };
 
 export default [
   connect,
-  dump
+  dump,
 ];

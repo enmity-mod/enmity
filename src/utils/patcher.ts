@@ -1,32 +1,35 @@
-const patches: Patch[] = [];
+import { Mdl, PatchCallback } from 'enmity-api/patcher';
 
-type mdl = Function | object;
+const patches: Patch[] = [];
 
 interface Patch {
   caller: string;
-  mdl: mdl;
+  mdl: Mdl;
   func: string;
   original: Function;
-  unpatch: Function;
+  unpatch: () => void;
   patches: Patcher[];
-};
+}
 
+interface Unpatchable {
+  unpatch: () => void;
+}
 interface Patcher {
   caller: string;
   type: Type;
   id: number;
-  callback: Function;
-  unpatch: Function;
-};
+  callback: PatchCallback;
+  unpatch: () => void;
+}
 
 enum Type {
-  before = "before",
-  instead = "instead",
-  after = "after",
-};
+  Before = 'before',
+  Instead = 'instead',
+  After = 'after',
+}
 
-function getPatchesByCaller(id: string) {
-  const _patches = [];
+function getPatchesByCaller(id: string): Patcher[] {
+  const _patches: Patcher[] = [];
 
   for (const patch of patches) {
     for (const child of patch.patches) {
@@ -37,7 +40,7 @@ function getPatchesByCaller(id: string) {
   return _patches;
 }
 
-function unpatchAll(caller: string) {
+function unpatchAll(caller: string): void {
   const patches = getPatchesByCaller(caller);
   if (!patches.length) return;
 
@@ -45,47 +48,49 @@ function unpatchAll(caller: string) {
 }
 
 function override(patch: Patch) {
-  return function() {
+  return function(): void {
     if (!patch.patches.length) return patch.original.apply(this, arguments);
 
     let res;
     let args: any = arguments;
 
-    for (const before of patch.patches.filter(p => p.type === Type.before)) {
+    for (const before of patch.patches.filter(p => p.type === Type.Before)) {
       try {
         const tempArgs = before.callback(this, args, patch.original.bind(this));
         if (Array.isArray(tempArgs)) args = tempArgs;
-      } catch(error) {
+      } catch (error) {
         console.error(`Could not fire before patch for ${patch.func} of ${before.caller}`);
         console.error(error);
       }
     }
 
-    const insteads = patch.patches.filter(p => p.type === Type.instead);
+    const insteads = patch.patches.filter(p => p.type === Type.Instead);
     if (!insteads.length) res = patch.original.apply(this, args);
 
-    else for (const instead of insteads) {
-      try {
-        const ret = instead.callback(this, args, patch.original.bind(this));
-        if (ret !== undefined) res = ret;
-      } catch(error) {
-        console.error(`Could not fire instead patch for ${patch.func} of ${instead.caller}`);
-        console.error(error);
+    else {
+      for (const instead of insteads) {
+        try {
+          const ret = instead.callback(this, args, patch.original.bind(this));
+          if (ret !== undefined) res = ret;
+        } catch (error) {
+          console.error(`Could not fire instead patch for ${patch.func} of ${instead.caller}`);
+          console.error(error);
+        }
       }
     }
 
-    for (const after of patch.patches.filter(p => p.type === Type.after)) {
+    for (const after of patch.patches.filter(p => p.type === Type.After)) {
       try {
-        const ret = after.callback(this, args, res, ret => (res = ret));
+        const ret = after.callback(this, args, res);
         if (ret !== undefined) res = ret;
-      } catch(error) {
+      } catch (error) {
         console.error(`Could not fire after patch for ${patch.func} of ${after.caller}`);
         console.error(error);
       }
     }
 
     return res;
-  }
+  };
 }
 
 function push([caller, mdl, func]): Patch {
@@ -98,13 +103,13 @@ function push([caller, mdl, func]): Patch {
       patch.mdl[patch.func] = patch.original;
       patch.patches = [];
     },
-    patches: []
+    patches: [],
   };
 
   mdl[func] = override(patch);
   Object.assign(mdl[func], patch.original, {
     toString: () => patch.original.toString(),
-    '__original': patch.original
+    '__original': patch.original,
   });
 
   patches.push(patch);
@@ -112,13 +117,13 @@ function push([caller, mdl, func]): Patch {
 }
 
 function get(caller, mdl, func): Patch {
-  const patch = patches.find(p => p.mdl == mdl && p.func == func);
+  const patch = patches.find(p => p.mdl === mdl && p.func === func);
   if (patch) return patch;
 
   return push([caller, mdl, func]);
 }
 
-function patch(caller: string, mdl: mdl, func: string, callback: Function, type = Type.after) {
+function patch(caller: string, mdl: Mdl, func: string, callback: PatchCallback, type = Type.After): () => void {
   const _patches = get(caller, mdl, func);
 
   const patch: Patcher = {
@@ -134,33 +139,42 @@ function patch(caller: string, mdl: mdl, func: string, callback: Function, type 
         patches[index].unpatch();
         patches.splice(index, 1);
       }
-    }
-  }
+    },
+  };
 
   _patches.patches.push(patch);
   return patch.unpatch;
 }
 
-function create(name: string) {
+function before(caller: string, mdl: Mdl, func: string, callback: PatchCallback): Unpatchable {
+  const unpatch = patch(caller, mdl, func, callback, Type.Before);
   return {
-    getPatchesByCaller: getPatchesByCaller,
-    before: (...args) => before(name, ...args),
-    instead: (...args) => instead(name, ...args),
-    after: (...args) => after(name, ...args),
-    unpatchAll: () => unpatchAll(name)
+    unpatch,
   };
 }
 
-function before(caller: string, mdl: mdl, func: string, callback: Function) {
-  return patch(caller, mdl, func, callback, Type.before);
+function instead(caller: string, mdl: Mdl, func: string, callback: PatchCallback): Unpatchable {
+  const unpatch = patch(caller, mdl, func, callback, Type.Instead);
+  return {
+    unpatch,
+  };
 }
 
-function instead(caller: string, mdl: mdl, func: string, callback: Function) {
-  return patch(caller, mdl, func, callback, Type.instead);
+function after(caller: string, mdl: Mdl, func: string, callback: PatchCallback): Unpatchable {
+  const unpatch = patch(caller, mdl, func, callback, Type.After);
+  return {
+    unpatch,
+  };
 }
 
-function after(caller: string, mdl: mdl, func: string, callback: Function) {
-  return patch(caller, mdl, func, callback, Type.after);
+function create(name: string): Record<string, any> {
+  return {
+    getPatchesByCaller: getPatchesByCaller,
+    before: (mdl: Mdl, func: string, callback: PatchCallback) => before(name, mdl, func, callback),
+    instead: (mdl: Mdl, func: string, callback: PatchCallback) => instead(name, mdl, func, callback),
+    after: (mdl: Mdl, func: string, callback: PatchCallback) => after(name, mdl, func, callback),
+    unpatchAll: () => unpatchAll(name),
+  };
 }
 
 export {
@@ -168,5 +182,5 @@ export {
   before,
   instead,
   after,
-  unpatchAll
+  unpatchAll,
 };

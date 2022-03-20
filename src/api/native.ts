@@ -1,32 +1,23 @@
-import { getModule } from "../utils/modules";
+import { getModule } from '../utils/modules';
 
 const nativeModules = getModule(m => m.NativeModules).NativeModules;
 
-function reloadDiscord() {
+export function reloadDiscord(): void {
   nativeModules.BundleUpdaterManager.reload();
 }
 
-function getVersion() {
+export function getVersion(): string {
   return nativeModules.InfoDictionaryManager.Version;
 }
 
-function getBuild() {
+export function getBuild(): string {
   return nativeModules.InfoDictionaryManager.Build;
 }
 
-function getDevice() {
+export function getDevice(): string {
   return nativeModules.DCDDeviceManager.device;
 }
 
-function getSystemVersion() {
+export function getSystemVersion(): string {
   return nativeModules.DCDDeviceManager.systemVersion;
-}
-
-export {
-  reloadDiscord,
-
-  getVersion,
-  getBuild,
-  getDevice,
-  getSystemVersion
 }

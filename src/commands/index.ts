@@ -1,14 +1,15 @@
 
-import { registerCommands } from "../api/commands";
-import plugins from "./plugins";
-import websocket from "./websocket";
-import utils from "./utils";
-import themes from "./themes";
+import { registerCommands } from '../api/commands';
+
+import plugins from './plugins';
+import themes from './themes';
+import utils from './utils';
+import websocket from './websocket';
 
 /**
  * Register the built-in Enmity commands
  */
-function prepareCommands() {
+function prepareCommands(): void {
   const commands = [
     ...plugins,
     ...websocket,
@@ -16,9 +17,9 @@ function prepareCommands() {
     ...themes,
   ];
 
-  registerCommands("enmity", commands);
+  registerCommands('enmity', commands);
 }
 
 export {
-  prepareCommands
+  prepareCommands,
 };
