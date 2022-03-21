@@ -14,10 +14,10 @@
   "bugs": {
     "url": "https://github.com/enmity-mod/enmity/issues"
   },
-  "homepage": "https:/enmity.app",
+  "homepage": "https://enmity.app",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.1.1",
+    "@rollup/plugin-replace": "^4.0.0",
     "@types/node": "^17.0.5",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
