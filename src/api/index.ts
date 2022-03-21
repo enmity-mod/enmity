@@ -22,7 +22,7 @@ export function prepareApi(): void {
     'getModuleByIndex': getModuleByIndex,
     'getAssetByName': getAssetByName,
     'getAssets': getAssets,
-    'version': 'ENMITY_VERSION_DO_NOT_CHANGE_THIS_STRING_OR_I_WILL_DESTROY_YOU',
+    'version': '__VERSION__',
 
     'themer': {
       getTheme,
