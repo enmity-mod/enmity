@@ -3,6 +3,9 @@ import { create } from '../utils/patcher';
 import { reloadDiscord } from '../api/native';
 import { showDialog } from '../api/dialog';
 
+import { FormArrow, FormDivider, FormLabel, FormRow, FormSection, React, Text, View } from '../api/react';
+import { getModuleByProps } from 'enmity-api/module';
+
 export function patchSettings(): void {
   const Patcher = create('SettingsPatch');
 
@@ -20,22 +23,13 @@ export function patchSettings(): void {
     Patcher.after(UserSettingsOverview.prototype, 'render', (_, args, res) => {
       const children = res.props.children;
       const Messages = getModule(x => x.default?.Messages).default.Messages;
-      const React = getModule(m => m.createElement, true);
       const nitroIndex = children.findIndex(x => x.props.title === Messages['PREMIUM_SETTINGS']);
       const nitro = children[nitroIndex];
 
-      const { View, Text } = getModule(m => m.View);
-      const { FormSection, FormRow, FormDivider, FormArrow, FormLabel } = getModule(m => m.FormSection);
       const { openURL } = getModule(m => m.handleSupportedURL);
       const { version } = window['enmity'];
 
       const Navigator = getModule(m => m.NavButton);
-
-      Patcher.after(Navigator, 'handleSectionSelect', (_, args, res) => {
-        console.log(_);
-        console.log(args);
-        console.log(res);
-      });
 
       const enmitySection =
         <><FormSection title="Enmity">
