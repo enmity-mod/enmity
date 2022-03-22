@@ -2,12 +2,15 @@ import { after, before, create, instead } from '../utils/patcher';
 import { getAssetByName, getAssets } from '../utils/assets';
 import { getModule, getModuleByIndex, getModuleByProps, getModules } from '../utils/modules';
 
+import * as React from './react';
 import { applyTheme, getTheme, getThemeByName, listThemes, removeTheme } from './themes';
 import { deleteRequest, getAPIBaseURL, getRequest, patchRequest, postRequest, putRequest } from './rest';
 import { disablePlugin, enablePlugin, getDisabledPlugins, getEnabledPlugins, getPlugin, getPlugins, registerPlugin } from './plugins';
 import { fetchCurrentUser, fetchProfile, getUser } from './users';
 import { getBuild, getDevice, getSystemVersion, getVersion, reloadDiscord } from './native';
 import { getItem, removeItem, setItem } from './storage';
+import { getSetting, setSetting } from './settings';
+import { getString, setString } from './clipboard';
 import { getToken, hideToken, removeToken, setToken, showToken } from './token';
 import { registerCommands, unregisterCommands } from './commands';
 import { sendReply } from './clyde';
@@ -53,6 +56,11 @@ export function prepareApi(): void {
       enablePlugin,
     },
 
+    'clipboard': {
+      setString,
+      getString,
+    },
+
     'clyde': {
       sendReply,
     },
@@ -81,6 +89,15 @@ export function prepareApi(): void {
       patch: patchRequest,
       delete: deleteRequest,
       getAPIBaseURL,
+    },
+
+    'react': {
+      ...React,
+    },
+
+    'settings': {
+      get: getSetting,
+      set: setSetting,
     },
 
     'storage': {
