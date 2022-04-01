@@ -14,6 +14,21 @@ const FormsModule = getModuleByProps(
 );
 
 const {
+  lazy,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} = React;
+
+const {
+  Alert,
+
   Button,
   FlatList,
   Image,
@@ -63,7 +78,18 @@ const {
 
 export {
   React,
+  lazy,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
 
+  Alert,
   Button,
   FlatList,
   Image,
