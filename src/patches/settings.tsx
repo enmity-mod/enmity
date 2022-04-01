@@ -1,10 +1,26 @@
 import { getModule, getModules } from '../utils/modules';
+import { PluginPage } from '../screens/plugins';
 import { create } from '../utils/patcher';
 import { reloadDiscord } from '../api/native';
 import { showDialog } from '../api/dialog';
 
-import { FormArrow, FormDivider, FormLabel, FormRow, FormSection, React, Text, View } from '../api/react';
-import { getModuleByProps } from 'enmity-api/module';
+import {
+  Button,
+  Form,
+  FormArrow,
+  FormDivider,
+  FormLabel,
+  FormRow,
+  FormSection,
+  FormText,
+  React,
+  StatusBar,
+  Text,
+  View,
+  useState,
+} from '../api/react';
+
+const navigationModule = getModule(m => m.default?.pushLazy);
 
 export function patchSettings(): void {
   const Patcher = create('SettingsPatch');
@@ -29,19 +45,14 @@ export function patchSettings(): void {
       const { openURL } = getModule(m => m.handleSupportedURL);
       const { version } = window['enmity'];
 
-      const Navigator = getModule(m => m.NavButton);
-
       const enmitySection =
         <><FormSection title="Enmity">
           <FormRow label="Enmity" trailing={<FormLabel text={version}/>} onPress={(): void => {
-            openURL(`https://github.com/enmity-mod/Enmity/commit/${version}`);
+            openURL(`https://github.com/enmity-mod/enmity/commit/${version}`);
           }}></FormRow>
           <FormDivider />
           <FormRow label="Plugins" trailing={<FormArrow/>} onPress={(): void => {
-            showDialog({
-              title: 'Coming soon',
-              confirmText: 'Okay',
-            });
+            navigationModule.default.push(PluginPage, {});
           }}></FormRow>
           <FormDivider />
           <FormRow label="Themes" trailing={<FormArrow/>} onPress={(): void => {
@@ -64,7 +75,7 @@ export function patchSettings(): void {
         </FormSection>
         <FormSection>
           <FormRow label={<FormLabel text={'GitHub'}/>} trailing={<FormArrow/>} onPress={(): void => {
-            openURL('https://github.com/enmity-mod/Enmity');
+            openURL('https://github.com/enmity-mod/enmity');
           }}></FormRow>
           <FormDivider />
           <FormRow label={<FormLabel text={'Twitter'}/>} trailing={<FormArrow/>} onPress={(): void => {
