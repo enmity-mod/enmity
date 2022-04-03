@@ -79,7 +79,7 @@ export function patchSettings(): void {
           }}></FormRow>
           <FormDivider />
           <FormRow label={<FormLabel text={'Twitter'}/>} trailing={<FormArrow/>} onPress={(): void => {
-            openURL('https://twitter.com/smolzoey');
+            openURL('https://twitter.com/enmityapp');
           }}></FormRow>
           <FormDivider />
         </FormSection></>;
