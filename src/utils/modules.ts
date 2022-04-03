@@ -11,7 +11,7 @@ export function modulesBlacklist(i: number): boolean {
   if (i === 199 || i === 432 || i === 433 || i === 444 || i === 445 || i === 456) return true;
 
   // Skipping locale modules
-  if (i >= 944 && i <= 972) return true;
+  if (i >= 944 && i <= 993) return true;
 
   return false;
 }
