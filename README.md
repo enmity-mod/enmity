@@ -6,10 +6,10 @@
 
 <div align='center'>
    <h3>Enmity</h3>
-   <p>
-      The power of addons, all in your hand.
-      <br />
-      <b>Discord Client Modification</b>
+   Main code for Enmity.
+
+   Installation guide can be found [here](https://github.com/enmity-mod/enmity/blob/main/docs/install.md).
+   Developer guide can be found [here](https://github.com/enmity-mod/enmity/blob/main/docs/developers.md).
    </p>
 </div>
 
