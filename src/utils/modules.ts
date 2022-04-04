@@ -8,10 +8,10 @@ declare const modules: { [id: number]: any };
  */
 export function modulesBlacklist(i: number): boolean {
   // Native modules that causes Discord to hang if loaded
-  if (i === 203 || i === 199 || i === 432 || i === 433 || i === 444 || i === 445 || i === 456 || i === 457) return true;
+  if (i === 203 || i === 433 || i === 434 || i === 445 || i === 446 || i === 457) return true;
 
   // Skipping locale modules
-  if (i >= 944 && i <= 993) return true;
+  if (i >= 944 && i <= 994) return true;
 
   return false;
 }
