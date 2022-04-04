@@ -74,6 +74,10 @@ export function patchSettings(): void {
           }}></FormRow>
         </FormSection>
         <FormSection>
+          <FormRow label={<FormLabel text={'Discord'}/>} trailing={<FormArrow/>} onPress={(): void => {
+            openURL('https://discord.gg/rMdzhWUaGT');
+          }}></FormRow>
+          <FormDivider />
           <FormRow label={<FormLabel text={'GitHub'}/>} trailing={<FormArrow/>} onPress={(): void => {
             openURL('https://github.com/enmity-mod/enmity');
           }}></FormRow>
