@@ -31,7 +31,7 @@ export default defineConfig({
 function createHash(options = {}): Plugin {
   return {
     name: 'plugin-info',
-    buildEnd: (err) => {
+    writeBundle(err) {
       const buffer = fs.readFileSync('dist/Enmity.js');
       const hash = crypto.createHash('sha256');
       hash.update(buffer);
