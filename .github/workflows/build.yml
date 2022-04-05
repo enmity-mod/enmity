@@ -1,5 +1,8 @@
 name: Create release
-on: ['push']
+on:
+  push:
+    tags:
+       - '*'
 
 jobs:
   build:
@@ -20,7 +23,7 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.sha }}
+          tag_name: release-${{ github.ref_name }}
           files:  |
             dist/Enmity.js
             dist/hash
