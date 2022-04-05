@@ -1,0 +1,26 @@
+name: Create release
+on: ['push']
+
+jobs:
+  build:
+    name: Build and publish Enmity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up node
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: mkdir -p dist/
+      - run: npm install
+
+      - name: Build Enmity
+        run: npm run build
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.sha }}
+          files:  |
+            dist/Enmity.js
+            dist/hash
