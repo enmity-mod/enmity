@@ -10,7 +10,7 @@ export function sendReply(channelID: string, content: (string | object), usernam
   let receivedMessage = createBotMessageModule.createBotMessage(channelID, '');
 
   receivedMessage.author.username = username ?? "Enmity";
-  receivedMessage.author.avatar = "enmity"; 
+  receivedMessage.author.avatar = username ? username.toLowerCase() : "enmity"; 
   if (avatarURL) {
     botAvatarsModule.default.BOT_AVATARS[username] = avatarURL;
     receivedMessage.author.avatar = username;
