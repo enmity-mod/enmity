@@ -6,14 +6,20 @@ const botAvatarsModule = getModule(m => m.default?.BOT_AVATARS);
 
 botAvatarsModule.default.BOT_AVATARS.enmity = "https://cdn.discordapp.com/attachments/950850316318933004/961398357866217502/101209876.png"
 
-export function sendReply(channelID: string, content: string, username?: string, avatarURL?: string): void {
-  let receivedMessage = createBotMessageModule.createBotMessage(channelID, content);
+export function sendReply(channelID: string, content: (string | object), username?: string, avatarURL?: string): void {
+  let receivedMessage = createBotMessageModule.createBotMessage(channelID, '');
 
   receivedMessage.author.username = username ?? "Enmity";
   receivedMessage.author.avatar = "enmity"; 
   if (avatarURL) {
     botAvatarsModule.default.BOT_AVATARS[username] = avatarURL;
     receivedMessage.author.avatar = username;
+  }
+  
+  if (typeof content === "string") {
+    receivedMessage.content = content;
+  } else {
+    receivedMessage.embeds.push(content);
   }
   clydeModule.default.receiveMessage(channelID, receivedMessage);
 }
