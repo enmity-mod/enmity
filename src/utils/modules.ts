@@ -1,7 +1,7 @@
 import { Module, ModuleExports } from 'enmity-api/module';
 
 declare const __r: (moduleId: number) => any;
-declare const modules: { [id: number]: any; };
+declare const modules: { [id: number]: any };
 
 /**
  * Blacklisted modules
