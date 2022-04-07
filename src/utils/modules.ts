@@ -1,7 +1,7 @@
 import { Module, ModuleExports } from 'enmity-api/module';
 
 declare const __r: (moduleId: number) => any;
-declare const modules: { [id: number]: any };
+declare const modules: { [id: number]: any; };
 
 /**
  * Blacklisted modules
@@ -51,7 +51,7 @@ export function getModule(filter: (module: ModuleExports) => boolean, exports = 
  * Get module via props
  */
 export function getModuleByProps(...props: string[]): ModuleExports {
-  return getModule(m => props.every(p => m[p]), true);
+  return getModule(m => props.every(p => (m[p] ?? m.default?.[p]) !== void 0), true);
 }
 
 /**
