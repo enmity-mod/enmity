@@ -87,7 +87,7 @@ const ThemeCard = ({ theme, uninstallTheme }: ThemeCardProps): void => (
             onPress={(): void => {
               sendCommand('uninstall-theme', [theme], data => {
                 showToast({
-                  content: `${theme} has been uninstalled.`,
+                  content: data,
                 });
 
                 uninstallTheme(theme);
@@ -119,8 +119,8 @@ const ThemesScreen = (): void => {
     setThemes(listThemes());
   }, []);
 
-  const uninstallTheme = (value): void => {
-    if (getTheme() === value) {
+  const uninstallTheme = (name): void => {
+    if (getTheme() === name) {
       removeTheme();
     }
 
