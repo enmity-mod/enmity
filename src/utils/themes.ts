@@ -49,3 +49,14 @@ export async function removeTheme(): Promise<string> {
     });
   });
 }
+
+/**
+ * Uninstall a theme
+ */
+export async function uninstallTheme(name: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    sendCommand('uninstall-theme', [name], data => {
+      resolve(data);
+    });
+  });
+}

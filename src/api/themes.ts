@@ -1,4 +1,4 @@
-import { applyTheme, getTheme, getThemeByName, listThemes, removeTheme } from '../utils/themes';
+import { applyTheme, getTheme, getThemeByName, listThemes, removeTheme, uninstallTheme } from '../utils/themes';
 
 export {
   getTheme,
@@ -6,4 +6,5 @@ export {
   listThemes,
   applyTheme,
   removeTheme,
+  uninstallTheme,
 };

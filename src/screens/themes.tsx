@@ -14,8 +14,8 @@ import {
 } from '../api/react';
 import { applyTheme, getTheme, listThemes, removeTheme } from '../api/themes';
 import { getModule } from '../utils/modules';
-import { reloadDiscord } from '../api/native';
 import { sendCommand } from '../utils/native';
+import { showDialog } from '../api/dialog';
 import { showToast } from '../api/toast';
 
 const navigationModule = getModule(m => m.default?.pushLazy);
@@ -73,67 +73,44 @@ const cardStyle = createThemedStyleSheet({
 });
 
 interface ThemeCardProps {
-   theme: string;
-   uninstallTheme: (name: string) => void;
+  theme: string;
+  uninstallTheme: (name: string) => void;
 }
 
-const ThemeCard = ({ theme, uninstallTheme }: ThemeCardProps): void => {
-  const [enabled, setEnabled] = useState(true);
-
-  useEffect(() => {
-    const isEnabled = getTheme() === theme;
-    setEnabled(isEnabled);
-  }, []);
-
-  return (
-    <View style={cardStyle.cardContainer}>
-      <View style={cardStyle.cardHeader}>
-        <FormRow
-          label={theme}
-          trailing={
-            <TouchableOpacity
-              onPress={(): void => {
-                sendCommand('uninstall-theme', [theme], data => {
-                  showToast({
-                    content: `${theme} has been uninstalled.`,
-                  });
-
-                  uninstallTheme(theme);
-                });
-              }}
-            >
-              <Text style={cardStyle.text}>Uninstall</Text>
-            </TouchableOpacity>
-          }
-        />
-      </View>
-      <View style={cardStyle.cardBody}>
-        <FormRow
-          label="Enabled"
-          trailing={
-            <FormSwitch
-              value={enabled}
-              onValueChange={(value): void => {
-                setEnabled(value);
+const ThemeCard = ({ theme, uninstallTheme }: ThemeCardProps): void => (
+  <View style={cardStyle.cardContainer}>
+    <View style={cardStyle.cardHeader}>
+      <FormRow
+        label={theme}
+        trailing={
+          <TouchableOpacity
+            onPress={(): void => {
+              sendCommand('uninstall-theme', [theme], data => {
                 showToast({
-                  content: `${theme} has been ${value ? 'enabled' : 'disabled'}.`,
+                  content: `${theme} has been uninstalled.`,
                 });
 
-                if (value) {
-                  applyTheme(theme);
-                } else {
-                  removeTheme();
-                }
-
-                setImmediate(reloadDiscord);
-              }}
-            />
-          }
-        />
-      </View>
+                uninstallTheme(theme);
+              });
+            }}
+          >
+            <Text style={cardStyle.text}>Uninstall</Text>
+          </TouchableOpacity>
+        }
+      />
     </View>
-  );
-};
+    <View style={cardStyle.cardBody}>
+      <FormRow
+        label="Apply"
+        onPress={(): void => {
+          applyTheme(theme).then(data => {
+            showDialog({ title: 'Theme has been applied, please restart Discord to apply the new theme.' });
+          });
+        }}
+      />
+    </View>
+  </View>
+);
 
 const ThemesScreen = (): void => {
   const [themes, setThemes] = useState([]);
@@ -143,6 +120,10 @@ const ThemesScreen = (): void => {
   }, []);
 
   const uninstallTheme = (value): void => {
+    if (getTheme() === value) {
+      removeTheme();
+    }
+
     setThemes(themes.filter(theme => theme !== name));
   };
 
@@ -150,6 +131,16 @@ const ThemesScreen = (): void => {
     flex: 1,
   }}>
     <Form>
+      {getTheme() !== '' &&
+        <FormRow
+          label="Remove applied theme"
+          onPress={(): void => {
+            removeTheme().then(() => {
+              showDialog({ title: 'Theme has been removed, please restart Discord to remove the theme.' });
+            });
+          }}
+        />
+      }
       {themes.map(theme => <ThemeCard theme={theme} uninstallTheme={uninstallTheme} />)}
     </Form>
   </View>);
@@ -192,10 +183,17 @@ export const ThemePage = (): void => (
               Alert.prompt(
                 'Install a theme',
                 'Please enter the URL of the theme to install.',
-                (text: string) => {
-                  sendCommand('install-theme', [text], data => {
+                (url: string) => {
+                  if (!url.includes('json')) {
                     showToast({
-                      content: `Theme has been installed. Please reload Discord.`,
+                      content: 'Invalid url for theme.',
+                    });
+                    return;
+                  }
+
+                  sendCommand('install-theme', [url], data => {
+                    showToast({
+                      content: data,
                     });
                   });
                 },
