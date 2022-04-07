@@ -1,25 +1,26 @@
 import { getModule } from '../utils/modules';
 
-const clydeModule = getModule(m => m.default?.receiveMessage);
-const createBotMessageModule = getModule(m => m.createBotMessage);
-const botAvatarsModule = getModule(m => m.default?.BOT_AVATARS);
+const Messages = getModule(m => m.default?.receiveMessage);
+const BotMessages = getModule(m => m.createBotMessage);
+const Images = getModule(m => m.default?.BOT_AVATARS);
 
-botAvatarsModule.default.BOT_AVATARS.enmity = "https://github.com/enmity-mod.png";
+Images.default.BOT_AVATARS.ENMITY = "https://github.com/enmity-mod.png";
 
 export function sendReply(channelID: string, content: (string | object), username?: string, avatarURL?: string): void {
-  let receivedMessage = createBotMessageModule.createBotMessage(channelID, '');
+  const msg = BotMessages.createBotMessage(channelID, "");
 
-  receivedMessage.author.username = username ?? "Enmity";
-  receivedMessage.author.avatar = username ? username.toLowerCase() : "enmity"; 
+  msg.author.username = username ?? "Enmity";
+  msg.author.avatar = avatarURL ? username : "ENMITY"; 
+  
   if (avatarURL) {
-    botAvatarsModule.default.BOT_AVATARS[username] = avatarURL;
-    receivedMessage.author.avatar = username;
+    Images.default.BOT_AVATARS[username] = avatarURL;
   }
   
   if (typeof content === "string") {
-    receivedMessage.content = content;
+    msg.content = content;
   } else {
-    receivedMessage.embeds.push(content);
+    Object.assign(msg, content);
   }
-  clydeModule.default.receiveMessage(channelID, receivedMessage);
+
+  Messages.default.receiveMessage(channelID, msg);
 }
