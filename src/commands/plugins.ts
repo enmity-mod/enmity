@@ -3,7 +3,7 @@ import { sendCommand } from '../utils/native';
 import { sendReply } from '../api/clyde';
 
 import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from 'enmity-api/commands';
-import { disablePlugin, enablePlugin, getDisabledPlugins, getEnabledPlugins, getPlugins } from '../api/plugins';
+import { disablePlugin, enablePlugin, getDisabledPlugins, getEnabledPlugins, getPlugins, installPlugin, uninstallPlugin } from '../api/plugins';
 
 /**
  * List installed plugins
@@ -81,7 +81,7 @@ const install: Command = {
     const url = args[0].value;
     const channel = message.channel.id;
 
-    sendCommand('install-plugin', [url], data => {
+    installPlugin(url, data => {
       sendReply(channel, data);
     });
   },
@@ -120,7 +120,7 @@ const uninstall: Command = {
     const name = args[0].value;
     const channel = message.channel.id;
 
-    sendCommand('uninstall-plugin', [name], data => {
+    uninstallPlugin(name, data => {
       sendReply(channel, data);
     });
   },

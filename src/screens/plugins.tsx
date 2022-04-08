@@ -11,9 +11,8 @@ import {
   useEffect,
   useState,
 } from '../api/react';
-import { disablePlugin, enablePlugin, getEnabledPlugins, getPlugins } from '../api/plugins';
+import { disablePlugin, enablePlugin, getEnabledPlugins, getPlugins, installPlugin, uninstallPlugin } from '../api/plugins';
 import { getModule } from '../utils/modules';
-import { sendCommand } from '../utils/native';
 import { showToast } from '../api/toast';
 
 import { Plugin } from 'enmity-api/plugins';
@@ -93,7 +92,7 @@ const PluginCard = ({ plugin, removePlugin }: PluginCardProps): void => {
           trailing={
             <TouchableOpacity
               onPress={(): void => {
-                sendCommand('uninstall-plugin', [plugin.name], data => {
+                uninstallPlugin(plugin.name, data => {
                   showToast({
                     content: `${plugin.name} has been uninstalled.`,
                   });
@@ -189,8 +188,8 @@ export const PluginPage = (): void => (
               Alert.prompt(
                 'Install a plugin',
                 'Please enter the URL of the plugin to install.',
-                (text: string) => {
-                  sendCommand('install-plugin', [text], data => {
+                (url: string) => {
+                  installPlugin(url, data => {
                     showToast({
                       content: `Plugin has been installed. Please reload Discord.`,
                     });
