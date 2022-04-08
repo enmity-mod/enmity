@@ -100,8 +100,8 @@ export function evalPlugin(url: string): void {
       }, ${id}, []);
       __r(${id})`;
 
-      eval(wrapper);
       enabled.push(name);
+      eval(wrapper);
     })
     .catch(err => {
       console.error(err);
@@ -110,8 +110,8 @@ export function evalPlugin(url: string): void {
 
 export function installPlugin(url: string, reply?: (result) => void): void {
   sendCommand('install-plugin', [url], data => {
-    reply(data);
     evalPlugin(url);
+    reply(data);
   });
 }
 
