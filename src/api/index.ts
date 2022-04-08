@@ -1,4 +1,4 @@
-import { after, before, create, instead } from '../utils/patcher';
+import { after, before, create, instead, unpatchAll } from '../utils/patcher';
 import { getAssetByName, getAssets } from '../utils/assets';
 import { getModule, getModuleByIndex, getModuleByProps, getModules } from '../utils/modules';
 
@@ -40,6 +40,7 @@ export function prepareApi(): void {
       before,
       instead,
       after,
+      unpatchAll
     },
 
     'plugins': {
