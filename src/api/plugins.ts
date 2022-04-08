@@ -1,10 +1,11 @@
 import { registerCommands, unregisterCommands } from './commands';
 import { Plugin as EnmityPlugin } from 'enmity-api/plugins';
+import { getRequest } from './rest';
 import { sendCommand } from '../utils/native';
 
 const plugins: EnmityPlugin[] = [];
-const enabled: string[] = window['plugins'].enabled;
-const disabled: string[] = window['plugins'].disabled;
+let enabled: string[] = window['plugins'].enabled;
+let disabled: string[] = window['plugins'].disabled;
 
 export function registerPlugin(plugin: EnmityPlugin): void {
   plugin.onEnable = (): void => {
@@ -79,4 +80,48 @@ export function enablePlugin(name: string, reply?: (result) => void): void {
   getPlugin(name).onEnable();
 
   sendCommand('enable-plugin', [name], reply);
+}
+
+export function evalPlugin(url: string): void {
+  getRequest(url)
+    .then(response => {
+      const code = response.text;
+      const name = url
+        .split('/')
+        .pop()
+        .split('.')[0];
+      const id = Number(Object.keys(window['modules']).pop()) + 1;
+      const wrapper = `__d(function(...args) {
+        try {
+          ${code}
+        } catch(err) {
+          console.log(err);
+        }
+      }, ${id}, []);
+      __r(${id})`;
+
+      eval(wrapper);
+      enabled.push(name);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
+export function installPlugin(url: string, reply?: (result) => void): void {
+  sendCommand('install-plugin', [url], data => {
+    reply(data);
+    evalPlugin(url);
+  });
+}
+
+export function uninstallPlugin(name: string, reply?: (result) => void): void {
+  disablePlugin(name);
+
+  enabled = enabled.filter(p => p !== name);
+  disabled = disabled.filter(p => p !== name);
+
+  sendCommand('uninstall-plugin', [name], data => {
+    reply(data);
+  });
 }
