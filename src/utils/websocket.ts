@@ -1,7 +1,10 @@
+import { getModule } from './modules';
 import { showToast } from '../api/toast';
 
 declare const nativeLoggingHook: (message: string, level: number) => void;
 
+const logger = getModule(m => m.default?.name === 'Logger');
+const EnmityLogger = new logger.default('Enmity');
 let socket: WebSocket;
 
 /**
@@ -57,6 +60,7 @@ export function prepareWebsocket(): void {
   const _log = nativeLoggingHook;
   globalThis.nativeLoggingHook = (message: string, level: number): void => {
     if (socket?.readyState === WebSocket.OPEN) socket.send(JSON.stringify({ level, message }));
+    EnmityLogger.log(message);
     return _log(message, level);
   };
 
