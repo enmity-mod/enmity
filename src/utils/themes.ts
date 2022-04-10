@@ -1,11 +1,12 @@
-import { getModule, getModuleByProps } from '../utils/modules';
 import { Theme } from 'enmity-api/themes';
+import { getModule } from '../utils/modules';
+import { getRequest } from '../api/rest';
 import { sendCommand } from './native';
 
 const Theme = getModule(m => m.default?.theme).default.theme;
 
 const theme = window['themes']?.theme ?? '';
-const themes: Theme[] = window['themes']?.list ?? [];
+let themes: Theme[] = window['themes']?.list ?? [];
 
 /**
  * Get the currently loaded theme name
@@ -29,34 +30,46 @@ export function listThemes(): string[] {
 }
 
 /**
+ * Install a theme
+ */
+export async function installTheme(url: string, reply?: (data) => void): Promise<void> {
+  sendCommand('install-theme', [url], data => {
+    reply(data);
+    getRequest(url)
+      .then(response => {
+        const theme = JSON.parse(response.text);
+        themes.push(theme);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  });
+}
+
+/**
  * Apply a theme to Discord
  */
-export async function applyTheme(name): Promise<string> {
-  return new Promise((resolve, reject) => {
-    sendCommand('apply-theme', [name, Theme], data => {
-      resolve(data);
-    });
+export async function applyTheme(name, reply?: (data) => void): Promise<void> {
+  sendCommand('apply-theme', [name, Theme], data => {
+    reply(data);
   });
 }
 
 /**
  * Remove the currently applied theme
  */
-export async function removeTheme(): Promise<string> {
-  return new Promise((resolve, reject) => {
-    sendCommand('remove-theme', [], data => {
-      resolve(data);
-    });
+export async function removeTheme(reply?: (data) => void): Promise<void> {
+  sendCommand('remove-theme', [], data => {
+    reply(data);
   });
 }
 
 /**
  * Uninstall a theme
  */
-export async function uninstallTheme(name: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    sendCommand('uninstall-theme', [name], data => {
-      resolve(data);
-    });
+export async function uninstallTheme(name: string, reply?: (data) => void): Promise<void> {
+  sendCommand('uninstall-theme', [name], data => {
+    reply(data);
+    themes = themes.filter(t => t.name !== name);
   });
 }
