@@ -73,9 +73,7 @@ const token: Command = {
   inputType: ApplicationCommandInputType.BuiltIn,
 
   execute: function(args, message) {
-    const token = getToken();
-    const channeld = message.channel.id;
-    sendReply(channeld, `\`${token}\``);
+    sendReply(message.channel.id, getToken());
   },
 };
 
