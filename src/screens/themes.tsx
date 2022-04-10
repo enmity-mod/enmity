@@ -13,8 +13,8 @@ import {
   useState,
 } from '../api/react';
 import { applyTheme, getTheme, listThemes, removeTheme } from '../api/themes';
+import { installTheme, uninstallTheme } from '../utils/themes';
 import { getModule } from '../utils/modules';
-import { sendCommand } from '../utils/native';
 import { showDialog } from '../api/dialog';
 import { showToast } from '../api/toast';
 
@@ -74,10 +74,10 @@ const cardStyle = createThemedStyleSheet({
 
 interface ThemeCardProps {
   theme: string;
-  uninstallTheme: (name: string) => void;
+  deleteTheme: (name: string) => void;
 }
 
-const ThemeCard = ({ theme, uninstallTheme }: ThemeCardProps): void => (
+const ThemeCard = ({ theme, deleteTheme }: ThemeCardProps): void => (
   <View style={cardStyle.cardContainer}>
     <View style={cardStyle.cardHeader}>
       <FormRow
@@ -85,12 +85,12 @@ const ThemeCard = ({ theme, uninstallTheme }: ThemeCardProps): void => (
         trailing={
           <TouchableOpacity
             onPress={(): void => {
-              sendCommand('uninstall-theme', [theme], data => {
+              uninstallTheme(theme, data => {
                 showToast({
                   content: data,
                 });
 
-                uninstallTheme(theme);
+                deleteTheme(theme);
               });
             }}
           >
@@ -103,7 +103,7 @@ const ThemeCard = ({ theme, uninstallTheme }: ThemeCardProps): void => (
       <FormRow
         label="Apply"
         onPress={(): void => {
-          applyTheme(theme).then(data => {
+          applyTheme(theme, data => {
             showDialog({ title: 'Theme has been applied, please restart Discord to apply the new theme.' });
           });
         }}
@@ -119,7 +119,7 @@ const ThemesScreen = (): void => {
     setThemes(listThemes());
   }, []);
 
-  const uninstallTheme = (name): void => {
+  const deleteTheme = (name): void => {
     if (getTheme() === name) {
       removeTheme();
     }
@@ -141,7 +141,7 @@ const ThemesScreen = (): void => {
           }}
         />
       }
-      {themes.map(theme => <ThemeCard theme={theme} uninstallTheme={uninstallTheme} />)}
+      {themes.map(theme => <ThemeCard theme={theme} deleteTheme={deleteTheme} />)}
     </Form>
   </View>);
 };
@@ -191,7 +191,7 @@ export const ThemePage = (): void => (
                     return;
                   }
 
-                  sendCommand('install-theme', [url], data => {
+                  installTheme(url, data => {
                     showToast({
                       content: data,
                     });
