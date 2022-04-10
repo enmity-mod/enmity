@@ -23,6 +23,7 @@ const debug: Command = {
 
   execute: () => {
     let content = '**Debug Info:**\n';
+    content += `> Enmity: ${window['enmity'].version}\n`;
     content += `> Discord: ${getVersion()} (${getBuild()})\n`;
     content += `> Device: ${getDevice()}\n`;
     content += `> System: ${getSystemVersion()}\n`;
