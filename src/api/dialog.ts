@@ -1,7 +1,7 @@
-import { getModule } from '../utils/modules';
+import * as Modules from '../utils/modules';
 
-const dialogModule = getModule(m => m.default?.show);
+const Dialog = Modules.common.dialog;
 
 export function showDialog(options): void {
-  dialogModule.default.show(options);
+  Dialog.show(options);
 }

@@ -2,9 +2,7 @@ import {
   Alert,
   Button,
   Form,
-  FormCTAButton,
   FormRow,
-  FormSwitch,
   React,
   Text,
   TouchableOpacity,
@@ -14,20 +12,20 @@ import {
 } from '../api/react';
 import { applyTheme, getTheme, listThemes, removeTheme } from '../api/themes';
 import { installTheme, uninstallTheme } from '../utils/themes';
-import { getModule } from '../utils/modules';
+import * as Modules from '../utils/modules';
 import { showDialog } from '../api/dialog';
 import { showToast } from '../api/toast';
 
-const navigationModule = getModule(m => m.default?.pushLazy);
-const reactNavigationNative = getModule(m => m.NavigationContainer);
-const reactNavigationStack = getModule(m => m.createStackNavigator);
-const themedStylesheet = getModule(m => m.createThemedStyleSheet);
-const colorMap = getModule(m => m.ThemeColorMap);
+const Navigation = Modules.common.navigation;
+const NavigationNative = Modules.common.navigationNative;
+const NavigationStack = Modules.common.navigationStack;
+const StyleSheet = Modules.common.stylesheet;
+const ColorMap = Modules.common.colorMap;
 
-const { NavigationContainer } = reactNavigationNative;
-const { createStackNavigator } = reactNavigationStack;
-const { createThemedStyleSheet } = themedStylesheet;
-const { ThemeColorMap } = colorMap;
+const { NavigationContainer } = NavigationNative;
+const { createStackNavigator } = NavigationStack;
+const { createThemedStyleSheet } = StyleSheet;
+const { ThemeColorMap } = ColorMap;
 
 const navbarStyle = createThemedStyleSheet({
   container: {
@@ -174,7 +172,7 @@ export const ThemePage = (): void => (
           headerLeft: (): void => (<Button
             color="#fff"
             title="Close"
-            onPress={(): void => navigationModule.default.pop()}
+            onPress={(): void => Navigation.pop()}
           />),
           headerRight: (): void => (<Button
             color="#fff"

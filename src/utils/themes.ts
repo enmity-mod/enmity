@@ -1,9 +1,9 @@
+import * as Modules from '../utils/modules';
 import { Theme } from 'enmity-api/themes';
-import { getModule } from '../utils/modules';
 import { getRequest } from '../api/rest';
 import { sendCommand } from './native';
 
-const Theme = getModule(m => m.default?.theme).default.theme;
+const Settings = Modules.common.theme;
 
 const theme = window['themes']?.theme ?? '';
 let themes: Theme[] = window['themes']?.list ?? [];
@@ -50,7 +50,7 @@ export async function installTheme(url: string, reply?: (data) => void): Promise
  * Apply a theme to Discord
  */
 export async function applyTheme(name, reply?: (data) => void): Promise<void> {
-  sendCommand('apply-theme', [name, Theme], data => {
+  sendCommand('apply-theme', [name, Settings.theme], data => {
     reply(data);
   });
 }

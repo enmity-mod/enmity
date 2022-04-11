@@ -1,7 +1,7 @@
-import { getModule } from './modules';
+import * as Modules from '../utils/modules';
 import { v4 as uuidv4 } from 'uuid';
 
-const linkingModule = getModule(m => m.openURL);
+const URLHandler = Modules.common.linking;
 
 interface URL {
   url: string;
@@ -14,7 +14,7 @@ interface Response {
 
 const replies = {};
 
-linkingModule.addEventListener('url', (url: URL) => {
+URLHandler.addEventListener('url', (url: URL) => {
   let responseUrl = url.url;
   responseUrl = decodeURIComponent(responseUrl.replace('com.hammerandchisel.discord://', ''));
 
@@ -39,7 +39,7 @@ linkingModule.addEventListener('url', (url: URL) => {
 export function sendCommand(name: string, params: string[] = [], reply?: (data) => void): void {
   const id = uuidv4();
 
-  linkingModule.openURL(`com.hammerandchisel.discord://enmity?id=${id}&command=${name}&params=${params.join(',')}`).then(() => {
+  URLHandler.openURL(`com.hammerandchisel.discord://enmity?id=${id}&command=${name}&params=${params.join(',')}`).then(() => {
     if (reply) {
       replies[id] = reply;
     }

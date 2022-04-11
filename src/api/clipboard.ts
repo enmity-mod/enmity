@@ -1,11 +1,12 @@
-import { getModuleByProps } from '../utils/modules';
+import * as Modules from '../utils/modules';
 
-const ClipboardModule = getModuleByProps('setString', 'getString');
+const Clipboard = Modules.common.clipboard;
 
-export function setString(text: string): void {
-  ClipboardModule.setString(text);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function setString(text: string): any {
+  return Clipboard.setString(text);
 }
 
 export async function getString(): Promise<string> {
-  return ClipboardModule.getString();
+  return Clipboard.getString();
 }

@@ -1,11 +1,11 @@
-import { getModuleByProps } from '../utils/modules';
+import * as Modules from '../utils/modules';
 
-const SettingsModule = getModuleByProps('watchKeys');
+const Settings = Modules.common.settings;
 
 export function getSetting(key: string): string {
-  return SettingsModule.get(key);
+  return Settings.get(key);
 }
 
 export function setSetting(setting: Record<string, string>): void {
-  SettingsModule.set(setting);
+  Settings.set(setting);
 }

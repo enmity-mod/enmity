@@ -12,21 +12,22 @@ import {
   useState,
 } from '../api/react';
 import { disablePlugin, enablePlugin, getEnabledPlugins, getPlugins, installPlugin, uninstallPlugin } from '../api/plugins';
-import { getModule } from '../utils/modules';
+import * as Modules from '../utils/modules';
+import { sendCommand } from '../utils/native';
 import { showToast } from '../api/toast';
 
 import { Plugin } from 'enmity-api/plugins';
 
-const navigationModule = getModule(m => m.default?.pushLazy);
-const reactNavigationNative = getModule(m => m.NavigationContainer);
-const reactNavigationStack = getModule(m => m.createStackNavigator);
-const themedStylesheet = getModule(m => m.createThemedStyleSheet);
-const colorMap = getModule(m => m.ThemeColorMap);
+const Navigation = Modules.common.navigation;
+const NavigationNative = Modules.common.navigationNative;
+const NavigationStack = Modules.common.navigationStack;
+const StyleSheet = Modules.common.stylesheet;
+const ColorMap = Modules.common.colorMap;
 
-const { NavigationContainer } = reactNavigationNative;
-const { createStackNavigator } = reactNavigationStack;
-const { createThemedStyleSheet } = themedStylesheet;
-const { ThemeColorMap } = colorMap;
+const { NavigationContainer } = NavigationNative;
+const { createStackNavigator } = NavigationStack;
+const { createThemedStyleSheet } = StyleSheet;
+const { ThemeColorMap } = ColorMap;
 
 const navbarStyle = createThemedStyleSheet({
   container: {
@@ -179,7 +180,7 @@ export const PluginPage = (): void => (
           headerLeft: (): void => (<Button
             color="#fff"
             title="Close"
-            onPress={(): void => navigationModule.default.pop()}
+            onPress={(): void => Navigation.pop()}
           />),
           headerRight: (): void => (<Button
             color="#fff"

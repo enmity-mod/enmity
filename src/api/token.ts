@@ -1,23 +1,23 @@
-import { getModule } from '../utils/modules';
+import * as Modules from '../utils/modules';
 
-const tokenModule = getModule(m => m.default?.setToken);
+const Token = Modules.common.token;
 
 export function getToken(): string {
-  return tokenModule.default.getToken();
+  return Token.getToken();
 }
 
 export function setToken(token: string): string {
-  return tokenModule.default.setToken(token);
+  return Token.setToken(token);
 }
 
 export function hideToken(): void {
-  tokenModule.default.hideToken();
+  Token.hideToken();
 }
 
 export function showToken(): void {
-  tokenModule.default.showToken();
+  Token.showToken();
 }
 
 export function removeToken(): void {
-  tokenModule.default.removeToken();
+  Token.removeToken();
 }

@@ -1,5 +1,9 @@
 import { patchSettings } from './settings';
 
 export function applyPatches(): void {
-  patchSettings();
+  try {
+    patchSettings();
+  } catch (e) {
+    console.log(e.message);
+  }
 }

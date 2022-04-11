@@ -1,13 +1,13 @@
-import { getModule } from './modules';
+import * as Modules from '../utils/modules';
 
-const assetsModule = getModule(m => m.registerAsset);
+const Assets = Modules.common.assets;
 
 export function getAssetByName(name: string): Record<string, any> {
   let asset;
 
   let counter = 1;
   while (true) {
-    asset = assetsModule.getAssetByID(counter);
+    asset = Assets.getAssetByID(counter);
 
     if (asset === undefined) break;
     if (asset.name === name) break;
@@ -25,7 +25,7 @@ export function getAssets(): Record<string, string>[] {
 
   let counter = 1;
   while (true) {
-    const asset = assetsModule.getAssetByID(counter);
+    const asset = Assets.getAssetByID(counter);
     if (asset === undefined) break;
 
     assets.push({

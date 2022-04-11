@@ -1,28 +1,28 @@
 import { RestOptions, RestResponse } from 'enmity-api/rest';
-import { getModule } from '../utils/modules';
+import * as Modules from '../utils/modules';
 
-const restModule = getModule(m => m.default?.getAPIBaseURL);
+const REST = Modules.common.rest;
 
 export async function getRequest(data: RestOptions | string): Promise<RestResponse> {
-  return restModule.default.get(data);
+  return REST.get(data);
 }
 
 export async function postRequest(data: RestOptions | string): Promise<RestResponse> {
-  return restModule.default.post(data);
+  return REST.post(data);
 }
 
 export async function putRequest(data: RestOptions | string): Promise<RestResponse> {
-  return restModule.default.put(data);
+  return REST.put(data);
 }
 
 export async function patchRequest(data: RestOptions | string): Promise<RestResponse> {
-  return restModule.default.patch(data);
+  return REST.patch(data);
 }
 
 export async function deleteRequest(data: RestOptions | string): Promise<RestResponse> {
-  return restModule.default.delete(data);
+  return REST.delete(data);
 }
 
 export async function getAPIBaseURL(): Promise<string> {
-  return restModule.default.getAPIBaseURL();
+  return REST.getAPIBaseURL();
 }

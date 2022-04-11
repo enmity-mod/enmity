@@ -1,16 +1,16 @@
 import { Profile, User } from 'enmity-api/common';
-import { getModule } from '../utils/modules';
+import * as Modules from '../utils/modules';
 
-const userModule = getModule(m => m.fetchProfile);
+const Users = Modules.common.users;
 
 export async function fetchCurrentUser(): Promise<User> {
-  return userModule.fetchCurrentUser();
+  return Users.fetchCurrentUser();
 }
 
 export async function fetchProfile(userID: string): Promise<Profile> {
-  return userModule.fetchProfile(userID);
+  return Users.fetchProfile(userID);
 }
 
 export async function getUser(userID: string): Promise<User> {
-  return userModule.getUser(userID);
+  return Users.getUser(userID);
 }

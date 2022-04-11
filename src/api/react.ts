@@ -1,17 +1,8 @@
-import { getModuleByProps } from '../utils/modules';
+import * as Modules from '../utils/modules';
 
-const React = getModuleByProps('createElement');
-
-const ComponentsModule = getModuleByProps(
-  'Button',
-  'Text',
-  'View',
-);
-
-const FormsModule = getModuleByProps(
-  'Form',
-  'FormSection',
-);
+const React = Modules.common.React;
+const ComponentsModule = Modules.common.Components.General;
+const FormsModule = Modules.common.Components.Forms;
 
 const {
   lazy,

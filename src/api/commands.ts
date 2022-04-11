@@ -1,11 +1,17 @@
+import { filters, bulk } from '../utils/modules';
 import { create } from '../utils/patcher';
-import { getModuleByProps } from '../utils/modules';
 
 const Patcher = create('enmity-commands');
 
-const Commands = getModuleByProps('getBuiltInCommands');
-const Discovery = getModuleByProps('useApplicationCommandsDiscoveryState');
-const Assets = getModuleByProps('getGuildTemplateIconURL');
+const [
+  Commands,
+  Discovery,
+  Assets
+] = bulk(
+  filters.byProps('getBuiltInCommands'),
+  filters.byProps('useApplicationCommandsDiscoveryState'),
+  filters.byProps('getGuildTemplateIconURL')
+);
 
 let commands = [];
 
@@ -18,14 +24,14 @@ export const section = {
 
 Patcher.after(Commands, 'getBuiltInCommands', (_, args, res) => [...res, ...commands.values()]);
 
-Patcher.after(Assets.default, 'getApplicationIconURL', (_, [props], res) => {
+Patcher.after(Assets, 'getApplicationIconURL', (_, [props], res) => {
   if (props.id === 'enmity') {
     return section.icon;
   }
 });
 
 
-Patcher.after(Discovery, 'useApplicationCommandsDiscoveryState', (_, [,,, isChat], res) => {
+Patcher.after(Discovery, 'useApplicationCommandsDiscoveryState', (_, [, , , isChat], res) => {
   if (isChat !== false) return res;
 
   if (!res.discoverySections.find(d => d.key === section.id) && commands.length) {

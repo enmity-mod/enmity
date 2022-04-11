@@ -2,17 +2,17 @@ import { FormArrow, FormDivider, FormLabel, FormRow, FormSection, React } from '
 import { PluginPage } from '../screens/plugins';
 import { ThemePage } from '../screens/themes';
 import { create } from '../utils/patcher';
-import { getModule } from '../utils/modules';
 import { reloadDiscord } from '../api/native';
 import { showDialog } from '../api/dialog';
+import { getByTypeName, common, getByProps } from '../utils/modules';
 
-const Navigation = getModule(m => m.default?.pushLazy);
+const Navigation = common.navigation;
 
 export function patchSettings(): void {
   const Patcher = create('enmity-settings');
 
   let UserSettingsOverview;
-  const Settings = getModule(m => m.default?.name === 'UserSettingsOverviewWrapper');
+  const Settings = getByTypeName('UserSettingsOverviewWrapper', { default: false });
   const unpatch = Patcher.after(Settings, 'default', (_, args, res) => {
     if (UserSettingsOverview !== void 0) {
       return;
@@ -22,8 +22,8 @@ export function patchSettings(): void {
 
     UserSettingsOverview = res.type;
 
-    const { openURL } = getModule(m => m.handleSupportedURL);
-    const Messages = getModule(x => x.default?.Messages).default.Messages;
+    const { openURL } = getByProps('handleSupportedURL');
+    const Messages = common.Locales.Messages;
 
     Patcher.after(UserSettingsOverview.prototype, 'render', (_, args, { props: { children } }) => {
       const index = children.findIndex(x => x.props.title === Messages['PREMIUM_SETTINGS']);
@@ -43,7 +43,7 @@ export function patchSettings(): void {
             label="Plugins"
             trailing={<FormArrow />}
             onPress={(): void => {
-              Navigation.default.push(PluginPage, {});
+              Navigation.push(PluginPage, {});
             }}
           />
           <FormDivider />
@@ -51,7 +51,7 @@ export function patchSettings(): void {
             label="Themes"
             trailing={<FormArrow />}
             onPress={(): void => {
-              Navigation.default.push(ThemePage, {});
+              Navigation.push(ThemePage, {});
             }}
           />
           <FormDivider />

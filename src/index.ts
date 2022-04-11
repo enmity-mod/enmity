@@ -5,9 +5,9 @@ import { prepareCommands } from './commands';
 import { prepareWebsocket } from './utils/websocket';
 
 try {
+  prepareWebsocket();
   prepareApi();
   applyPatches();
-  prepareWebsocket();
   prepareCommands();
 } catch (error) {
   console.error(error);

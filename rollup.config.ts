@@ -6,7 +6,7 @@ import fs from "fs";
 import { execSync } from "child_process";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 
-const revision = execSync('git rev-parse --short HEAD').toString().trim()
+const revision = execSync('git rev-parse --short HEAD').toString().trim();
 
 export default defineConfig({
   input: "src/index.ts",
@@ -15,7 +15,6 @@ export default defineConfig({
   ],
   plugins: [
     esbuild({
-      
       target: "esnext",
       minify: true,
     }),
@@ -40,5 +39,5 @@ function createHash(options = {}): Plugin {
 
       fs.writeFileSync('dist/hash', hex);
     }
-  }
+  };
 };
