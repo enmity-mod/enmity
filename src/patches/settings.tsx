@@ -1,10 +1,10 @@
 import { FormArrow, FormDivider, FormLabel, FormRow, FormSection, React } from '../api/react';
-import { getByTypeName, common, getByProps } from '../utils/modules';
+import { common, getByProps, getByTypeName } from '../utils/modules';
 import { PluginPage } from '../screens/plugins';
 import { ThemePage } from '../screens/themes';
+import { create } from '../utils/patcher';
 import { reloadDiscord } from '../api/native';
 import { showDialog } from '../api/dialog';
-import { create } from '../utils/patcher';
 
 const Navigation = common.navigation;
 
