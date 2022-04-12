@@ -1,114 +1,114 @@
 const modules: {
   [key: string]: {
-    props?: string[] | object,
-    export?: string | string[],
-    displayName?: string,
-    multiple?: boolean,
-    filter?: Function,
+    props?: string[] | object;
+    export?: string | string[];
+    displayName?: string;
+    multiple?: boolean;
+    filter?: Function;
     ensure?: Function;
   };
 } = {
   clipboard: {
-    props: ['setString', 'getString']
+    props: ['setString', 'getString'],
   },
 
   assets: {
-    props: ['registerAsset']
+    props: ['registerAsset'],
   },
 
   messages: {
-    props: ['receiveMessage', 'sendMessage']
+    props: ['receiveMessage', 'sendMessage'],
   },
 
   clyde: {
-    props: ['createBotMessage']
+    props: ['createBotMessage'],
   },
 
   avatars: {
-    props: ['BOT_AVATARS']
+    props: ['BOT_AVATARS'],
   },
 
   native: {
     props: ['NativeModules'],
-    export: 'NativeModules'
+    export: 'NativeModules',
   },
 
   React: {
-    props: ['createElement']
+    props: ['createElement'],
   },
 
   Dispatcher: {
-    props: ['dirtyDispatch']
+    props: ['dirtyDispatch'],
   },
 
   storage: {
-    props: ['getItem']
+    props: ['getItem'],
   },
 
   toasts: {
     props: ['open', 'close'],
-    ensure: (m) => !m.openLazy && !m.startDrag && !m.init && !m.openReplay
+    ensure: m => !m.openLazy && !m.startDrag && !m.init && !m.openReplay,
   },
 
   dialog: {
-    props: ['show', 'openLazy', 'open', 'close']
+    props: ['show', 'openLazy', 'open', 'close'],
   },
 
   token: {
-    props: ['getToken']
+    props: ['getToken'],
   },
 
   rest: {
-    props: ['getAPIBaseURL']
+    props: ['getAPIBaseURL'],
   },
 
   settings: {
-    props: ['watchKeys']
+    props: ['watchKeys'],
   },
 
   users: {
-    props: ['fetchProfile']
+    props: ['fetchProfile'],
   },
 
   theme: {
-    props: ['theme']
+    props: ['theme'],
   },
 
   linking: {
-    props: ['openURL']
+    props: ['openURL'],
   },
 
   navigation: {
-    props: ['pushLazy']
+    props: ['pushLazy'],
   },
 
   navigationNative: {
-    props: ['NavigationContainer']
+    props: ['NavigationContainer'],
   },
 
   navigationStack: {
-    props: ['createStackNavigator']
+    props: ['createStackNavigator'],
   },
 
   stylesheet: {
-    props: ['createThemedStyleSheet']
+    props: ['createThemedStyleSheet'],
   },
 
   colorMap: {
-    props: ['ThemeColorMap']
+    props: ['ThemeColorMap'],
   },
 
   Components: {
     multiple: true,
     props: {
       Forms: ['Form', 'FormSection'],
-      General: ['Button', 'Text', 'View',]
-    }
+      General: ['Button', 'Text', 'View'],
+    },
   },
 
   Locales: {
-    props: ['Messages']
-  }
+    props: ['Messages'],
+  },
 };
 
 export default modules;
