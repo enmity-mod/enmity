@@ -1,10 +1,10 @@
 import { FormArrow, FormDivider, FormLabel, FormRow, FormSection, React } from '../api/react';
+import { getByTypeName, common, getByProps } from '../utils/modules';
 import { PluginPage } from '../screens/plugins';
 import { ThemePage } from '../screens/themes';
-import { create } from '../utils/patcher';
 import { reloadDiscord } from '../api/native';
 import { showDialog } from '../api/dialog';
-import { getByTypeName, common, getByProps } from '../utils/modules';
+import { create } from '../utils/patcher';
 
 const Navigation = common.navigation;
 
@@ -60,7 +60,8 @@ export function patchSettings(): void {
             arrowShown={true}
             onPress={(): void => {
               showDialog({
-                title: 'Are you sure you want to reload Discord?',
+                title: 'Reload Discord',
+                body: 'Are you sure you want to reload Discord?',
                 confirmText: 'Yes',
                 cancelText: 'No',
                 onConfirm: reloadDiscord,

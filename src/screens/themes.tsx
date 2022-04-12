@@ -12,6 +12,7 @@ import {
 } from '../api/react';
 import { applyTheme, getTheme, listThemes, removeTheme } from '../api/themes';
 import { installTheme, uninstallTheme } from '../utils/themes';
+import { reloadDiscord } from '../api/native';
 import * as Modules from '../utils/modules';
 import { showDialog } from '../api/dialog';
 import { showToast } from '../api/toast';
@@ -102,7 +103,13 @@ const ThemeCard = ({ theme, deleteTheme }: ThemeCardProps): void => (
         label="Apply"
         onPress={(): void => {
           applyTheme(theme, data => {
-            showDialog({ title: 'Theme has been applied, please restart Discord to apply the new theme.' });
+            showDialog({
+              title: 'Theme Applied',
+              body: 'Applying a theme requires a restart, would you like to restart Discord to apply the new theme?',
+              confirmText: 'Yes',
+              cancelText: 'No',
+              onConfirm: reloadDiscord
+            });
           });
         }}
       />
@@ -134,7 +141,13 @@ const ThemesScreen = (): void => {
           label="Remove applied theme"
           onPress={(): void => {
             removeTheme().then(() => {
-              showDialog({ title: 'Theme has been removed, please restart Discord to remove the theme.' });
+              showDialog({
+                title: 'Theme Removed',
+                body: 'Removing the applied theme requires a restart, would you like to restart Discord to remove the applied theme?',
+                confirmText: 'Yes',
+                cancelText: 'No',
+                onConfirm: reloadDiscord
+              });
             });
           }}
         />
