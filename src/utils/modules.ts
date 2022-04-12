@@ -115,6 +115,7 @@ Object.entries(Common).map(([name, m]) => {
   }
 });
 
+// eslint-disable-next-line @typescript-eslint/no-use-before-define
 const results = bulk(...getters.map(({ filter }) => filter));
 getters.map(({ id, map, submodule }, index) => {
   let mapper = ((_): any => _);
