@@ -37,6 +37,10 @@ const modules: {
     props: ['createElement']
   },
 
+  Dispatcher: {
+    props: ['dirtyDispatch']
+  },
+
   storage: {
     props: ['getItem']
   },
