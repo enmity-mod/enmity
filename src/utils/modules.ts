@@ -1,12 +1,12 @@
+/* eslint-disable */
 import Common from '../data/modules';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const __r: (moduleId: number) => any;
-declare const modules: { [id: number]: any };
+declare const modules: { [id: number]: any; };
 
 type Common = typeof import('../data/modules').default;
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 type module<Type> = {
   [Property in keyof Type]: any;
 };
@@ -14,7 +14,7 @@ type module<Type> = {
 export const common: module<Common> = {};
 
 const blacklist: (Function | number)[] = [
-  (id: number): boolean => id >= 944 && id <= 994,
+  id => id >= 944 && id <= 994,
   125,
   203,
   433,
@@ -25,32 +25,37 @@ const blacklist: (Function | number)[] = [
 ];
 
 export const filters = {
-  byProps: (...mdls) => (mdl): any => mdls.every(k => mdl[k] !== void 0),
+  byProps: (...mdls) => (mdl) => mdls.every(k => mdl[k] !== void 0),
 
-  byName: name => (mdl): any => typeof mdl === 'function' && mdl.name === name,
+  byName: (name) => (mdl) => {
+    return typeof mdl === 'function' && mdl.name === name;
+  },
 
-  byTypeName: name => (mdl): any => {
+  byTypeName: (name) => (mdl) => {
     if (!mdl) return false;
     return typeof mdl === 'function' && mdl.name === name;
   },
 
-  byDisplayName: name => (mdl): any => {
+  byDisplayName: (name) => (mdl) => {
     if (!mdl) return false;
     return typeof mdl === 'function' && mdl.displayName === name;
   },
 
-  byTypeString: (...strings) => (mdl): any => {
+  byTypeString: (...strings) => (mdl) => {
     if (!mdl?.default) return false;
     return strings.every(s => mdl.default.toString?.()?.includes?.(s));
   },
 
-  byDefaultString: (...strings) => (mdl): any => {
+  byDefaultString: (...strings) => (mdl) => {
     if (!mdl?.default) return false;
     return strings.every(s => mdl.default.toString?.()?.includes?.(s));
   },
 
-  byString: (...strings) => (mdl): any => strings.every(s => mdl.toString?.()?.includes?.(s)),
+  byString: (...strings) => (mdl) => {
+    return strings.every(s => mdl.toString?.()?.includes?.(s));
+  }
 };
+
 
 // Export common modules
 const getters = [];
@@ -60,12 +65,12 @@ Object.entries(Common).map(([name, m]) => {
     Object.entries(m.props).map(([mdl, filter]) => {
       getters.push({
         id: mdl,
-        filter: mdl => {
+        filter: (mdl) => {
           const res = filters.byProps(...filter)(mdl);
 
           return res;
         },
-        submodule: name,
+        submodule: name
       });
     });
   } else if (m.props) {
@@ -74,7 +79,7 @@ Object.entries(Common).map(([name, m]) => {
 
       getters.push({
         id: name,
-        filter: mdl => {
+        filter: (mdl) => {
           const res = (m.props as string[]).some(props => (props as any).every(p => mdl[p]));
           if (res && m.ensure && !m.ensure(mdl)) {
             return false;
@@ -84,12 +89,12 @@ Object.entries(Common).map(([name, m]) => {
 
           return res;
         },
-        map: m.export,
+        map: m.export
       });
     } else {
       getters.push({
         id: name,
-        filter: mdl => {
+        filter: (mdl) => {
           const res = filters.byProps(...(m.props as string[]))(mdl);
           if (res && m.ensure && m.ensure(mdl) === false) {
             return false;
@@ -97,34 +102,33 @@ Object.entries(Common).map(([name, m]) => {
 
           return res;
         },
-        map: m.export,
+        map: m.export
       });
     }
   } else if (m.displayName) {
     getters.push({
       id: name,
       filter: filters.byDisplayName(m.displayName),
-      map: m.export,
+      map: m.export
     });
   } else if (m.filter) {
     getters.push({
       id: name,
       filter: m.filter,
-      map: m.export,
+      map: m.export
     });
   }
 });
 
-// eslint-disable-next-line @typescript-eslint/no-use-before-define
 const results = bulk(...getters.map(({ filter }) => filter));
 getters.map(({ id, map, submodule }, index) => {
-  let mapper = ((_): any => _);
+  let mapper = (_ => _);
 
   if (typeof map === 'string') {
-    mapper = (mdl): any => mdl[map];
+    mapper = mdl => mdl[map];
   } else if (Array.isArray(map)) {
-    const res = {};
-    mapper = (mdl): any => {
+    let res = {};
+    mapper = mdl => {
       for (const key of map) {
         res[key] = mdl[key];
       }
@@ -142,12 +146,12 @@ getters.map(({ id, map, submodule }, index) => {
   }
 });
 
-export function getModule(filter, { all = false, traverse = true, defaultExport = true } = {}): module<any> {
+export function getModule(filter, { all = false, traverse = true, defaultExport = true } = {}) {
   if (typeof filter !== 'function') return null;
 
   const found = [];
 
-  const search = (m: any, index): module<any> | boolean => {
+  const search = function (m: any, index) {
     try {
       return filter(m, index);
     } catch {
@@ -196,13 +200,13 @@ export function getModule(filter, { all = false, traverse = true, defaultExport 
   return all ? found : found[0];
 }
 
-export function getModules(filter): module<any> {
+export function getModules(filter) {
   return getModule(filter, { all: true });
-}
+};
 
-export function bulk(...filters): module<any> {
+export function bulk(...filters) {
   const found = new Array(filters.length);
-  const wrapped = filters.map(filter => m => {
+  const wrapped = filters.map(filter => (m) => {
     try {
       return filter(m);
     } catch {
@@ -213,7 +217,7 @@ export function bulk(...filters): module<any> {
   getModule(mdl => {
     for (let i = 0; i < wrapped.length; i++) {
       const filter = wrapped[i];
-      if (typeof filter !== 'function' || !filter(mdl) || found[i] !== null) continue;
+      if (typeof filter !== 'function' || !filter(mdl) || found[i] != null) continue;
 
       found[i] = mdl;
     }
@@ -224,17 +228,13 @@ export function bulk(...filters): module<any> {
   return found;
 }
 
-function parseOptions(args, filter = (o): boolean => typeof o === 'object' && !Array.isArray(o)): any[] {
-  return [args, filter(args[args.length - 1]) ? args.pop() : {}];
-}
-
-export function getByProps(...options): module<any> {
+export function getByProps(...options) {
   const [props, { bulk = false, ...rest }] = parseOptions(options);
 
   if (bulk) {
     const filters = props.map(p => Array.isArray(p)
       ? filters.byProps(...p)
-      : filters.byProps(p),
+      : filters.byProps(p)
     ).concat({ ...rest });
 
     return bulk(...filters);
@@ -243,7 +243,7 @@ export function getByProps(...options): module<any> {
   return getModule(filters.byProps(...props), rest);
 }
 
-export function getByDisplayName(...options): module<any> {
+export function getByDisplayName(...options) {
   const [names, { bulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
 
   if (bulk) {
@@ -255,7 +255,7 @@ export function getByDisplayName(...options): module<any> {
   return getModule(filters.byDisplayName(names[0]), { defaultExport, ...rest });
 }
 
-export function getByTypeName(...options): module<any> {
+export function getByTypeName(...options) {
   const [names, { bulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
 
   if (bulk) {
@@ -267,7 +267,7 @@ export function getByTypeName(...options): module<any> {
   return getModule(filters.byTypeName(names[0]), { defaultExport, ...rest });
 }
 
-export function getByName(...options): module<any> {
+export function getByName(...options) {
   const [names, { bulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
 
   if (bulk) {
@@ -279,13 +279,13 @@ export function getByName(...options): module<any> {
   return getModule(filters.byName(names[0]), { defaultExport, ...rest });
 }
 
-export function getByDefaultString(...options): module<any> {
+export function getByDefaultString(...options) {
   const [props, { bulk = false, ...rest }] = parseOptions(options);
 
   if (bulk) {
     const filters = props.map(p => Array.isArray(p)
       ? filters.byDefaultString(...p)
-      : filters.byDefaultString(p),
+      : filters.byDefaultString(p)
     ).concat({ ...rest });
 
     return bulk(...filters);
@@ -294,13 +294,13 @@ export function getByDefaultString(...options): module<any> {
   return getModule(filters.byDefaultString(...props), rest);
 }
 
-export function getByTypeString(...options): module<any> {
+export function getByTypeString(...options) {
   const [props, { bulk = false, ...rest }] = parseOptions(options);
 
   if (bulk) {
     const filters = props.map(p => Array.isArray(p)
       ? filters.byTypeString(...p)
-      : filters.byTypeString(p),
+      : filters.byTypeString(p)
     ).concat({ ...rest });
 
     return bulk(...filters);
@@ -309,17 +309,21 @@ export function getByTypeString(...options): module<any> {
   return getModule(filters.byTypeString(...props), rest);
 }
 
-export function getByString(...options): module<any> {
+export function getByString(...options) {
   const [props, { bulk = false, ...rest }] = parseOptions(options);
 
   if (bulk) {
     const filters = props.map(p => Array.isArray(p)
       ? filters.byString(...p)
-      : filters.byString(p),
+      : filters.byString(p)
     ).concat({ ...rest });
 
     return bulk(...filters);
   }
 
   return getModule(filters.byString(...props), rest);
+}
+
+function parseOptions(args, filter = o => typeof o === 'object' && !Array.isArray(o)) {
+  return [args, filter(args[args.length - 1]) ? args.pop() : {}];
 }
