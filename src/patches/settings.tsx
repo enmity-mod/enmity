@@ -56,7 +56,7 @@ export function patchSettings(): void {
           />
           <FormDivider />
           <FormRow
-            label={<FormLabel style={{ color: '#FFC0CB' }} text={'Reload Discord'} />}
+            label={<FormLabel style={{ color: '#d83c3f' }} text={'Reload Discord'} />}
             arrowShown={true}
             onPress={(): void => {
               showDialog({
