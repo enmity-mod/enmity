@@ -324,6 +324,32 @@ export function getByString(...options) {
   return getModule(filters.byString(...props), rest);
 }
 
+export function getByKeyword(...options) {
+  const [[keyword], { caseSensitive = false, all = false, ...rest }] = parseOptions(options);
+
+  return getModule(mdl => {
+    const mdls = [...Object.keys(mdl), ...Object.keys(mdl.__proto__)];
+
+    for (let i = 0; i < mdls.length; i++) {
+      const instance = mdls[i];
+
+      if (caseSensitive) {
+        if (~instance.indexOf(keyword)) {
+          return true;
+        }
+      } else {
+        const key = keyword.toLowerCase();
+
+        if (~instance.toLowerCase().indexOf(key)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }, { all, ...rest });
+};
+
 function parseOptions(args, filter = o => typeof o === 'object' && !Array.isArray(o)) {
   return [args, filter(args[args.length - 1]) ? args.pop() : {}];
 }
