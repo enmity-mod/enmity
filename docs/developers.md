@@ -1,6 +1,6 @@
 # Developer guide
 
-If you wanna make plugins for Enmity, you'll require `node` installed and you can use the [plugin-template](https://github.com/NotZoeyDev/Enmity-Plugins/tree/main/PluginTemplate) project as a starting point.
+If you wanna make plugins for Enmity, you'll require `node` installed and you can use the [plugin-template](https://github.com/enmity-mod/plugin-template) template as a starting point.
 
 Plugins are installed over https, you can use [http-server](https://www.npmjs.com/package/http-server) to quickly spin up a local web server to test out your plugins on your device.
 
