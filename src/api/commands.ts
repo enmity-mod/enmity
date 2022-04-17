@@ -10,7 +10,7 @@ const [
 ] = bulk(
   filters.byProps('getBuiltInCommands'),
   filters.byProps('useApplicationCommandsDiscoveryState'),
-  filters.byProps('getGuildTemplateIconURL')
+  filters.byProps('getApplicationIconURL')
 );
 
 let commands = [];
@@ -29,7 +29,6 @@ Patcher.after(Assets, 'getApplicationIconURL', (_, [props], res) => {
     return section.icon;
   }
 });
-
 
 Patcher.after(Discovery, 'useApplicationCommandsDiscoveryState', (_, [, , , isChat], res) => {
   if (isChat !== false) return res;
