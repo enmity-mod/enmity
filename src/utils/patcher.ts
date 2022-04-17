@@ -45,8 +45,10 @@ function unpatchAll(caller: string): void {
 }
 
 function override(patch: Patch) {
-  return function(): void {
-    if (!patch.patches.length) return patch.original.apply(this, arguments);
+  return function (): void {
+    if (!patch.patches.length) {
+      return new.target ? new patch.original(...arguments) : patch.original.apply(this, arguments);
+    }
 
     let res;
     let args: any = arguments;
@@ -62,7 +64,13 @@ function override(patch: Patch) {
     }
 
     const insteads = patch.patches.filter(p => p.type === Type.Instead);
-    if (!insteads.length) res = patch.original.apply(this, args);
+    if (!insteads.length) {
+      if (new.target) {
+        res = new patch.original(...args);
+      } else {
+        res = patch.original.apply(this, args);
+      }
+    }
 
     else {
       for (const instead of insteads) {
@@ -103,10 +111,25 @@ function push([caller, mdl, func]): Patch {
     patches: [],
   };
 
+
+  if (!patch.original) return;
+
   mdl[func] = override(patch);
-  Object.assign(mdl[func], patch.original, {
-    toString: () => patch.original.toString(),
-    '__original': patch.original,
+  const descriptors = Object.getOwnPropertyDescriptors(patch.original);
+  delete descriptors.length;
+
+  Object.defineProperties(mdl[func], {
+    ...descriptors,
+    toString: {
+      value: () => patch.original.toString(),
+      configurable: true,
+      enumerable: false
+    },
+    __original: {
+      value: patch.original,
+      configurable: true,
+      enumerable: false
+    }
   });
 
   patches.push(patch);
@@ -121,7 +144,10 @@ function get(caller, mdl, func): Patch {
 }
 
 function patch(caller: string, mdl: Mdl, func: string, callback: PatchCallback, type = Type.After): () => void {
+  if (!caller || !mdl || !func || !callback) return;
+
   const _patches = get(caller, mdl, func);
+  if (!_patches) return;
 
   const patch: Patcher = {
     caller,
