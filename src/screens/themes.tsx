@@ -1,3 +1,4 @@
+import * as Modules from '../utils/modules';
 import {
   Alert,
   Button,
@@ -13,7 +14,6 @@ import {
 import { applyTheme, getTheme, listThemes, removeTheme } from '../api/themes';
 import { installTheme, uninstallTheme } from '../utils/themes';
 import { reloadDiscord } from '../api/native';
-import * as Modules from '../utils/modules';
 import { showDialog } from '../api/dialog';
 import { showToast } from '../api/toast';
 
@@ -108,7 +108,7 @@ const ThemeCard = ({ theme, deleteTheme }: ThemeCardProps): void => (
               body: 'Applying a theme requires a restart, would you like to restart Discord to apply the new theme?',
               confirmText: 'Yes',
               cancelText: 'No',
-              onConfirm: reloadDiscord
+              onConfirm: reloadDiscord,
             });
           });
         }}
@@ -146,7 +146,7 @@ const ThemesScreen = (): void => {
                 body: 'Removing the applied theme requires a restart, would you like to restart Discord to remove the applied theme?',
                 confirmText: 'Yes',
                 cancelText: 'No',
-                onConfirm: reloadDiscord
+                onConfirm: reloadDiscord,
               });
             });
           }}
