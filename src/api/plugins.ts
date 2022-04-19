@@ -82,7 +82,7 @@ export function enablePlugin(name: string, reply?: (result) => void): void {
   sendCommand('enable-plugin', [name], reply);
 }
 
-export function evalPlugin(url: string): void {
+export function evalPlugin(url: string, update?: () => void): void {
   getRequest(url)
     .then(response => {
       const code = response.text;
@@ -102,15 +102,17 @@ export function evalPlugin(url: string): void {
 
       enabled.push(name);
       eval(wrapper);
+      update();
     })
     .catch(err => {
       console.error(err);
+      update();
     });
 }
 
-export function installPlugin(url: string, reply?: (result) => void): void {
+export function installPlugin(url: string, reply?: (result) => void, update?: () => void): void {
   sendCommand('install-plugin', [url], data => {
-    evalPlugin(url);
+    evalPlugin(url, update);
     reply(data);
   });
 }
