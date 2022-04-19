@@ -1,5 +1,5 @@
-import { RestOptions, RestResponse } from 'enmity-api/rest';
 import * as Modules from '../utils/modules';
+import { RestOptions, RestResponse } from 'enmity-api/rest';
 
 const REST = Modules.common.rest;
 
