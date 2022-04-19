@@ -1,3 +1,4 @@
+import * as Modules from '../utils/modules';
 import {
   Alert,
   Button,
@@ -5,6 +6,8 @@ import {
   FormRow,
   FormSwitch,
   React,
+  RefreshControl,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -12,8 +15,6 @@ import {
   useState,
 } from '../api/react';
 import { disablePlugin, enablePlugin, getEnabledPlugins, getPlugins, installPlugin, uninstallPlugin } from '../api/plugins';
-import * as Modules from '../utils/modules';
-import { sendCommand } from '../utils/native';
 import { showToast } from '../api/toast';
 
 import { Plugin } from 'enmity-api/plugins';
@@ -53,6 +54,10 @@ const cardStyle = createThemedStyleSheet({
     width: '100%',
     flex: 1,
     flexDirection: 'column',
+  },
+
+  container: {
+    backgroundColor: ThemeColorMap.BACKGROUND_PRIMARY,
   },
 
   cardHeader: {
@@ -132,8 +137,11 @@ const PluginCard = ({ plugin, removePlugin }: PluginCardProps): void => {
   );
 };
 
-const PluginsScreen = (): void => {
+const Stack = createStackNavigator();
+
+export const PluginPage = (): void => {
   const [plugins, setPlugins] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     setPlugins(getPlugins);
@@ -143,64 +151,76 @@ const PluginsScreen = (): void => {
     setPlugins(plugins.filter(plugin => plugin.name !== pluginName));
   };
 
-  return (<View style={{
+  const PluginsScreen = (): void => (<View style={{
     flex: 1,
   }}>
-    <Form>
-      {plugins.map(plugin => <PluginCard plugin={plugin} removePlugin={removePlugin} />)}
-    </Form>
-  </View>);
-};
-
-const Stack = createStackNavigator();
-
-export const PluginPage = (): void => (
-  <NavigationContainer>
-    <Stack.Navigator
-      style={navbarStyle.container}
-      screenOptions={{
-        cardOverlayEnabled: !1,
-        cardShadowEnabled: !1,
-        cardStyle: navbarStyle.cardStyle,
-        headerStyle: navbarStyle.header,
-        headerTitleContainerStyle: navbarStyle.headerTitleContainer,
-        headerTitleAlign: 'center',
-        safeAreaInsets: {
-          top: 0,
-        },
-      }}
+    <ScrollView
+      style={cardStyle.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={(): void => {
+            setRefreshing(true);
+            setPlugins(getPlugins);
+            setRefreshing(false);
+          }}
+        />
+      }
     >
-      <Stack.Screen
-        name="Plugins"
-        component={PluginsScreen}
-        options={{
-          headerTitleStyle: {
-            color: 'white',
+      {plugins.map(plugin => <PluginCard plugin={plugin} removePlugin={removePlugin} />)}
+    </ScrollView>
+  </View>);
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        style={navbarStyle.container}
+        screenOptions={{
+          cardOverlayEnabled: !1,
+          cardShadowEnabled: !1,
+          cardStyle: navbarStyle.cardStyle,
+          headerStyle: navbarStyle.header,
+          headerTitleContainerStyle: navbarStyle.headerTitleContainer,
+          headerTitleAlign: 'center',
+          safeAreaInsets: {
+            top: 0,
           },
-          headerLeft: (): void => (<Button
-            color="#fff"
-            title="Close"
-            onPress={(): void => Navigation.pop()}
-          />),
-          headerRight: (): void => (<Button
-            color="#fff"
-            title="Add"
-            onPress={(): void => {
-              Alert.prompt(
-                'Install a plugin',
-                'Please enter the URL of the plugin to install.',
-                (url: string) => {
-                  installPlugin(url, data => {
-                    showToast({
-                      content: `Plugin has been installed. Please reload Discord.`,
-                    });
-                  });
-                },
-              );
-            }}
-          />),
         }}
-      />
-    </Stack.Navigator>
-  </NavigationContainer>
-);
+      >
+        <Stack.Screen
+          name="Plugins"
+          component={PluginsScreen}
+          options={{
+            headerTitleStyle: {
+              color: 'white',
+            },
+            headerLeft: (): void => (<Button
+              color="#fff"
+              title="Close"
+              onPress={(): void => Navigation.pop()}
+            />),
+            headerRight: (): void => (<Button
+              color="#fff"
+              title="Add"
+              onPress={(): void => {
+                Alert.prompt(
+                  'Install a plugin',
+                  'Please enter the URL of the plugin to install.',
+                  (url: string) => {
+                    installPlugin(url, data => {
+                      showToast({
+                        content: `Plugin has been installed.`,
+                      });
+                    }, () => {
+                      setPlugins(getPlugins);
+                    });
+                  },
+                );
+              }}
+            />),
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
