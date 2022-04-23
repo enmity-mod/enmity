@@ -8,12 +8,12 @@ const blacklist = [
   'TextTrack'
 ];
 
-const Trackers = getModules(m => typeof m === 'object' && Object.keys(m)?.some(e => ~e.toLowerCase().indexOf('track') && !blacklist.some(b => ~e.indexOf(b))));
+const Trackers = getModules(m => typeof m === 'object' && Object.keys(m)?.some(e => (~e.toLowerCase().indexOf('track') || ~e.toLowerCase().indexOf('analytics')) && !blacklist.some(b => ~e.indexOf(b))));
 const Reporters = getModules(m => typeof m === 'object' && Object.keys(m)?.some(e => ~e.toLowerCase().indexOf('crashreport') && !blacklist.some(b => ~e.indexOf(b))));
 
 export default function () {
   for (let i = 0; i < Trackers.length; i++) {
-    traverse(Trackers[i], key => ~key.toLowerCase().indexOf('track') && !blacklist.some(b => ~key.indexOf(b)));
+    traverse(Trackers[i], key => (~e.toLowerCase().indexOf('track') || ~e.toLowerCase().indexOf('analytics')) && !blacklist.some(b => ~key.indexOf(b)));
   }
 
   for (let i = 0; i < Reporters.length; i++) {
