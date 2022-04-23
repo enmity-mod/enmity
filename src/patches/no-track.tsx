@@ -5,7 +5,8 @@ const Patcher = create('no-track');
 
 const blacklist = [
   'useAndTrack',
-  'TextTrack'
+  'TextTrack',
+  'useAnalyticsContext'
 ];
 
 const Trackers = getModules(m => typeof m === 'object' && Object.keys(m)?.some(e => (~e.toLowerCase().indexOf('track') || ~e.toLowerCase().indexOf('analytics')) && !blacklist.some(b => ~e.indexOf(b))));
