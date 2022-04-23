@@ -14,7 +14,7 @@ const Reporters = getModules(m => typeof m === 'object' && Object.keys(m)?.some(
 
 export default function () {
   for (let i = 0; i < Trackers.length; i++) {
-    traverse(Trackers[i], key => (~e.toLowerCase().indexOf('track') || ~e.toLowerCase().indexOf('analytics')) && !blacklist.some(b => ~key.indexOf(b)));
+    traverse(Trackers[i], key => (~key.toLowerCase().indexOf('track') || ~key.toLowerCase().indexOf('analytics')) && !blacklist.some(b => ~key.indexOf(b)));
   }
 
   for (let i = 0; i < Reporters.length; i++) {
