@@ -8,7 +8,7 @@ import { showDialog } from '../api/dialog';
 
 const Navigation = common.navigation;
 
-export function patchSettings(): void {
+export default function (): void {
   const Patcher = create('enmity-settings');
 
   let UserSettingsOverview;
