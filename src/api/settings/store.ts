@@ -1,0 +1,47 @@
+import { Lodash, Settings, Dispatcher, Flux } from '@metro/common';
+
+export const settings = Settings.get('enmity') ?? {};
+
+export function getSetting(file, setting, defaults) {
+  return settings[file]?.[setting] ?? defaults;
+}
+
+export function get(file) {
+  return settings[file] ?? {};
+}
+
+export function getAll() {
+  return settings;
+}
+
+const Events = {
+  'ENMITY_GET_SETTING': ({ file, setting, defaults }) => {
+    return settings[file][setting] ?? defaults;
+  },
+
+  'ENMITY_SET_SETTING': ({ file, setting, value }) => {
+    if (!settings[file]) settings[file] = {};
+
+    if (value == void 0) {
+      delete settings[file][setting];
+    } else {
+      settings[file][setting] = value;
+    }
+  },
+
+  'ENMITY_TOGGLE_SETTING': ({ file, setting, defaults }) => {
+    if (!settings[file]) settings[file] = {};
+
+    if (settings[file][setting] === void 0) {
+      settings[file][setting] = !Boolean(defaults);
+    } else {
+      settings[file][setting] = !Boolean(settings[file][setting]);
+    }
+  }
+};
+
+export const store = new Flux.Store(Dispatcher, Events);
+
+store.addChangeListener(Lodash.debounce(() => Settings.set({ enmity: settings }), 200));
+
+export default { store, getAll, getSetting, get };

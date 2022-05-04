@@ -1,19 +1,15 @@
-import * as Modules from '../utils/modules';
+import { Clyde, Messages, Avatars } from '@metro/common';
 
-const Messages = Modules.common.messages;
-const BotMessages = Modules.common.clyde;
-const Images = Modules.common.avatars;
-
-Images.BOT_AVATARS.ENMITY = 'https://github.com/enmity-mod.png';
+Avatars.BOT_AVATARS.ENMITY = 'https://github.com/enmity-mod.png';
 
 export function sendReply(channelID: string, content: (string | object), username?: string, avatarURL?: string): void {
-  const msg = BotMessages.createBotMessage(channelID, '');
+  const msg = Clyde.createBotMessage(channelID, '');
 
   msg.author.username = username ?? 'Enmity';
   msg.author.avatar = avatarURL ? username : 'ENMITY';
 
   if (avatarURL) {
-    Images.BOT_AVATARS[username] = avatarURL;
+    Avatars.BOT_AVATARS[username] = avatarURL;
   }
 
   if (typeof content === 'string') {

@@ -1,34 +1,29 @@
-const modules: {
-  [key: string]: {
-    props?: string[] | object;
-    export?: string | string[];
-    displayName?: string;
-    multiple?: boolean;
-    filter?: Function;
-    ensure?: Function;
-  };
-} = {
-  clipboard: {
+const modules = {
+  Constants: {
+    props: ['ActionTypes']
+  },
+
+  Clipboard: {
     props: ['setString', 'getString'],
   },
 
-  assets: {
+  Assets: {
     props: ['registerAsset'],
   },
 
-  messages: {
+  Messages: {
     props: ['receiveMessage', 'sendMessage'],
   },
 
-  clyde: {
+  Clyde: {
     props: ['createBotMessage'],
   },
 
-  avatars: {
+  Avatars: {
     props: ['BOT_AVATARS'],
   },
 
-  native: {
+  Native: {
     props: ['NativeModules'],
     export: 'NativeModules',
   },
@@ -41,60 +36,64 @@ const modules: {
     props: ['dirtyDispatch'],
   },
 
-  storage: {
+  Storage: {
     props: ['getItem'],
   },
 
-  toasts: {
+  Toasts: {
     props: ['open', 'close'],
     ensure: m => !m.openLazy && !m.startDrag && !m.init && !m.openReplay,
   },
 
-  dialog: {
+  Dialog: {
     props: ['show', 'openLazy', 'open', 'close'],
   },
 
-  token: {
+  Token: {
     props: ['getToken'],
   },
 
-  rest: {
+  REST: {
     props: ['getAPIBaseURL'],
   },
 
-  settings: {
+  Settings: {
     props: ['watchKeys'],
   },
 
-  users: {
-    props: ['fetchProfile'],
+  Users: {
+    props: ['getCurrentUser'],
   },
 
-  theme: {
-    props: ['theme'],
+  Subscriptions: {
+    props: ['getPremiumTypeSubscription']
   },
 
-  linking: {
-    props: ['openURL'],
-  },
-
-  navigation: {
+  Navigation: {
     props: ['pushLazy'],
   },
 
-  navigationNative: {
+  NavigationNative: {
     props: ['NavigationContainer'],
   },
 
-  navigationStack: {
+  NavigationStack: {
     props: ['createStackNavigator'],
   },
 
-  stylesheet: {
+  Theme: {
+    props: ['theme'],
+  },
+
+  Linking: {
+    props: ['openURL'],
+  },
+
+  StyleSheet: {
     props: ['createThemedStyleSheet'],
   },
 
-  colorMap: {
+  ColorMap: {
     props: ['ThemeColorMap'],
   },
 
@@ -106,9 +105,50 @@ const modules: {
     },
   },
 
-  Locales: {
+  Locale: {
     props: ['Messages'],
   },
+
+  Profiles: {
+    props: ['showUserProfile']
+  },
+
+  Lodash: {
+    props: ['debounce', 'throttle']
+  },
+
+  Logger: {
+    name: 'Logger'
+  },
+
+  Flux: {
+    props: [
+      ['Store', 'connectStores'],
+      ['useStateFromStoresObject']
+    ]
+  },
+
+  SVG: {
+    props: ['Svg']
+  },
+
+  Scenes: {
+    name: 'getScreens',
+    default: false
+  }
 };
 
-export default modules;
+export default modules as {
+  [key: string]: {
+    props?: string[] | object;
+    export?: string | string[];
+    default?: boolean;
+    displayName?: string;
+    multiple?: boolean;
+    filter?: Function;
+    ensure?: Function;
+    name?: string;
+  };
+};
+
+export type Modules = keyof typeof modules;

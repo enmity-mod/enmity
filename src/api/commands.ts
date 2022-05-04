@@ -1,5 +1,5 @@
-import { filters, bulk } from '../utils/modules';
-import { create } from '../utils/patcher';
+import { filters, bulk } from '@metro';
+import { create } from '@patcher';
 
 const Patcher = create('enmity-commands');
 
@@ -74,7 +74,4 @@ function unregisterCommands(caller): void {
   commands = commands.filter(c => c.caller !== caller);
 }
 
-export {
-  registerCommands,
-  unregisterCommands,
-};
+export { registerCommands, unregisterCommands };

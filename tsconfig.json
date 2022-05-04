@@ -1,0 +1,69 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src/",
+    "outDir": "dist",
+    "target": "ESNext",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "noUnusedParameters": false,
+    "useDefineForClassFields": false,
+    "paths": {
+      "@metro": [
+        "modules/metro/index"
+      ],
+      "@metro/*": [
+        "modules/metro/*"
+      ],
+      "@data/*": [
+        "data/*"
+      ],
+      "@utilities/*": [
+        "modules/utilities/*"
+      ],
+      "@patcher": [
+        "modules/patcher/index"
+      ],
+      "@patcher/*": [
+        "modules/patcher/*"
+      ],
+      "@api/*": [
+        "api/*"
+      ],
+      "@api": [
+        "api/index"
+      ],
+      "@api/settings": [
+        "api/settings/index"
+      ],
+      "@components": [
+        "components/index"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@managers/*": [
+        "managers/*"
+      ],
+      "@screens/*": [
+        "core/screens/*"
+      ],
+      "@modules/*": [
+        "modules/*"
+      ],
+      "react": [
+        "modules/metro/react"
+      ],
+      "@core": [
+        "core"
+      ],
+      "@core/*": [
+        "core/*"
+      ],
+      "reactTypes": [
+        "../node_modules/@types/react"
+      ]
+    }
+  }
+}

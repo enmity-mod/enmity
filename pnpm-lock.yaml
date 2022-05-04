@@ -4,34 +4,27 @@ specifiers:
   '@rollup/plugin-node-resolve': ^13.1.1
   '@rollup/plugin-replace': ^4.0.0
   '@types/node': ^17.0.5
+  '@types/react': ^18.0.7
   '@typescript-eslint/eslint-plugin': ^5.15.0
   '@typescript-eslint/parser': ^5.15.0
   enmity-api: github:enmity-mod/enmity-api
-  esbuild: ^0.14.9
-  esbuild-darwin-64: ^0.14.21
-  esbuild-darwin-arm64: ^0.14.21
-  esbuild-linux-64: ^0.14.21
-  esbuild-windows-64: ^0.14.21
+  esbuild: ^0.14.25
   eslint: ^8.5.0
   eslint-plugin-react: ^7.29.4
   rollup: ^2.62.0
   rollup-plugin-esbuild: ^4.8.2
-  uuid: ^8.3.2
+  rollup-plugin-typescript-paths: ^1.3.1
+  uninstall: ^0.0.0
 
 dependencies:
-  enmity-api: github.com/enmity-mod/enmity-api/13e48514049fb0144a1b4e99709fc82b0fb870f0
-  uuid: 8.3.2
-
-optionalDependencies:
-  esbuild-darwin-64: 0.14.25
-  esbuild-darwin-arm64: 0.14.25
-  esbuild-linux-64: 0.14.25
-  esbuild-windows-64: 0.14.25
+  enmity-api: github.com/enmity-mod/enmity-api/d1af0b7ed1ce3634b4852a08fe7c0376252ebaa6
+  uninstall: 0.0.0
 
 devDependencies:
   '@rollup/plugin-node-resolve': 13.1.3_rollup@2.70.0
   '@rollup/plugin-replace': 4.0.0_rollup@2.70.0
   '@types/node': 17.0.21
+  '@types/react': 18.0.7
   '@typescript-eslint/eslint-plugin': 5.18.0_a85db8b1d5808ef52dee66bebd9bc654
   '@typescript-eslint/parser': 5.18.0_eslint@8.10.0
   esbuild: 0.14.25
@@ -39,6 +32,7 @@ devDependencies:
   eslint-plugin-react: 7.29.4_eslint@8.10.0
   rollup: 2.70.0
   rollup-plugin-esbuild: 4.8.2_esbuild@0.14.25+rollup@2.70.0
+  rollup-plugin-typescript-paths: 1.3.1
 
 packages:
 
@@ -152,10 +146,26 @@ packages:
     resolution: {integrity: sha512-DBZCJbhII3r90XbQxI8Y9IjjiiOGlZ0Hr32omXIZvwwZ7p4DMMXGrKXVyPfuoBOri9XNtL0UK69jYIBIsRX3QQ==}
     dev: true
 
+  /@types/prop-types/15.7.5:
+    resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
+    dev: true
+
+  /@types/react/18.0.7:
+    resolution: {integrity: sha512-CXSXHzTexlX9esf4ReIUJeaemKcmBEvYzxHDUk19c3BCcEGUvUjkeC3jkscPSfSaQ6SPDRNd/zMxi8oc/P1zxA==}
+    dependencies:
+      '@types/prop-types': 15.7.5
+      '@types/scheduler': 0.16.2
+      csstype: 3.0.11
+    dev: true
+
   /@types/resolve/1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
       '@types/node': 17.0.21
+    dev: true
+
+  /@types/scheduler/0.16.2:
+    resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/5.18.0_a85db8b1d5808ef52dee66bebd9bc654:
@@ -411,6 +421,10 @@ packages:
       which: 2.0.2
     dev: true
 
+  /csstype/3.0.11:
+    resolution: {integrity: sha512-sa6P2wJ+CAbgyy4KFssIb/JNMLxFvKF1pCYCSXS8ZMuqZnMsrxqI2E5sPyoTpxoPU/gVZMzr2zjOfg8GIZOMsw==}
+    dev: true
+
   /debug/4.3.3:
     resolution: {integrity: sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==}
     engines: {node: '>=6.0'}
@@ -523,6 +537,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /esbuild-darwin-arm64/0.14.25:
@@ -531,6 +546,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /esbuild-freebsd-64/0.14.25:
@@ -566,6 +582,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /esbuild-linux-arm/0.14.25:
@@ -664,6 +681,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /esbuild-windows-arm64/0.14.25:
@@ -1458,6 +1476,12 @@ packages:
       - supports-color
     dev: true
 
+  /rollup-plugin-typescript-paths/1.3.1:
+    resolution: {integrity: sha512-gRjWwEIVcrga59OWWh8WGiJlcM9zzdr8xS64ZVYl+0pU5kRpoy2nu4QHh6bBlacIM38PK41w1v0WrH5SgTNetg==}
+    peerDependencies:
+      typescript: '>=3.4'
+    dev: true
+
   /rollup/2.70.0:
     resolution: {integrity: sha512-iEzYw+syFxQ0X9RefVwhr8BA2TNJsTaX8L8dhyeyMECDbmiba+8UQzcu+xZdji0+JQ+s7kouQnw+9Oz5M19XKA==}
     engines: {node: '>=10.0.0'}
@@ -1610,16 +1634,15 @@ packages:
       which-boxed-primitive: 1.0.2
     dev: true
 
+  /uninstall/0.0.0:
+    resolution: {integrity: sha1-ED5uN+nFLshXVCzSWQI9ccej+ys=}
+    dev: false
+
   /uri-js/4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
       punycode: 2.1.1
     dev: true
-
-  /uuid/8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    hasBin: true
-    dev: false
 
   /v8-compile-cache/2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
@@ -1656,8 +1679,8 @@ packages:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
     dev: true
 
-  github.com/enmity-mod/enmity-api/13e48514049fb0144a1b4e99709fc82b0fb870f0:
-    resolution: {tarball: https://codeload.github.com/enmity-mod/enmity-api/tar.gz/13e48514049fb0144a1b4e99709fc82b0fb870f0}
+  github.com/enmity-mod/enmity-api/d1af0b7ed1ce3634b4852a08fe7c0376252ebaa6:
+    resolution: {tarball: https://codeload.github.com/enmity-mod/enmity-api/tar.gz/d1af0b7ed1ce3634b4852a08fe7c0376252ebaa6}
     name: enmity-api
-    version: 1.0.0
+    version: 1.0.8
     dev: false

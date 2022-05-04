@@ -1,14 +1,17 @@
-import './utils/themes';
-import { applyPatches } from './patches';
-import { prepareApi } from './api';
-import { prepareCommands } from './commands';
-import { prepareWebsocket } from './utils/websocket';
+declare global {
+  interface Window {
+    [key: PropertyKey]: any;
+  }
+}
+
+// Setup asset handler early to capture most assets
+import '@api/assets';
+// Initialize Enmity
+import Enmity from '@core';
 
 try {
-  prepareWebsocket();
-  prepareApi();
-  applyPatches();
-  prepareCommands();
+  Enmity.initialize();
 } catch (error) {
+  alert(`Enmity failed to initialize: ${error.message}`);
   console.error(error);
 }

@@ -1,9 +1,7 @@
-import * as Modules from '../utils/modules';
-
-const Native = Modules.common.native;
+import { Native } from '@metro/common';
 
 export function reloadDiscord(): void {
-  Native.BundleUpdaterManager.reload();
+  return Native.BundleUpdaterManager.reload();
 }
 
 export function getVersion(): string {
