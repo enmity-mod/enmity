@@ -19,7 +19,7 @@ export function connectWebsocket(host?: string): void {
     socket = null;
   }
 
-  const address = Settings.get('enmity', 'debugWSAddress');
+  const address = Boolean(Settings.get('enmity', 'autoConnectWS', false)) && Settings.get('enmity', 'debugWSAddress');
   if (!address && !host) return;
   socket = new WebSocket(`ws://${host ?? address}`);
 
