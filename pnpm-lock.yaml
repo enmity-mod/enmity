@@ -14,11 +14,9 @@ specifiers:
   rollup: ^2.62.0
   rollup-plugin-esbuild: ^4.8.2
   rollup-plugin-typescript-paths: ^1.3.1
-  uninstall: ^0.0.0
 
 dependencies:
   enmity-api: github.com/enmity-mod/enmity-api/d1af0b7ed1ce3634b4852a08fe7c0376252ebaa6
-  uninstall: 0.0.0
 
 devDependencies:
   '@rollup/plugin-node-resolve': 13.1.3_rollup@2.70.0
@@ -1633,10 +1631,6 @@ packages:
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
     dev: true
-
-  /uninstall/0.0.0:
-    resolution: {integrity: sha1-ED5uN+nFLshXVCzSWQI9ccej+ys=}
-    dev: false
 
   /uri-js/4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
