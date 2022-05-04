@@ -13,19 +13,7 @@ const Icon = getByTypeName('Icon');
 const { ThemeColorMap } = ColorMap;
 
 export default function () {
-  SheetPatcher.after('enmity-downloader4', 'MessageLongPressActionSheet', (_, args) => {
-    console.log('patch 4 !!!!!!!!');
-  });
-
-  // setTimeout(() => {
-  SheetPatcher.after('enmity-downloader', 'MessageLongPressActionSheet', (_, args) => {
-    console.log('patch 1 !!!!!!!!');
-  });
-  // }, 10000);
-
-  return;
   SheetPatcher.after('enmity-downloader', 'MessageLongPressActionSheet', (_, [{ channel, message }, items]) => {
-    console.log('patch 2 !!!!!!!!');
     const styles = StyleSheet.createThemedStyleSheet({
       icon: {
         color: ThemeColorMap.INTERACTIVE_NORMAL
