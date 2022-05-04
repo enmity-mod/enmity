@@ -10,7 +10,7 @@ type Common = { [key in keyof typeof import('@data/modules').default]: any };
 export const common: Common = {};
 
 const blacklist: (Function | number)[] = [
-  id => id >= 944 && id <= 994,
+  id => id >= 951 && id <= 1006,
   125,
   203,
   433,
