@@ -21,10 +21,10 @@ Patcher.before(Opener, 'openLazy', (_, [component, sheet, sure, gay]) => {
         if (patch.applied) continue;
 
         const cb = patch.callback;
-        const unpatch = patcher[patch.type](patch.caller, res.type, 'render', (ctx, args, res) => {
-          // const children = findInReactTree(args[0], r => r.find?.(c => Array.isArray(c)));
-          // if (!children) return;
-          // const passedArgs = [children[0]?.props, children[1], ...args];
+        patcher[patch.type](patch.caller, res.type, 'render', (ctx, args, res) => {
+          const children = findInReactTree(args[0], r => r.find?.(c => Array.isArray(c)));
+          if (!children) return;
+          const passedArgs = [children[0]?.props, children[1], ...args];
 
           return cb.apply(ctx, [ctx, args, res]);
         });
