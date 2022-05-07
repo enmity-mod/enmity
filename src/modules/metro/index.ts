@@ -51,20 +51,6 @@ export const filters = {
     } else {
       return typeof mdl === 'function' && mdl.name === name;
     }
-  },
-
-  byTypeString: (...strings) => (mdl) => {
-    if (!mdl?.default) return false;
-    return strings.every(s => mdl.default.toString?.()?.includes?.(s));
-  },
-
-  byDefaultString: (...strings) => (mdl) => {
-    if (!mdl?.default) return false;
-    return strings.every(s => mdl.default.toString?.()?.includes?.(s));
-  },
-
-  byString: (...strings) => (mdl) => {
-    return strings.every(s => mdl.toString?.()?.includes?.(s));
   }
 };
 
@@ -295,51 +281,6 @@ export function getByName(...options) {
   }
 
   return getModule(filters.byName(names[0]), { defaultExport, ...rest });
-}
-
-export function getByDefaultString(...options) {
-  const [props, { bulk = false, ...rest }] = parseOptions(options);
-
-  if (bulk) {
-    const filters = props.map(p => Array.isArray(p)
-      ? filters.byDefaultString(...p)
-      : filters.byDefaultString(p)
-    ).concat({ ...rest });
-
-    return bulk(...filters);
-  }
-
-  return getModule(filters.byDefaultString(...props), rest);
-}
-
-export function getByTypeString(...options) {
-  const [props, { bulk = false, ...rest }] = parseOptions(options);
-
-  if (bulk) {
-    const filters = props.map(p => Array.isArray(p)
-      ? filters.byTypeString(...p)
-      : filters.byTypeString(p)
-    ).concat({ ...rest });
-
-    return bulk(...filters);
-  }
-
-  return getModule(filters.byTypeString(...props), rest);
-}
-
-export function getByString(...options) {
-  const [props, { bulk = false, ...rest }] = parseOptions(options);
-
-  if (bulk) {
-    const filters = props.map(p => Array.isArray(p)
-      ? filters.byString(...p)
-      : filters.byString(p)
-    ).concat({ ...rest });
-
-    return bulk(...filters);
-  }
-
-  return getModule(filters.byString(...props), rest);
 }
 
 export function getByKeyword(...options) {

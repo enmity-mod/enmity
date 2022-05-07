@@ -29,7 +29,7 @@ export function Page({ settings }) {
   };
 
   const Plugins = [...window.plugins.enabled, ...window.plugins.disabled];
-  const Themes = listThemes();
+  const Themes = listThemes().map(t => t.name);
 
   return <ScrollView>
     <KeyboardAvoidingView
