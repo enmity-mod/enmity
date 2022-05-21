@@ -3,7 +3,7 @@ import { Dialog, StyleSheet, ColorMap, Constants, Toasts } from '@metro/common';
 import { reloadDiscord } from '@api/native';
 import * as Themes from '@managers/themes';
 import Authors from './partials/Authors';
-import { getByProps, getModule } from '@metro';
+import { getModule } from '@metro';
 import Assets from '@api/assets';
 import React from 'react';
 
