@@ -13,7 +13,8 @@ export default function ({ name = 'hi', children = (<Text>hi</Text>) } = {}) {
       flex: 1,
     },
     cardStyle: {
-      backgroundColor: 'transparent',
+      backgroundColor: ThemeColorMap.BACKGROUND_MOBILE_PRIMARY,
+      color: ThemeColorMap.TEXT_NORMAL
     },
     header: {
       backgroundColor: ThemeColorMap.BACKGROUND_MOBILE_SECONDARY,
@@ -32,22 +33,23 @@ export default function ({ name = 'hi', children = (<Text>hi</Text>) } = {}) {
     <Settings.Navigator
       initialRouteName={name}
       style={styles.container}
+      screenOptions={{
+        cardOverlayEnabled: !1,
+        cardShadowEnabled: !1,
+        cardStyle: styles.cardStyle,
+        headerStyle: styles.header,
+        headerTitleContainerStyle: styles.headerTitleContainer,
+        headerTitleAlign: 'center',
+        safeAreaInsets: {
+          top: 0,
+        },
+      }}
     >
       <Settings.Screen
         name={name}
         component={children}
         options={{
-          cardOverlayEnabled: !1,
-          cardShadowEnabled: !1,
-          cardStyle: styles.cardStyle,
-          headerStyle: styles.header,
-          headerTitleContainerStyle: styles.headerTitleContainer,
-          headerTitleAlign: 'center',
-          animationEnabled: true,
-          animationTypeForReplace: 'pop',
-          safeAreaInsets: {
-            top: 0,
-          },
+
           headerTitleStyle: {
             color: 'white',
           },

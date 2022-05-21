@@ -1,10 +1,11 @@
 import { Alert, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
 import { StyleSheet, ColorMap, Constants, Toasts, Navigation } from '@metro/common';
+import { connectComponent } from '@api/settings';
 import PluginSettings from './PluginSettings';
 import * as Plugins from '@managers/plugins';
 import { Plugin } from 'enmity-api/plugins';
 import Authors from './partials/Authors';
-import { getByProps } from '@metro';
+import { getModule } from '@metro';
 import Assets from '@api/assets';
 import React from 'react';
 
@@ -14,7 +15,6 @@ const { ThemeColorMap } = ColorMap;
 interface PluginCardProps {
   plugin: Plugin;
 }
-
 
 export function PluginCard({ plugin }: PluginCardProps) {
   const plugins = Plugins.getEnabledPlugins();
@@ -58,23 +58,22 @@ export function PluginCard({ plugin }: PluginCardProps) {
       flexDirection: 'row',
       alignItems: 'center'
     },
-
     delete: {
       marginRight: 7.5
     },
-
     trashIcon: {
       width: 22,
       height: 22,
       tintColor: 'white'
     },
-
     settingsIcon: {
       width: 22,
       height: 22,
       tintColor: 'white'
     }
   });
+
+  const Settings = plugin.getSettingsPanel;
 
   return (
     <View style={styles.container}>
@@ -88,14 +87,17 @@ export function PluginCard({ plugin }: PluginCardProps) {
             <Authors authors={plugin.authors} />
           </View>}
           trailing={() => <View style={styles.actions}>
-            <TouchableOpacity
+            {Settings && <TouchableOpacity
               style={styles.delete}
               onPress={(): void => {
-                Navigation.push(PluginSettings);
+                Navigation.push(PluginSettings, {
+                  name: plugin.name,
+                  children: connectComponent(Settings, plugin.name)
+                });
               }}
             >
               <Image style={styles.settingsIcon} source={Assets.getIDByName('settings')} />
-            </TouchableOpacity>
+            </TouchableOpacity>}
             <TouchableOpacity
               style={styles.delete}
               onPress={(): void => void Plugins.uninstallPlugin(plugin.name)}
@@ -188,7 +190,7 @@ export function HeaderRight() {
   );
 }
 
-const Search = getByProps('SearchBarNavWrapper', { default: false });
+const Search = getModule(m => m.name === 'StaticSearchBarContainer');
 
 export function Page() {
   const forceUpdate = React.useState(null)[1];
@@ -231,7 +233,6 @@ export function Page() {
       flex: 1,
       padding: 5
     },
-
     notFound: {
       display: 'flex',
       justifyContent: 'center',
@@ -239,25 +240,26 @@ export function Page() {
       alignSelf: 'center',
       marginTop: '50%'
     },
-
     notFoundText: {
       marginTop: 10,
       color: ThemeColorMap.TEXT_MUTED,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
       textAlign: 'center'
     },
-
     search: {
-      marginTop: 7.5,
+      margin: 0,
+      marginBottom: 0,
+      paddingBottom: 5,
       paddingRight: 10,
       paddingLeft: 10,
       backgroundColor: 'none',
-      borderBottomWidth: 0
+      borderBottomWidth: 0,
+      background: 'none'
     }
   });
 
   return (<>
-    <Search.SearchBarNavWrapper
+    <Search
       style={styles.search}
       placeholder='Search plugins...'
       onChangeText={v => setSearch(v)}

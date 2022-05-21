@@ -3,7 +3,7 @@ import { Dialog, StyleSheet, ColorMap, Constants, Toasts } from '@metro/common';
 import { reloadDiscord } from '@api/native';
 import * as Themes from '@managers/themes';
 import Authors from './partials/Authors';
-import { getByProps } from '@metro';
+import { getByProps, getModule } from '@metro';
 import Assets from '@api/assets';
 import React from 'react';
 
@@ -56,11 +56,9 @@ export function ThemeCard({ theme }: ThemeCardProps) {
       flexDirection: 'row',
       alignItems: 'center'
     },
-
     delete: {
       marginRight: 7.5
     },
-
     trashIcon: {
       width: 22,
       height: 22
@@ -210,7 +208,7 @@ export function HeaderRight() {
   );
 }
 
-const Search = getByProps('SearchBarNavWrapper', { default: false });
+const Search = getModule(m => m.name === 'StaticSearchBarContainer');
 
 export function Page() {
   const forceUpdate = React.useState(null)[1];
@@ -253,7 +251,6 @@ export function Page() {
       flex: 1,
       padding: 5
     },
-
     notFound: {
       display: 'flex',
       justifyContent: 'center',
@@ -261,25 +258,26 @@ export function Page() {
       alignSelf: 'center',
       marginTop: '50%'
     },
-
     notFoundText: {
       marginTop: 10,
       color: ThemeColorMap.TEXT_MUTED,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
       textAlign: 'center'
     },
-
     search: {
-      marginTop: 7.5,
+      margin: 0,
+      marginBottom: 0,
+      paddingBottom: 5,
       paddingRight: 10,
       paddingLeft: 10,
       backgroundColor: 'none',
-      borderBottomWidth: 0
+      borderBottomWidth: 0,
+      background: 'none'
     }
   });
 
   return (<>
-    <Search.SearchBarNavWrapper
+    <Search
       style={styles.search}
       placeholder='Search themes...'
       onChangeText={v => setSearch(v)}
