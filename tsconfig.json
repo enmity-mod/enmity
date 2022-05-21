@@ -56,7 +56,7 @@
         "modules/metro/react"
       ],
       "@core": [
-        "core"
+        "core/index"
       ],
       "@core/*": [
         "core/*"

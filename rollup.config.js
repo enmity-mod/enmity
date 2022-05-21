@@ -7,7 +7,7 @@ import { createHash } from 'crypto';
 import { typescriptPaths } from 'rollup-plugin-typescript-paths';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import esbuild from 'rollup-plugin-esbuild';
+import { swc } from 'rollup-plugin-swc3';
 
 const revision = execSync('git rev-parse --short HEAD').toString().trim();
 
@@ -26,9 +26,60 @@ export default defineConfig({
       preserveExtensions: true
     }),
     nodeResolve(),
-    esbuild({
-      target: 'esnext',
-      minify: true
+    swc({
+      jsc: {
+        minify: {
+          compress: true
+        },
+        parser: {
+          "syntax": "typescript",
+          "tsx": true
+        },
+        target: 'es2022',
+        baseUrl: './src/',
+        paths: {
+          "@metro/*": [
+            "modules/metro/index",
+            "modules/metro/*"
+          ],
+          "@data/*": [
+            "data/*"
+          ],
+          "@utilities/*": [
+            "modules/utilities/*"
+          ],
+          "@patcher/*": [
+            "modules/patcher/index",
+            "modules/patcher/*"
+          ],
+          "@api/*": [
+            "api/index",
+            "api/*"
+          ],
+          "@api/settings/*": [
+            "api/settings/index"
+          ],
+          "@components/*": [
+            "components/index",
+            "components/*"
+          ],
+          "@managers/*": [
+            "managers/*"
+          ],
+          "@screens/*": [
+            "core/screens/*"
+          ],
+          "@modules/*": [
+            "modules/*"
+          ],
+          "react/*": [
+            "modules/metro/react",
+          ],
+          "@core/*": [
+            "core/*"
+          ]
+        }
+      }
     }),
     replace({
       preventAssignment: true,
