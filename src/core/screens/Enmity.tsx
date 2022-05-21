@@ -1,5 +1,6 @@
 import { FormSection, ScrollView, FormRow, FormSwitch, Text, FormInput, KeyboardAvoidingView } from '@components';
 import { Linking, StyleSheet, ColorMap, Clipboard, Toasts } from '@metro/common';
+import { socket, connectWebsocket } from '@core/debug/websocket';
 import { listThemes } from '@managers/themes';
 import ThemeIcon from './partials/PluginIcon';
 import PluginIcon from './partials/ThemeIcon';
@@ -91,7 +92,15 @@ export function Page({ settings }) {
           label='Automatically connect to debug websocket'
           trailing={<FormSwitch
             value={settings.getBoolean('autoConnectWS', false)}
-            onValueChange={() => settings.toggle('autoConnectWS', false)}
+            onValueChange={() => {
+              settings.toggle('autoConnectWS', false);
+
+              if (settings.get('autoConnectWS', false)) {
+                connectWebsocket();
+              } else {
+                socket.close();
+              }
+            }}
           />}
         />
         {settings.getBoolean('autoConnectWS', false) && <FormInput

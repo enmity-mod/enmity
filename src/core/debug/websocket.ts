@@ -6,7 +6,7 @@ declare const nativeLoggingHook: (message: string, level: number) => void;
 
 const Logger = getByName('Logger');
 const EnmityLogger = new Logger('Enmity');
-let socket: WebSocket;
+export let socket: WebSocket;
 
 /**
  * Connect to a websocket server
@@ -25,19 +25,16 @@ export function connectWebsocket(host?: string): void {
 
   socket.addEventListener('open', () => {
     console.log('Connected with debug websocket');
-
     Toasts.open({ content: 'Connected to the websocket server.' });
   });
 
   socket.addEventListener('error', (err: any) => {
     console.log(`Error with debug websocket: ${err.message}`);
-
-    Toasts.open({ content: 'An error occured with the websocket connection.' });
+    Toasts.open({ content: 'An error occured with the websocket connection, retrying in 1s.' });
   });
 
   socket.addEventListener('close', (err: any) => {
     console.log(`Error with debug websocket: ${err.message}`);
-
     Toasts.open({ content: 'The websocket connection has been closed.' });
   });
 

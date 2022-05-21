@@ -5,6 +5,8 @@ import { Locale, Scenes } from '@metro/common';
 import * as Screens from '@screens/index';
 import { create } from '@patcher';
 import React from 'react';
+import ThemeIcon from '@screens/partials/ThemeIcon';
+import PluginIcon from '@screens/partials/PluginIcon';
 
 const Patcher = create('enmity-settings');
 
@@ -69,18 +71,21 @@ function patchSettings() {
         <FormSection key='Enmity' title='Enmity'>
           <FormRow
             label='General'
+            leading={<FormRow.Icon source={{ uri: 'https://files.enmity.app/icon-64.png' }} />}
             trailing={<FormArrow />}
             onPress={() => void navigation.push('Enmity')}
           />
           <FormDivider />
           <FormRow
             label='Plugins'
+            leading={<PluginIcon width={24} height={24} />}
             trailing={<FormArrow />}
             onPress={() => void navigation.push('EnmityPlugins')}
           />
           <FormDivider />
           <FormRow
             label='Themes'
+            leading={<ThemeIcon width={24} height={24} />}
             trailing={<FormArrow />}
             onPress={() => void navigation.push('EnmityThemes')}
           />
