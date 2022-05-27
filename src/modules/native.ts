@@ -29,11 +29,6 @@ Linking.addEventListener('url', (url: URL) => {
   }
 });
 
-/**
- * Send a command to the native handler of Enmity
- * @param name
- * @param params
- */
 export function sendCommand(name: string, params: string[] = [], reply?: (data) => void): void {
   const id = uuid();
 

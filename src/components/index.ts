@@ -1,8 +1,11 @@
 import { Components } from '@metro/common';
 
+interface Components {
+  [key: string]: React.ComponentType;
+}
+
 const {
   Alert,
-
   Button,
   FlatList,
   Image,
@@ -24,7 +27,7 @@ const {
   Touchable,
   View,
   VirtualizedList,
-} = Components.General;
+}: Components = Components.General;
 
 const {
   Form,
@@ -48,7 +51,7 @@ const {
   FormText,
   FormTextColors,
   FormTextSizes,
-} = Components.Forms;
+}: Components = Components.Forms;
 
 export {
   Alert,
@@ -73,7 +76,6 @@ export {
   Touchable,
   View,
   VirtualizedList,
-
   Form,
   FormArrow,
   FormCTA,

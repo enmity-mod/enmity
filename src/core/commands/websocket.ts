@@ -1,4 +1,4 @@
-import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from 'enmity-api/commands';
+import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from 'enmity-api/api/commands';
 import { connectWebsocket, sendMessage } from '@core/debug/websocket';
 import { section } from '@api/commands';
 import { sendReply } from '@api/clyde';

@@ -1,8 +1,8 @@
 import { Alert, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
 import { Dialog, StyleSheet, ColorMap, Constants, Toasts } from '@metro/common';
-import { reloadDiscord } from '@api/native';
 import * as Themes from '@managers/themes';
 import Authors from './partials/Authors';
+import { reload } from '@api/native';
 import { getModule } from '@metro';
 import Assets from '@api/assets';
 import React from 'react';
@@ -86,7 +86,7 @@ export function ThemeCard({ theme }: ThemeCardProps) {
                     body: 'Uninstalling the theme you previously had applied requires a restart, would you like to restart Discord to remove the theme?',
                     confirmText: 'Yes',
                     cancelText: 'No',
-                    onConfirm: reloadDiscord,
+                    onConfirm: reload,
                   });
                 });
               }}
@@ -109,7 +109,7 @@ export function ThemeCard({ theme }: ThemeCardProps) {
                     body: 'Applying a theme requires a restart, would you like to restart Discord to apply the theme?',
                     confirmText: 'Yes',
                     cancelText: 'No',
-                    onConfirm: reloadDiscord,
+                    onConfirm: reload,
                   });
                 } else {
                   Themes.removeTheme();
@@ -118,7 +118,7 @@ export function ThemeCard({ theme }: ThemeCardProps) {
                     body: 'Removing the applied theme requires a restart, would you like to restart Discord to remove the applied theme?',
                     confirmText: 'Yes',
                     cancelText: 'No',
-                    onConfirm: reloadDiscord,
+                    onConfirm: reload,
                   });
                 }
               }}
@@ -190,7 +190,7 @@ export function HeaderRight() {
                   body: 'Replacing the theme you previously had applied requires a restart, would you like to restart Discord to reload the theme values?',
                   confirmText: 'Yes',
                   cancelText: 'No',
-                  onConfirm: reloadDiscord,
+                  onConfirm: reload,
                 });
               }
             });

@@ -1,24 +1,34 @@
+import { SettingsStore } from 'enmity-api/api/settings';
 import { Dispatcher, Flux } from '@metro/common';
 import Manager from './store';
 import React from 'react';
 
+interface FluxDispatch {
+  file: string;
+  type: string;
+  [key: string]: any;
+}
 
-export const listeners = {};
+interface Listeners {
+  [key: string]: Set<Function>;
+}
+
+export const listeners: Listeners = {};
 
 export { settings, store } from './store';
 
 Dispatcher.subscribe('ENMITY_SET_SETTING', ENMITY_SET_SETTING);
 Dispatcher.subscribe('ENMITY_TOGGLE_SETTING', ENMITY_TOGGLE_SETTING);
 
-function ENMITY_SET_SETTING(args) {
+function ENMITY_SET_SETTING(args: FluxDispatch): void {
   return handleSettingsUpdate({ ...args, type: 'set' });
 }
 
-function ENMITY_TOGGLE_SETTING(args) {
+function ENMITY_TOGGLE_SETTING(args: FluxDispatch): void {
   return handleSettingsUpdate({ ...args, type: 'toggle' });
 }
 
-function handleSettingsUpdate({ file, type, ...args }) {
+function handleSettingsUpdate({ file, type, ...args }: FluxDispatch): void {
   const callbacks = listeners[file];
   if (!callbacks) return;
 
@@ -27,7 +37,7 @@ function handleSettingsUpdate({ file, type, ...args }) {
   }
 }
 
-export function set(file, setting, value) {
+export function set(file: string, setting: string, value: any): void {
   if (!file || typeof file !== 'string') {
     throw new TypeError('the first argument file must be of type string');
   } else if (!setting || typeof setting !== 'string') {
@@ -42,7 +52,7 @@ export function set(file, setting, value) {
   });
 }
 
-export function get(file, setting, defaults?) {
+export function get(file: string, setting: string, defaults?: any): any {
   if (!file || typeof file !== 'string') {
     throw new TypeError('the first argument file must be of type string');
   } else if (!setting || typeof setting !== 'string') {
@@ -52,17 +62,19 @@ export function get(file, setting, defaults?) {
   return Manager.getSetting(file, setting, defaults);
 }
 
-export function getBoolean(file, setting, defaults) {
+export function getBoolean(file: string, setting: string, defaults?: boolean): boolean {
   if (!file || typeof file !== 'string') {
     throw new TypeError('the first argument file must be of type string');
   } else if (!setting || typeof setting !== 'string') {
     throw new TypeError('the second argument setting must be of type string');
+  } else if (defaults === void 0 || typeof defaults !== 'boolean') {
+    throw new TypeError('the third argument defaults must be of type boolean');
   }
 
   return Boolean(Manager.getSetting(file, setting, defaults));
 }
 
-export function toggle(file, setting, defaults) {
+export function toggle(file: string, setting: string, defaults: boolean): void {
   if (!file || typeof file !== 'string') {
     throw new TypeError('the first argument file must be of type string');
   } else if (!setting || typeof setting !== 'string') {
@@ -79,14 +91,14 @@ export function toggle(file, setting, defaults) {
   });
 }
 
-export function connectComponent(component, file) {
+export function connectComponent(component: React.ComponentType, file: string): React.ComponentType {
   if (!component || !['function', 'object'].includes(typeof component)) {
     throw new TypeError('the first argument component must be of type function or object');
   } else if (!file || typeof file !== 'string') {
     throw new TypeError('the second argument file must be of type string');
   }
 
-  const res = (props) => {
+  const res = (props: any) => {
     const forceUpdate = React.useState({})[1];
 
     React.useEffect(() => {
@@ -104,13 +116,18 @@ export function connectComponent(component, file) {
     });
   };
 
-  if (component.displayName) res.displayName = component.displayName;
-  if (component.name) res.name = `Connected${component.name}`;
+  if (component.displayName) {
+    res.displayName = component.displayName;
+  }
+
+  if (component.name) {
+    res.name = `Connected${component.name}`;
+  }
 
   return res;
 };
 
-export function makeStore(file) {
+export function makeStore(file: string): SettingsStore {
   if (!file || typeof file !== 'string') {
     throw new TypeError('the first argument file must be of type string');
   }
@@ -124,7 +141,7 @@ export function makeStore(file) {
   };
 }
 
-export function subscribe(file, callback) {
+export function subscribe(file: string, callback: (...args) => any): void {
   if (!file || typeof file !== 'string') {
     throw new TypeError('the first argument file must be of type string');
   } else if (!callback || typeof callback !== 'function') {
@@ -135,7 +152,7 @@ export function subscribe(file, callback) {
   listeners[file].add(callback);
 }
 
-export function unsubscribe(file, callback) {
+export function unsubscribe(file: string, callback: (...args) => any): void {
   if (!file || typeof file !== 'string') {
     throw new TypeError('the first argument file must be of type string');
   } else if (!callback || typeof callback !== 'function') {
@@ -148,8 +165,14 @@ export function unsubscribe(file, callback) {
   }
 }
 
-export function connectStores(file) {
-  return Flux.connectStores([Manager.store], () => ({ settings: makeStore(file) }));
+export function connectStores(component: React.ComponentType, file: string): React.ComponentType {
+  if (!component || !['function', 'object'].includes(typeof component)) {
+    throw new TypeError('the first argument component must be of type function or object');
+  } else if (!file || typeof file !== 'string') {
+    throw new TypeError('the second argument file must be of type string');
+  }
+
+  return Flux.connectStores([Manager.store], () => ({ settings: makeStore(file) }))(component);
 }
 
 export default {

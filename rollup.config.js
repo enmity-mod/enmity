@@ -14,6 +14,7 @@ const revision = execSync('git rev-parse --short HEAD').toString().trim();
 export default defineConfig({
   input: 'src/index.ts',
   treeshake: true,
+  inlineDynamicImports: true,
   output: [
     {
       file: 'dist/Enmity.js',
@@ -25,58 +26,60 @@ export default defineConfig({
     typescriptPaths({
       preserveExtensions: true
     }),
-    nodeResolve(),
+    nodeResolve({
+      jsnext: true
+    }),
     swc({
       jsc: {
         minify: {
           compress: true
         },
         parser: {
-          "syntax": "typescript",
-          "tsx": true
+          'syntax': 'typescript',
+          'tsx': true
         },
         target: 'es2022',
         baseUrl: './src/',
         paths: {
-          "@metro/*": [
-            "modules/metro/index",
-            "modules/metro/*"
+          '@metro/*': [
+            'modules/metro/index',
+            'modules/metro/*'
           ],
-          "@data/*": [
-            "data/*"
+          '@data/*': [
+            'data/*'
           ],
-          "@utilities/*": [
-            "modules/utilities/*"
+          '@utilities/*': [
+            'modules/utilities/*'
           ],
-          "@patcher/*": [
-            "modules/patcher/index",
-            "modules/patcher/*"
+          '@patcher/*': [
+            'modules/patcher/index',
+            'modules/patcher/*'
           ],
-          "@api/*": [
-            "api/index",
-            "api/*"
+          '@api/*': [
+            'api/index',
+            'api/*'
           ],
-          "@api/settings/*": [
-            "api/settings/index"
+          '@api/settings/*': [
+            'api/settings/index'
           ],
-          "@components/*": [
-            "components/index",
-            "components/*"
+          '@components/*': [
+            'components/index',
+            'components/*'
           ],
-          "@managers/*": [
-            "managers/*"
+          '@managers/*': [
+            'managers/*'
           ],
-          "@screens/*": [
-            "core/screens/*"
+          '@screens/*': [
+            'core/screens/*'
           ],
-          "@modules/*": [
-            "modules/*"
+          '@modules/*': [
+            'modules/*'
           ],
-          "react/*": [
-            "modules/metro/react",
+          'react/*': [
+            'modules/metro/react',
           ],
-          "@core/*": [
-            "core/*"
+          '@core/*': [
+            'core/*'
           ]
         }
       }

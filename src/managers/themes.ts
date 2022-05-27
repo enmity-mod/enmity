@@ -1,8 +1,9 @@
+import type { Theme as ThemeType } from 'enmity-api/managers/themes';
 import { sendCommand } from '@modules/native';
 import { Theme, REST } from '@metro/common';
 import { getByProps } from '@metro';
 
-type Theme = typeof import('enmity-api/themes');
+type Theme = ThemeType;
 
 let theme = window['themes']?.theme ?? '';
 let themes: Theme[] = window['themes']?.list ?? [];
@@ -31,11 +32,7 @@ export function getThemeByName(name): Theme {
 /**
  * List registered themes
  */
-export function listThemes(): {
-  name: string;
-  description: string;
-  authors: string | { name: string, id: string; }[];
-}[] {
+export function listThemes(): Theme[] {
   return themes;
 }
 

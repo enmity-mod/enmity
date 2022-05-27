@@ -4,7 +4,7 @@ import { socket, connectWebsocket } from '@core/debug/websocket';
 import { listThemes } from '@managers/themes';
 import ThemeIcon from './partials/PluginIcon';
 import PluginIcon from './partials/ThemeIcon';
-import { getVersion } from '@api/native';
+import { version } from '@api/native';
 import * as Assets from '@api/assets';
 import React from 'react';
 
@@ -58,10 +58,10 @@ export function Page({ settings }) {
         <FormRow
           label='Discord Version'
           leading={<FormRow.Icon source={Icons.Discord} />}
-          trailing={() => <Text style={styles.debugText}>{getVersion()}</Text>}
+          trailing={() => <Text style={styles.debugText}>{version}</Text>}
           onPress={() => {
             Toasts.open({ content: 'Copied to clipboard', source: Icons.Checkmark });
-            Clipboard.setString(getVersion());
+            Clipboard.setString(version);
           }}
         />
         <FormRow

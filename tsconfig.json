@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "./src/",
+    "module": "esnext",
     "outDir": "dist",
     "target": "ESNext",
     "jsx": "react",

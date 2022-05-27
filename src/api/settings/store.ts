@@ -1,20 +1,26 @@
 import { Lodash, Settings, Dispatcher, Flux } from '@metro/common';
 
+interface SettingsInstance {
+  [file: string]: {
+    [key: string]: any;
+  };
+}
+
 export const settings = Settings.get('enmity') ?? {};
 
-export function getSetting(file, setting, defaults) {
+export function getSetting(file: string, setting: string, defaults: any): any {
   return settings[file]?.[setting] ?? defaults;
 }
 
-export function get(file) {
+export function get(file: string): any {
   return settings[file] ?? {};
 }
 
-export function getAll() {
+export function getAll(): SettingsInstance {
   return settings;
 }
 
-const Events = {
+const Events: Record<string, (...args) => any> = {
   'ENMITY_GET_SETTING': ({ file, setting, defaults }) => {
     return settings[file][setting] ?? defaults;
   },

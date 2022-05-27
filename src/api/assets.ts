@@ -1,21 +1,14 @@
+import type { Asset } from 'enmity-api/api/assets';
 import { Assets } from '@metro/common';
 import Patcher from '@patcher';
 
-export const assets: {
-  [id: string]: {
-    __packager_asset?: boolean;
-    name: string;
-    httpServerLocation?: string;
-    width: number;
-    height: number;
-    scales: number[];
-    hash: string;
-    type: string;
-    id: number;
-  };
-} = {};
+interface Assets {
+  [id: string]: Asset;
+}
 
-Patcher.after('enmity-assets', Assets, 'registerAsset', (_, [asset], id) => {
+export const assets: Assets = {};
+
+Patcher.after('enmity-assets', Assets, 'registerAsset', (_, [asset]: [Asset], id: number) => {
   assets[asset.name] = { ...asset, id };
 });
 
@@ -28,19 +21,19 @@ for (let id = 1; ; id++) {
   assets[asset.name] = { ...asset, id };
 }
 
-export function find(filter) {
+export function find(filter): Asset | null {
   return Object.values(assets).find(filter as any);
 }
 
-export function getByName(name: string) {
+export function getByName(name: string): Asset | null {
   return assets[name];
 }
 
-export function getByID(id: number) {
+export function getByID(id: number): Asset | null {
   return Assets.getAssetByID(id);
 }
 
-export function getIDByName(name: string) {
+export function getIDByName(name: string): number | null {
   return assets[name]?.id;
 }
 

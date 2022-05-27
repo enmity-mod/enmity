@@ -1,9 +1,9 @@
 import { Alert, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
 import { StyleSheet, ColorMap, Constants, Toasts, Navigation } from '@metro/common';
+import { Plugin } from 'enmity-api/managers/plugins';
 import { connectComponent } from '@api/settings';
 import PluginSettings from './PluginSettings';
 import * as Plugins from '@managers/plugins';
-import { Plugin } from 'enmity-api/plugins';
 import Authors from './partials/Authors';
 import { getModule } from '@metro';
 import Assets from '@api/assets';

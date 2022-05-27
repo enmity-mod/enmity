@@ -1,5 +1,5 @@
-import { ApplicationCommandInputType, ApplicationCommandType, Command } from 'enmity-api/commands';
-import { getBuild, getDevice, getSystemVersion, getVersion, reloadDiscord } from '@api/native';
+import { ApplicationCommandInputType, ApplicationCommandType, Command } from 'enmity-api/api/commands';
+import { build, os, device, version, reload } from '@api/native';
 import { section } from '@api/commands';
 
 import { Token } from '@metro/common';
@@ -25,9 +25,9 @@ const debug: Command = {
   execute: () => {
     let content = '**Debug Info:**\n';
     content += `> Enmity: ${window['enmity'].version}\n`;
-    content += `> Discord: ${getVersion()} (${getBuild()})\n`;
-    content += `> Device: ${getDevice()}\n`;
-    content += `> System: ${getSystemVersion()}\n`;
+    content += `> Discord: ${version} (${build})\n`;
+    content += `> Device: ${device}\n`;
+    content += `> System: ${os}\n`;
 
     return {
       content,
@@ -38,7 +38,7 @@ const debug: Command = {
 /**
  * Reload Discord
  */
-const reload: Command = {
+const reloadDiscord: Command = {
   id: 'reload-command',
 
   name: 'reload',
@@ -52,9 +52,7 @@ const reload: Command = {
   type: ApplicationCommandType.Chat,
   inputType: ApplicationCommandInputType.BuiltIn,
 
-  execute: function (args) {
-    reloadDiscord();
-  },
+  execute: reload
 };
 
 /**
@@ -74,13 +72,13 @@ const getToken: Command = {
   type: ApplicationCommandType.Chat,
   inputType: ApplicationCommandInputType.BuiltIn,
 
-  execute: function (args, message) {
+  execute: function (_, message) {
     sendReply(message.channel.id, Token.getToken());
   },
 };
 
 export default [
   debug,
-  reload,
+  reloadDiscord,
   getToken,
 ];

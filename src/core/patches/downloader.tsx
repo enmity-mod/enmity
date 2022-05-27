@@ -1,12 +1,12 @@
 import { Toasts, Dialog, StyleSheet, ColorMap } from '@metro/common';
 import { AddonChannels } from '@data/constants';
 import * as Plugins from '@managers/plugins';
-import { reloadDiscord } from '@api/native';
 import * as Themes from '@managers/themes';
 import { getIDByName } from '@api/assets';
 import SheetPatcher from '@patcher/sheet';
 import { getByTypeName } from '@metro';
 import { FormRow } from '@components';
+import { reload } from '@api/native';
 import React from 'react';
 
 const Icon = getByTypeName('Icon');
@@ -96,7 +96,7 @@ export default function () {
                 body: 'Replacing the theme you previously had applied requires a restart, would you like to restart Discord to reload the theme values?',
                 confirmText: 'Yes',
                 cancelText: 'No',
-                onConfirm: reloadDiscord,
+                onConfirm: reload,
               });
             }
           });
