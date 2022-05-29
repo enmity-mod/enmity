@@ -3,6 +3,7 @@ import * as Themes from '@managers/themes';
 import * as Components from '@components';
 import * as Commands from '@api/commands';
 import * as Settings from '@api/settings';
+import * as Utilities from '@utilities';
 import { Native } from '@metro/common';
 import * as Assets from '@api/assets';
 import * as Clyde from '@api/clyde';
@@ -17,6 +18,7 @@ export const API = {
   plugins: Plugins,
   clyde: Clyde,
   commands: Commands,
+  utilities: Utilities,
   settings: Settings,
   components: Components,
   native: Native,

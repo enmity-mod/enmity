@@ -20,6 +20,9 @@
       "@data/*": [
         "data/*"
       ],
+      "@utilities": [
+        "modules/utilities/index"
+      ],
       "@utilities/*": [
         "modules/utilities/*"
       ],
