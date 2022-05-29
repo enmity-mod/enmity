@@ -28,7 +28,6 @@ const {
   Flux,
   SVG,
   Scenes,
-  Subscriptions,
   Navigation,
   NavigationNative,
   NavigationStack
@@ -64,7 +63,6 @@ export {
   Flux,
   SVG,
   Scenes,
-  Subscriptions,
   Navigation,
   NavigationNative,
   NavigationStack

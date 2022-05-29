@@ -65,10 +65,6 @@ const modules = {
     props: ['getCurrentUser'],
   },
 
-  Subscriptions: {
-    props: ['getPremiumTypeSubscription']
-  },
-
   Navigation: {
     props: ['pushLazy'],
   },
