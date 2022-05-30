@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    "dist"
+  ],
+  "exec": "pnpm run build",
+  "ext": "*.*"
+}
