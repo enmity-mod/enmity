@@ -150,7 +150,7 @@ getters.map(({ id, map, submodule }, index) => {
   }
 });
 
-export function getModule(filter, { all = false, traverse = true, defaultExport = true } = {}) {
+export function getModule(filter, { all = false, traverse = false, defaultExport = true } = {}) {
   if (typeof filter !== 'function') return null;
 
   const found = [];
@@ -178,7 +178,7 @@ export function getModule(filter, { all = false, traverse = true, defaultExport 
         found.push(mdl);
       }
 
-      if (mdl.__esModule && mdl.default && search(mdl.default, id)) {
+      if (mdl.default && search(mdl.default, id)) {
         const value = defaultExport ? mdl.default : mdl;
         if (!all) return value;
         found.push(value);
