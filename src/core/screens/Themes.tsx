@@ -61,7 +61,8 @@ export function ThemeCard({ theme }: ThemeCardProps) {
     },
     trashIcon: {
       width: 22,
-      height: 22
+      height: 22,
+      tintColor: ThemeColorMap.INTERACTIVE_NORMAL
     }
   });
 

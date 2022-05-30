@@ -64,12 +64,12 @@ export function PluginCard({ plugin }: PluginCardProps) {
     trashIcon: {
       width: 22,
       height: 22,
-      tintColor: 'white'
+      tintColor: ThemeColorMap.INTERACTIVE_NORMAL
     },
     settingsIcon: {
       width: 22,
       height: 22,
-      tintColor: 'white'
+      tintColor: ThemeColorMap.INTERACTIVE_NORMAL
     }
   });
 
