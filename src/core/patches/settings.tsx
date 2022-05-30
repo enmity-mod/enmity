@@ -1,10 +1,11 @@
 import { FormArrow, FormDivider, FormRow, FormSection } from '@components';
-import { getByDisplayName, getByName, getByTypeName } from '@metro';
 import { connectComponent } from '@api/settings';
 import { Locale, Scenes } from '@metro/common';
 import * as Screens from '@screens/index';
+import { getByTypeName } from '@metro';
 import { create } from '@patcher';
 import React from 'react';
+
 import ThemeIcon from '@screens/partials/ThemeIcon';
 import PluginIcon from '@screens/partials/PluginIcon';
 
@@ -15,10 +16,9 @@ export default function (): void {
   patchSettings();
 }
 
-export let forceUpdateSettings = null;
-
 function patchScreens() {
   Patcher.after(Scenes, 'default', (_, args, res) => {
+    console.log('Scenes were called');
     return {
       ...res,
       Enmity: {
@@ -28,13 +28,13 @@ function patchScreens() {
         headerRight: Screens.Enmity.HeaderRight
       },
       EnmityPlugins: {
-        key: 'Enmity Plugins',
+        key: 'EnmityPlugins',
         title: 'Plugins',
         render: Screens.Plugins.Page,
         headerRight: Screens.Plugins.HeaderRight
       },
       EnmityThemes: {
-        key: 'Enmity Themes',
+        key: 'EnmityThemes',
         title: 'Themes',
         render: Screens.Themes.Page,
         headerRight: Screens.Themes.HeaderRight
@@ -43,29 +43,14 @@ function patchScreens() {
   });
 }
 
-export const patch = {
-  status: false,
-  forceUpdate: () => { },
-  navigator: null,
-  handleSectionSelect: () => { }
-};
-
 function patchSettings() {
   const Settings = getByTypeName('UserSettingsOverviewWrapper', { default: false });
-  Patcher.after(Settings, 'default', (_, __, ret) => {
-    const forceUpdate = React.useState({})[1];
-    patch.forceUpdate = () => forceUpdate({});
-
+  const unpatch = Patcher.after(Settings, 'default', (_, __, ret) => {
     const { navigation } = ret.props;
-    patch.navigator = navigation;
 
-    if (patch.status) return;
     Patcher.after(ret.type.prototype, 'render', (_, args, res) => {
       const { children } = res.props;
       const index = children.findIndex(x => x.props.title === Locale.Messages['PREMIUM_SETTINGS']);
-      patch.handleSectionSelect = (...args) => {
-        return ret.type.prototype.handleSectionSelect.apply(_, args);
-      };
 
       children.splice(index, 0, <>
         <FormSection key='Enmity' title='Enmity'>
@@ -94,6 +79,6 @@ function patchSettings() {
       </>);
     });
 
-    patch.status = true;
+    unpatch();
   });
 }
