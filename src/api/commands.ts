@@ -6,12 +6,10 @@ const Patcher = create('enmity-commands');
 
 const [
   Commands,
-  Discovery,
   Assets,
   SearchStore
 ] = bulk(
   filters.byProps('getBuiltInCommands'),
-  filters.byProps('useApplicationCommandsDiscoveryState'),
   filters.byProps('getApplicationIconURL'),
   filters.byProps('useSearchManager')
 );
@@ -59,6 +57,25 @@ function unregisterCommands(caller: string): void {
 
 function initialize() {
   Commands.BUILT_IN_SECTIONS['enmity'] = section;
+
+  Patcher.after(SearchStore.SearchManagerStore, 'getQueryCommands', (_, [, , query], res) => {
+    if (!query || query.startsWith('/')) return;
+    res ??= [];
+
+    for (const command of commands) {
+      if (!~command.name?.indexOf(query) || res.some(e => e.__enmity && e.id === command.id)) {
+        continue;
+      }
+
+      try {
+        res.unshift(command);
+      } catch {
+        // Discord calls Object.preventExtensions on the result when switching channels
+        // Therefore, re-making the result array is required.
+        res = [...res, command];
+      }
+    }
+  });
 
   Patcher.after(SearchStore, 'useSearchManager', (_, [, type], res) => {
     if (type !== 1) return;
