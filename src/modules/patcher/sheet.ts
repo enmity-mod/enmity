@@ -9,10 +9,8 @@ const Patcher = patcher.create('enmity-sheet-patcher');
 const patches = {};
 
 const Opener = getByProps('openLazy');
-Patcher.before(Opener, 'openLazy', (_, [component, sheet, sure, gay]) => {
+Patcher.before(Opener, 'openLazy', (_, [component, sheet]) => {
   if (!patches[sheet]) return;
-
-  console.log(gay);
 
   component.then(instance => {
     const unpatchInstance = Patcher.after(instance, 'default', (_, __, res) => {
@@ -74,7 +72,6 @@ export function create(caller: string) {
 }
 
 function push(type: string, caller: string, sheet: string, callback: (self?: any, args?: any[], res?: any) => any): void {
-  setTimeout(() => console.log(callback.name), 2000);
   patches[sheet] ??= [] as object[];
   patches[sheet].push({
     type,

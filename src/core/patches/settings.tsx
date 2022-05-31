@@ -18,7 +18,6 @@ export default function (): void {
 
 function patchScreens() {
   Patcher.after(Scenes, 'default', (_, args, res) => {
-    console.log('Scenes were called');
     return {
       ...res,
       Enmity: {

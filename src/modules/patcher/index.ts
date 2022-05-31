@@ -118,7 +118,6 @@ function override(patch: Patch) {
       if (!instance) continue;
 
       try {
-        if (instance.caller.includes('downloader')) console.log(instance);
         const ret = instance.callback(this, args, res, ret => (res = ret));
         if (typeof ret !== 'undefined') res = ret;
         if (instance.once) instance.unpatch();
