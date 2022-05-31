@@ -1,5 +1,5 @@
 import { registerCommands, unregisterCommands } from '@api/commands';
-import { Plugin as EnmityPlugin } from 'enmity-api/managers/plugins';
+import { Plugin as EnmityPlugin } from 'enmity/managers/plugins';
 import { sendCommand } from '@modules/native';
 import { getByProps } from '@metro';
 import { REST } from '@metro/common';

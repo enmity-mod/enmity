@@ -1,4 +1,4 @@
-import type { Asset } from 'enmity-api/api/assets';
+import type { Asset } from 'enmity/api/assets';
 import { Assets } from '@metro/common';
 import Patcher from '@patcher';
 

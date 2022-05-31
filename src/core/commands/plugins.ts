@@ -2,7 +2,7 @@ import { section } from '@api/commands';
 import { sendReply } from '@api/clyde';
 
 import { disablePlugin, enablePlugin, getDisabledPlugins, getEnabledPlugins, getPlugins, installPlugin, uninstallPlugin } from '@managers/plugins';
-import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from 'enmity-api/api/commands';
+import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from 'enmity/api/commands';
 
 /**
  * List installed plugins

@@ -23,12 +23,14 @@
     "@types/react": "^18.0.7",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
-    "enmity-api": "github:enmity-mod/enmity-api#core",
     "eslint": "^8.5.0",
     "eslint-plugin-react": "^7.29.4",
     "rollup": "^2.62.0",
     "rollup-plugin-swc3": "^0.3.0",
     "rollup-plugin-typescript-paths": "^1.3.1",
     "typescript": "^4.7.2"
+  },
+  "dependencies": {
+    "enmity": "^1.1.8"
   }
 }

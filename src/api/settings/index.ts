@@ -1,4 +1,4 @@
-import { SettingsStore } from 'enmity-api/api/settings';
+import { SettingsStore } from 'enmity/api/settings';
 import { Dispatcher, Flux } from '@metro/common';
 import Manager from './store';
 import React from 'react';

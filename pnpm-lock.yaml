@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   '@rollup/plugin-node-resolve': ^13.1.1
@@ -8,7 +8,7 @@ specifiers:
   '@types/react': ^18.0.7
   '@typescript-eslint/eslint-plugin': ^5.15.0
   '@typescript-eslint/parser': ^5.15.0
-  enmity-api: github:enmity-mod/enmity-api#core
+  enmity: ^1.1.8
   eslint: ^8.5.0
   eslint-plugin-react: ^7.29.4
   rollup: ^2.62.0
@@ -16,19 +16,21 @@ specifiers:
   rollup-plugin-typescript-paths: ^1.3.1
   typescript: ^4.7.2
 
+dependencies:
+  enmity: 1.1.8
+
 devDependencies:
   '@rollup/plugin-node-resolve': 13.1.3_rollup@2.70.0
   '@rollup/plugin-replace': 4.0.0_rollup@2.70.0
   '@swc/core': 1.2.187
   '@types/node': 17.0.21
   '@types/react': 18.0.7
-  '@typescript-eslint/eslint-plugin': 5.18.0_9ad143976bffe4a61fb1198d227e60b1
-  '@typescript-eslint/parser': 5.18.0_eslint@8.10.0+typescript@4.7.2
-  enmity-api: github.com/enmity-mod/enmity-api/866af0f006a182107af6efba6f4413a916b2a284
+  '@typescript-eslint/eslint-plugin': 5.18.0_tliuhf3l77skmh5rdggse7tawe
+  '@typescript-eslint/parser': 5.18.0_gy6ulhlk526fafafzkwfpebbuq
   eslint: 8.10.0
   eslint-plugin-react: 7.29.4_eslint@8.10.0
   rollup: 2.70.0
-  rollup-plugin-swc3: 0.3.0_0e091621db942fcc9cf5747a314a3e08
+  rollup-plugin-swc3: 0.3.0_byermio3sqx4zhhvor5dcsr6ba
   rollup-plugin-typescript-paths: 1.3.1_typescript@4.7.2
   typescript: 4.7.2
 
@@ -137,6 +139,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm]
     os: [android]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -145,6 +148,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [android]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -153,6 +157,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [darwin]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -161,6 +166,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [darwin]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -169,6 +175,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [freebsd]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -177,6 +184,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm]
     os: [linux]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -185,6 +193,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -193,6 +202,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -201,6 +211,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -209,6 +220,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -217,6 +229,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [win32]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -225,6 +238,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [ia32]
     os: [win32]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -233,6 +247,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [win32]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -290,7 +305,7 @@ packages:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
     dev: true
 
-  /@typescript-eslint/eslint-plugin/5.18.0_9ad143976bffe4a61fb1198d227e60b1:
+  /@typescript-eslint/eslint-plugin/5.18.0_tliuhf3l77skmh5rdggse7tawe:
     resolution: {integrity: sha512-tzrmdGMJI/uii9/V6lurMo4/o+dMTKDH82LkNjhJ3adCW22YQydoRs5MwTiqxGF9CSYxPxQ7EYb4jLNlIs+E+A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -301,10 +316,10 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.18.0_eslint@8.10.0+typescript@4.7.2
+      '@typescript-eslint/parser': 5.18.0_gy6ulhlk526fafafzkwfpebbuq
       '@typescript-eslint/scope-manager': 5.18.0
-      '@typescript-eslint/type-utils': 5.18.0_eslint@8.10.0+typescript@4.7.2
-      '@typescript-eslint/utils': 5.18.0_eslint@8.10.0+typescript@4.7.2
+      '@typescript-eslint/type-utils': 5.18.0_gy6ulhlk526fafafzkwfpebbuq
+      '@typescript-eslint/utils': 5.18.0_gy6ulhlk526fafafzkwfpebbuq
       debug: 4.3.3
       eslint: 8.10.0
       functional-red-black-tree: 1.0.1
@@ -317,7 +332,7 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/parser/5.18.0_eslint@8.10.0+typescript@4.7.2:
+  /@typescript-eslint/parser/5.18.0_gy6ulhlk526fafafzkwfpebbuq:
     resolution: {integrity: sha512-+08nYfurBzSSPndngnHvFw/fniWYJ5ymOrn/63oMIbgomVQOvIDhBoJmYZ9lwQOCnQV9xHGvf88ze3jFGUYooQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -345,7 +360,7 @@ packages:
       '@typescript-eslint/visitor-keys': 5.18.0
     dev: true
 
-  /@typescript-eslint/type-utils/5.18.0_eslint@8.10.0+typescript@4.7.2:
+  /@typescript-eslint/type-utils/5.18.0_gy6ulhlk526fafafzkwfpebbuq:
     resolution: {integrity: sha512-vcn9/6J5D6jtHxpEJrgK8FhaM8r6J1/ZiNu70ZUJN554Y3D9t3iovi6u7JF8l/e7FcBIxeuTEidZDR70UuCIfA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -355,7 +370,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/utils': 5.18.0_eslint@8.10.0+typescript@4.7.2
+      '@typescript-eslint/utils': 5.18.0_gy6ulhlk526fafafzkwfpebbuq
       debug: 4.3.3
       eslint: 8.10.0
       tsutils: 3.21.0_typescript@4.7.2
@@ -390,7 +405,7 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/utils/5.18.0_eslint@8.10.0+typescript@4.7.2:
+  /@typescript-eslint/utils/5.18.0_gy6ulhlk526fafafzkwfpebbuq:
     resolution: {integrity: sha512-+hFGWUMMri7OFY26TsOlGa+zgjEy1ssEipxpLjtl4wSll8zy85x0GrUSju/FHdKfVorZPYJLkF3I4XPtnCTewA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -605,6 +620,10 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /enmity/1.1.8:
+    resolution: {integrity: sha512-gSzCYuVa6BhPVrmuDtZED9xOZ1uabu1QaCHAYYBOFQi2fyTzlA+saqPshlS2TUQWuFLUX5Dn2O9h1Y+u5bEvtw==}
+    dev: false
 
   /es-abstract/1.19.2:
     resolution: {integrity: sha512-gfSBJoZdlL2xRiOCy0g8gLMryhoe1TlimjzU99L/31Z8QEGIhVQI+EWwt5lT+AuU9SnorVupXFqqOGqGfsyO6w==}
@@ -1395,7 +1414,7 @@ packages:
       glob: 7.2.0
     dev: true
 
-  /rollup-plugin-swc3/0.3.0_0e091621db942fcc9cf5747a314a3e08:
+  /rollup-plugin-swc3/0.3.0_byermio3sqx4zhhvor5dcsr6ba:
     resolution: {integrity: sha512-ZQK2XxYxSspmT8j6/Y4CaxRxAlZHbNnxI+m+yJ5I87ZLp5uH7CYL4hFlJk1jkcZ+Q2QC19jIg7AClB/7+XFljw==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -1650,10 +1669,4 @@ packages:
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
-    dev: true
-
-  github.com/enmity-mod/enmity-api/866af0f006a182107af6efba6f4413a916b2a284:
-    resolution: {tarball: https://codeload.github.com/enmity-mod/enmity-api/tar.gz/866af0f006a182107af6efba6f4413a916b2a284}
-    name: enmity
-    version: 1.0.8
     dev: true

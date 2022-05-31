@@ -1,4 +1,4 @@
-import type { Theme as ThemeType } from 'enmity-api/managers/themes';
+import type { Theme as ThemeType } from 'enmity/managers/themes';
 import { sendCommand } from '@modules/native';
 import { Theme, REST } from '@metro/common';
 import { getByProps } from '@metro';
