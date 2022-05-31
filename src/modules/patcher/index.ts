@@ -1,9 +1,10 @@
-import { Mdl, PatchCallback } from 'enmity-api/patcher';
+import { PatchCallback } from 'enmity/patcher';
+import { Module } from 'enmity/common';
 
 const patches: Patch[] = [];
 
 interface Patch {
-  mdl: Mdl;
+  mdl: Module;
   func: string;
   original: Function;
   unpatch: () => void;
@@ -184,7 +185,7 @@ function get([, mdl, func]) {
   return push(...arguments);
 }
 
-function patch(caller: string, mdl: Mdl, func: string, callback: PatchCallback, type = Type.After, once = false): () => void {
+function patch(caller: string, mdl: Module, func: string, callback: PatchCallback, type = Type.After, once = false): () => void {
   if (!caller || typeof caller !== 'string') {
     throw new TypeError('first argument "caller" must be of type string');
   } else if (!mdl || !['function', 'object'].includes(typeof mdl)) {
@@ -234,24 +235,24 @@ function patch(caller: string, mdl: Mdl, func: string, callback: PatchCallback, 
   return patch.unpatch;
 }
 
-function before(caller: string, mdl: Mdl, func: string, callback: PatchCallback, once: boolean = false): () => void {
+function before(caller: string, mdl: Module, func: string, callback: PatchCallback, once: boolean = false): () => void {
   return patch(caller, mdl, func, callback, Type.Before, once);
 }
 
-function instead(caller: string, mdl: Mdl, func: string, callback: PatchCallback, once: boolean = false): () => void {
+function instead(caller: string, mdl: Module, func: string, callback: PatchCallback, once: boolean = false): () => void {
   return patch(caller, mdl, func, callback, Type.Instead, once);
 }
 
-function after(caller: string, mdl: Mdl, func: string, callback: PatchCallback, once: boolean = false): () => void {
+function after(caller: string, mdl: Module, func: string, callback: PatchCallback, once: boolean = false): () => void {
   return patch(caller, mdl, func, callback, Type.After, once);
 }
 
 function create(name: string): Record<string, any> {
   return {
     getPatchesByCaller: getPatchesByCaller,
-    before: (mdl: Mdl, func: string, callback: PatchCallback) => before(name, mdl, func, callback),
-    instead: (mdl: Mdl, func: string, callback: PatchCallback) => instead(name, mdl, func, callback),
-    after: (mdl: Mdl, func: string, callback: PatchCallback) => after(name, mdl, func, callback),
+    before: (mdl: Module, func: string, callback: PatchCallback) => before(name, mdl, func, callback),
+    instead: (mdl: Module, func: string, callback: PatchCallback) => instead(name, mdl, func, callback),
+    after: (mdl: Module, func: string, callback: PatchCallback) => after(name, mdl, func, callback),
     unpatchAll: () => unpatchAll(name),
   };
 }

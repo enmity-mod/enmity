@@ -1,4 +1,4 @@
-import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from 'enmity-api/api/commands';
+import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from 'enmity/api/commands';
 import { applyTheme, getThemeByName, listThemes, removeTheme } from '@managers/themes';
 import { section } from '@api/commands';
 import { sendReply } from '@api/clyde';

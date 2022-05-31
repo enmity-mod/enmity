@@ -1,4 +1,4 @@
-import { ApplicationCommandInputType, ApplicationCommandType, Command } from 'enmity-api/api/commands';
+import { ApplicationCommandInputType, ApplicationCommandType, Command } from 'enmity/api/commands';
 import { build, os, device, version, reload } from '@api/native';
 import { section } from '@api/commands';
 

@@ -1,4 +1,4 @@
-import type { Command } from 'enmity-api/api/commands';
+import type { Command } from 'enmity/api/commands';
 import { filters, bulk } from '@metro';
 import { create } from '@patcher';
 
