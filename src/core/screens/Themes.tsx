@@ -33,8 +33,10 @@ export function ThemeCard({ theme }: ThemeCardProps) {
     },
     version: {
       color: ThemeColorMap.HEADER_SECONDARY,
+      fontSize: 16,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
-      marginLeft: 2.5
+      marginLeft: 2.5,
+      marginRight: 2.5
     },
     content: {
       height: 'auto',
@@ -54,7 +56,9 @@ export function ThemeCard({ theme }: ThemeCardProps) {
     info: {
       marginLeft: -6,
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      width: '100%'
     },
     delete: {
       marginRight: 7.5
@@ -71,8 +75,16 @@ export function ThemeCard({ theme }: ThemeCardProps) {
       <View>
         <FormRow
           label={() => <View style={styles.info}>
-            <Text style={styles.name}>{theme.name}</Text>
-            {theme.version && <Text style={styles.version}>
+            <Text
+              adjustsFontSizeToFit
+              style={styles.name}
+            >
+              {theme.name}
+            </Text>
+            {theme.version && <Text
+              adjustsFontSizeToFit
+              style={styles.version}
+            >
               {theme.version} {theme.authors && 'by'}
             </Text>}
             <Authors authors={theme.authors} />

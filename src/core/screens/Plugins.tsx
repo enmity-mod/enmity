@@ -32,14 +32,12 @@ export function PluginCard({ plugin }: PluginCardProps) {
       color: ThemeColorMap.HEADER_PRIMARY,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
       fontSize: 16,
-      textOverflow: 'ellipsis'
     },
     version: {
       color: ThemeColorMap.HEADER_SECONDARY,
       fontSize: 16,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
       marginLeft: 2.5,
-      textOverflow: 'ellipsis',
       marginRight: 2.5
     },
     content: {
@@ -138,9 +136,7 @@ export function PluginCard({ plugin }: PluginCardProps) {
         />
       </View>
       <View style={styles.content}>
-        <Text
-          style={styles.description}
-        >
+        <Text style={styles.description}>
           {plugin.description ?? 'No description provided.'}
         </Text>
       </View>
