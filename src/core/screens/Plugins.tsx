@@ -31,12 +31,16 @@ export function PluginCard({ plugin }: PluginCardProps) {
     name: {
       color: ThemeColorMap.HEADER_PRIMARY,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
-      fontSize: 16
+      fontSize: 16,
+      textOverflow: 'ellipsis'
     },
     version: {
       color: ThemeColorMap.HEADER_SECONDARY,
+      fontSize: 16,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
-      marginLeft: 2.5
+      marginLeft: 2.5,
+      textOverflow: 'ellipsis',
+      marginRight: 2.5
     },
     content: {
       height: 'auto',
@@ -56,7 +60,9 @@ export function PluginCard({ plugin }: PluginCardProps) {
     info: {
       marginLeft: -6,
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      width: '100%'
     },
     delete: {
       marginRight: 7.5
@@ -80,8 +86,16 @@ export function PluginCard({ plugin }: PluginCardProps) {
       <View>
         <FormRow
           label={() => <View style={styles.info}>
-            <Text style={styles.name}>{plugin.name}</Text>
-            {plugin.version && <Text style={styles.version}>
+            <Text
+              adjustsFontSizeToFit
+              style={styles.name}
+            >
+              {plugin.name}
+            </Text>
+            {plugin.version && <Text
+              adjustsFontSizeToFit
+              style={styles.version}
+            >
               {plugin.version} {plugin.authors && 'by'}
             </Text>}
             <Authors authors={plugin.authors} />
@@ -124,7 +138,9 @@ export function PluginCard({ plugin }: PluginCardProps) {
         />
       </View>
       <View style={styles.content}>
-        <Text style={styles.description}>
+        <Text
+          style={styles.description}
+        >
           {plugin.description ?? 'No description provided.'}
         </Text>
       </View>
