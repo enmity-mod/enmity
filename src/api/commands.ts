@@ -1,4 +1,4 @@
-import type { Command } from 'enmity/api/commands';
+import { ApplicationCommandInputType, ApplicationCommandType, Command } from 'enmity/api/commands';
 import { filters, bulk } from '@metro';
 import { create } from '@patcher';
 
@@ -36,11 +36,20 @@ function registerCommands(caller: string, cmds: Command[]): void {
     throw new TypeError('second argument cmds must be of type array');
   }
 
-  for (const command of cmds) {
-    // @ts-ignore
-    command.__enmity = true;
-    // @ts-ignore
-    command.caller = caller;
+  for (const command in cmds) {
+    const cmd = cmds[command];
+    cmds[command] = {
+      displayName: cmd.name,
+      displayDescription: cmd.description,
+      type: ApplicationCommandType.Chat,
+      inputType: ApplicationCommandInputType.BuiltIn,
+      id: `enmity-${cmd.name.replaceAll(' ', '-')}`,
+      applicationId: section.id,
+      ...cmd,
+      // @ts-ignore
+      __enmity: true,
+      caller: caller
+    };
   }
 
   commands.push(...cmds);

@@ -1,217 +1,148 @@
-import { section } from '@api/commands';
+import { ApplicationCommandOptionType, Command } from 'enmity/api/commands';
+import * as Plugins from '@managers/plugins';
 import { sendReply } from '@api/clyde';
 
-import { disablePlugin, enablePlugin, getDisabledPlugins, getEnabledPlugins, getPlugins, installPlugin, uninstallPlugin } from '@managers/plugins';
-import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from 'enmity/api/commands';
+export default [
+  {
+    name: 'plugins list',
+    description: 'List installed plugins',
 
-/**
- * List installed plugins
- */
-const list: Command = {
-  id: 'installed-plugins',
-  applicationId: section.id,
+    execute: (_, message) => {
+      const channel = message.channel.id;
+      const pluginsList = Plugins.getPlugins();
 
-  name: 'plugins',
-  displayName: 'plugins',
-  description: 'List installed plugins',
-  displayDescription: 'List installed plugins',
-
-  type: ApplicationCommandType.Chat,
-  inputType: ApplicationCommandInputType.BuiltIn,
-
-  execute: (args, message) => {
-    const channel = message.channel.id;
-    const pluginsList = getPlugins();
-
-    if (pluginsList.length === 0) {
-      sendReply(channel, 'No plugins installed.');
-      return;
-    }
-
-    const enabledPlugins = getEnabledPlugins();
-    const disabledPlugins = getDisabledPlugins();
-
-    let plugins = '';
-
-    if (enabledPlugins.length > 0) {
-      plugins = `**Enabled plugins (${enabledPlugins.length})**:\n`;
-      plugins += `> ${enabledPlugins.join(', ')}\n`;
-    }
-
-    if (disabledPlugins.length > 0) {
-      plugins += `**Disabled plugins (${disabledPlugins.length})**:\n`;
-      plugins += `> ${disabledPlugins.join(', ')}`;
-    }
-
-    sendReply(channel, plugins);
-  },
-};
-
-/**
- * Install a plugin
- */
-const install: Command = {
-  id: 'install-plugin',
-  applicationId: section.id,
-
-  name: 'install',
-  displayName: 'install',
-
-  description: 'Install a plugin',
-  displayDescription: 'Install a plugin',
-
-  type: ApplicationCommandType.Chat,
-  inputType: ApplicationCommandInputType.BuiltIn,
-
-  options: [
-    {
-      name: 'plugin',
-      displayName: 'plugin',
-
-      description: 'Plugin url',
-      displayDescription: 'Plugin url',
-
-      required: true,
-      type: ApplicationCommandOptionType.String,
-    },
-  ],
-
-  execute: (args, message) => {
-    const url = args[0].value;
-    const channel = message.channel.id;
-
-    installPlugin(url, data => {
-      sendReply(channel, data);
-    });
-  },
-};
-
-/**
- * Uninstall a plugin
- */
-const uninstall: Command = {
-  id: 'uninstall-plugin',
-  applicationId: section.id,
-
-  name: 'uninstall',
-  displayName: 'uninstall',
-
-  description: 'Uninstall a plugin',
-  displayDescription: 'Uninstall a plugin',
-
-  type: ApplicationCommandType.Chat,
-  inputType: ApplicationCommandInputType.BuiltIn,
-
-  options: [
-    {
-      name: 'plugin',
-      displayName: 'plugin',
-
-      description: 'Plugin name',
-      displayDescription: 'Plugin name',
-
-      type: ApplicationCommandOptionType.String,
-      required: true,
-    },
-  ],
-
-  execute: (args, message) => {
-    const name = args[0].value;
-    const channel = message.channel.id;
-
-    uninstallPlugin(name, data => {
-      sendReply(channel, data);
-    });
-  },
-};
-
-/**
- * Enable a plugin
- */
-const disable: Command = {
-  id: 'disable-plugin',
-  applicationId: section.id,
-
-  name: 'disable',
-  displayName: 'disable',
-
-  description: 'Disable a plugin',
-  displayDescription: 'Disable a plugin',
-
-  type: ApplicationCommandType.Chat,
-  inputType: ApplicationCommandInputType.BuiltIn,
-
-  options: [
-    {
-      name: 'plugin',
-      displayName: 'plugin',
-
-      description: 'Plugin name',
-      displayDescription: 'Plugin name',
-
-      type: ApplicationCommandOptionType.String,
-      required: true,
-    },
-  ],
-
-  execute: (args, message) => {
-    const name = args[0].value;
-    const channel = message.channel.id;
-
-    // @ts-ignore
-    disablePlugin(name, result => {
-      if (result === 'yes') {
-        sendReply(channel, `**${name}** has been disabled.`);
+      if (pluginsList.length === 0) {
+        sendReply(channel, 'No plugins installed.');
         return;
       }
 
-      sendReply(channel, `Error when disabling **${name}**.`);
-    });
-  },
-};
+      const enabledPlugins = Plugins.getEnabledPlugins();
+      const disabledPlugins = Plugins.getDisabledPlugins();
 
-/**
- * Disable a plugin
- */
-const enable: Command = {
-  id: 'enable-plugin',
-  applicationId: section.id,
+      let plugins = '';
 
-  name: 'enable',
-  displayName: 'enable',
-
-  description: 'Enable a plugin',
-  displayDescription: 'Enable a plugin',
-
-  type: ApplicationCommandType.Chat,
-  inputType: ApplicationCommandInputType.BuiltIn,
-
-  options: [
-    {
-      name: 'plugin',
-      displayName: 'plugin',
-
-      description: 'Plugin name',
-      displayDescription: 'Plugin name',
-
-      type: ApplicationCommandOptionType.String,
-      required: true,
-    },
-  ],
-
-  execute: (args, message) => {
-    const name = args[0].value;
-    const channel = message.channel.id;
-
-    enablePlugin(name, result => {
-      if (result === 'yes') {
-        sendReply(channel, `**${name}** has been enabled.`);
-        return;
+      if (enabledPlugins.length > 0) {
+        plugins = `**Enabled plugins (${enabledPlugins.length})**:\n`;
+        plugins += `> ${enabledPlugins.join(', ')}\n`;
       }
 
-      sendReply(channel, `Error when enabling **${name}**.`);
-    });
-  },
-};
+      if (disabledPlugins.length > 0) {
+        plugins += `**Disabled plugins (${disabledPlugins.length})**:\n`;
+        plugins += `> ${disabledPlugins.join(', ')}`;
+      }
 
-export default [list, install, uninstall, disable, enable];
+      sendReply(channel, plugins);
+    },
+  },
+  {
+    name: 'plugins install',
+    description: 'Install a plugin',
+    options: [
+      {
+        name: 'plugin',
+        displayName: 'plugin',
+
+        description: 'Plugin url',
+        displayDescription: 'Plugin url',
+
+        required: true,
+        type: ApplicationCommandOptionType.String,
+      },
+    ],
+
+    execute: (args, message) => {
+      const url = args[0].value;
+      const channel = message.channel.id;
+
+      Plugins.installPlugin(url, data => {
+        sendReply(channel, data);
+      });
+    },
+  },
+  {
+    name: 'plugins uninstall',
+    description: 'Uninstall a plugin',
+    options: [
+      {
+        name: 'plugin',
+        displayName: 'plugin',
+
+        description: 'Plugin name',
+        displayDescription: 'Plugin name',
+
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+
+    execute: (args, message) => {
+      const name = args[0].value;
+      const channel = message.channel.id;
+
+      Plugins.uninstallPlugin(name, data => {
+        sendReply(channel, data);
+      });
+    },
+  },
+  {
+    name: 'plugins disable',
+    description: 'Disable a plugin',
+    options: [
+      {
+        name: 'plugin',
+        displayName: 'plugin',
+
+        description: 'Plugin name',
+        displayDescription: 'Plugin name',
+
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+
+    execute: (args, message) => {
+      const name = args[0].value;
+      const channel = message.channel.id;
+
+      // @ts-ignore
+      disablePlugin(name, result => {
+        if (result === 'yes') {
+          sendReply(channel, `**${name}** has been disabled.`);
+          return;
+        }
+
+        sendReply(channel, `Error when disabling **${name}**.`);
+      });
+    },
+  },
+  {
+    name: 'plugins enable',
+    description: 'Enable a plugin',
+    options: [
+      {
+        name: 'plugin',
+        displayName: 'plugin',
+
+        description: 'Plugin name',
+        displayDescription: 'Plugin name',
+
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+
+    execute: (args, message) => {
+      const name = args[0].value;
+      const channel = message.channel.id;
+
+      Plugins.enablePlugin(name, result => {
+        if (result === 'yes') {
+          sendReply(channel, `**${name}** has been enabled.`);
+          return;
+        }
+
+        sendReply(channel, `Error when enabling **${name}**.`);
+      });
+    },
+  }
+] as Command[];

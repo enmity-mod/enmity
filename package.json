@@ -31,6 +31,6 @@
     "typescript": "^4.7.2"
   },
   "dependencies": {
-    "enmity": "^1.1.8"
+    "enmity": "*"
   }
 }
