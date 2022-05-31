@@ -1,4 +1,4 @@
-import type { Command } from 'enmity-api/api/commands';
+import type { Command } from 'enmity/api/commands';
 import { filters, bulk } from '@metro';
 import { create } from '@patcher';
 
@@ -7,11 +7,13 @@ const Patcher = create('enmity-commands');
 const [
   Commands,
   Discovery,
-  Assets
+  Assets,
+  SearchStore
 ] = bulk(
   filters.byProps('getBuiltInCommands'),
   filters.byProps('useApplicationCommandsDiscoveryState'),
-  filters.byProps('getApplicationIconURL')
+  filters.byProps('getApplicationIconURL'),
+  filters.byProps('useSearchManager')
 );
 
 let commands: Command[] = [];
@@ -56,36 +58,50 @@ function unregisterCommands(caller: string): void {
 }
 
 function initialize() {
-  Patcher.after(Commands, 'getBuiltInCommands', (_, __, res) => ([...res, ...commands.values()]));
+  Commands.BUILT_IN_SECTIONS['enmity'] = section;
 
-  Patcher.after(Discovery, 'useApplicationCommandsDiscoveryState', (_, [, , , isChat], res) => {
-    if (isChat !== false) return res;
+  Patcher.after(SearchStore, 'useSearchManager', (_, [, type], res) => {
+    if (type !== 1) return;
 
-    if (!res.discoverySections.find(d => d.key === section.id) && commands.length) {
-      const cmds = [...commands.values()];
+    if (!res.sectionDescriptors?.find?.(s => s.id === section.id)) {
+      res.sectionDescriptors ??= [];
+      res.sectionDescriptors.push(section);
+    }
 
-      res.discoveryCommands.push(...cmds);
-      res.commands.push(...cmds.filter(cmd => !res.commands.some(e => e.name === cmd.name)));
+    if ((!res.filteredSectionId || res.filteredSectionId === section.id) && !res.activeSections.find(s => s.id === section.id)) {
+      res.activeSections.push(section);
+    }
 
-      res.discoverySections.push({
-        data: cmds,
-        key: section.id,
-        section,
+    if (commands.some(c => !res.commands?.find?.(r => r.id === c.id))) {
+      res.commands ??= [];
+
+      // De-duplicate commands
+      const collection = [...res.commands, ...commands];
+      res.commands = [...new Set(collection).values()];
+    }
+
+    if ((!res.filteredSectionId || res.filteredSectionId === section.id) && !res.commandsByActiveSection.find(r => r.section.id === section.id)) {
+      res.commandsByActiveSection.push({
+        section: section,
+        data: commands
       });
-
-      res.sectionsOffset.push(commands.length);
     }
 
-    if (!res.applicationCommandSections.find(s => s.id === section.id) && commands.length) {
-      res.applicationCommandSections.push(section);
+    const active = res.commandsByActiveSection.find(r => r.section.id === section.id);
+    if ((!res.filteredSectionId || res.filteredSectionId === section.id) && active && active.data.length === 0 && commands.length !== 0) {
+      active.data = commands;
     }
 
-    const index = res.discoverySections.findIndex(e => e.key === '-2');
-    if (res.discoverySections[index]?.data) {
-      const section = res.discoverySections[index];
-      section.data = section.data.filter(c => !c.__enmity);
+    /*
+     * Filter out duplicate built-in sections due to a bug that causes
+     * the getApplicationSections path to add another built-in commands
+     * section to the section rail
+     */
 
-      if (section.data.length === 0) res.discoverySections.splice(index, 1);
+    const builtIn = res.sectionDescriptors.filter(s => s.id === '-1');
+    if (builtIn.length > 1) {
+      res.sectionDescriptors = res.sectionDescriptors.filter(s => s.id !== '-1');
+      res.sectionDescriptors.push(builtIn.find(r => r.id === '-1'));
     }
   });
 
