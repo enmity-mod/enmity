@@ -24,7 +24,7 @@ Patcher.before(Opener, 'openLazy', (_, [component, sheet]) => {
           if (!children) return;
           const passedArgs = [children[0]?.props, children[1], ...args];
 
-          return cb.apply(ctx, [ctx, args, res]);
+          return cb.apply(ctx, [ctx, passedArgs, res]);
         });
 
         patch.applied = true;

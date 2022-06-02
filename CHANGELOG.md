@@ -17,7 +17,7 @@
 ```
 - Removed almost **ALL** discord tracking, this should improve app speeds by up to 30x
 - Removed crash reports and any other things that may indicate you are using a client modification (just incase)
-- In-app addon installer (WIP)
+- In-app addon installer when long pressing on a message inside the themes/plugins channels
 - Added many utilities for plugin developers
 - Added **plugin settings**
 - Deprecated all legacy APIs in favour of the new common modules that can be accessed from `enmity/metro/common`
