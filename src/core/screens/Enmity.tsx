@@ -6,9 +6,12 @@ import ThemeIcon from './partials/PluginIcon';
 import PluginIcon from './partials/ThemeIcon';
 import { version } from '@api/native';
 import * as Assets from '@api/assets';
+import { getByProps } from '@metro';
 import React from 'react';
 
 const ThemeColorMap = ColorMap.ThemeColorMap;
+
+const Invites = getByProps('acceptInviteAndTransitionToInviteChannel');
 
 export function HeaderRight() {
   return null;
@@ -45,7 +48,7 @@ export function Page({ settings }) {
           label='Discord Server'
           leading={<FormRow.Icon source={Icons.Discord} />}
           trailing={FormRow.Arrow}
-          onPress={() => Linking.openURL('https://discord.gg/enmityapp')}
+          onPress={() => Invites.acceptInviteAndTransitionToInviteChannel('enmityapp')}
         />
         <FormRow
           label='GitHub'
