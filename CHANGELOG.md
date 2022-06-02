@@ -22,7 +22,7 @@
 <br />
 
 # Preview
-![Preview](https://media.wtf/69919483)
+<img src="https://media.wtf/69919483" height="300" />
 
 - Added many utilities for plugin developers
 - Added **plugin settings**
