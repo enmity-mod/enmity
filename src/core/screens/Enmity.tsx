@@ -42,6 +42,12 @@ export function Page({ settings }) {
     >
       <FormSection title='Links'>
         <FormRow
+          label='Discord Server'
+          leading={<FormRow.Icon source={Icons.Discord} />}
+          trailing={FormRow.Arrow}
+          onPress={() => Linking.openURL('https://discord.gg/enmityapp')}
+        />
+        <FormRow
           label='GitHub'
           leading={<FormRow.Icon source={Icons.GitHub} />}
           trailing={FormRow.Arrow}
