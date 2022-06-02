@@ -2,6 +2,6 @@
   "ignore": [
     "dist"
   ],
-  "exec": "pnpm run build",
+  "exec": "rollup -c",
   "ext": "*.*"
 }
