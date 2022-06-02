@@ -69,6 +69,7 @@ export function applyTheme(name, callback?: (data) => void): Promise<void> {
     sendCommand('apply-theme', [name, Theme.theme], data => {
       theme = name;
       if (callback) callback(data);
+      Events.emit('applied', name);
       resolve(data);
     });
   });
@@ -82,6 +83,7 @@ export function removeTheme(callback?: (data) => void): Promise<void> {
     sendCommand('remove-theme', [], data => {
       theme = '';
       if (callback) callback(data);
+      Events.emit('removed');
       resolve(data);
     });
   });
