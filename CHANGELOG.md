@@ -19,8 +19,6 @@
 - Removed crash reports and any other things that may indicate you are using a client modification (just incase)
 - In-app addon installer when long pressing on a message inside the themes/plugins channels
 
-<br />
-
 ### Preview
 <img src="https://media.wtf/69919483" height="720" />
 
