@@ -15,7 +15,7 @@ export default [
         return;
       }
 
-      sendReply(message.channel.id, `**Installed themes (${themes.length})**: ${themes.join(', ')}`);
+      sendReply(message.channel.id, `**Installed themes (${themes.length})**: ${themes.map(t => t.name).join(', ')}`);
     },
   },
   {

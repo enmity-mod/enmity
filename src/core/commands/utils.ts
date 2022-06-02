@@ -1,23 +1,26 @@
 import { build, os, device, version, reload } from '@api/native';
+import { Messages, Token } from '@metro/common';
 import { Command } from 'enmity/api/commands';
 import { sendReply } from '@api/clyde';
-import { Token } from '@metro/common';
 
 export default [
   {
     name: 'debug',
     description: 'Print out your device information',
 
-    execute: () => {
-      let content = '**Debug Info:**\n';
-      content += `> Enmity: ${window['enmity'].version}\n`;
-      content += `> Discord: ${version} (${build})\n`;
-      content += `> Device: ${device}\n`;
-      content += `> System: ${os}\n`;
+    execute: (_, message) => {
+      const content = [];
 
-      return {
-        content,
-      };
+      content.push('**Debug Info:**');
+      content.push(`> Enmity: ${window.enmity.version}`);
+      content.push(`> Discord: ${version} (${build})`);
+      content.push(`> Device: ${device}`);
+      content.push(`> System: ${os}`);
+
+      Messages.sendMessage(message.channel.id, {
+        validNonShortcutEmojis: [],
+        content: content.join('\n')
+      });
     },
   },
   {
