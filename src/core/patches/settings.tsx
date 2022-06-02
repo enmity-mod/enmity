@@ -44,10 +44,9 @@ function patchScreens() {
 
 function patchSettings() {
   const Settings = getByTypeName('UserSettingsOverviewWrapper', { default: false });
-  const unpatch = Patcher.after(Settings, 'default', (_, __, ret) => {
-    const { navigation } = ret.props;
 
-    Patcher.after(ret.type.prototype, 'render', (_, args, res) => {
+  const unpatch = Patcher.after(Settings, 'default', (_, __, ret) => {
+    Patcher.after(ret.type.prototype, 'render', ({ props: { navigation } }, __, res) => {
       const { children } = res.props;
       const index = children.findIndex(x => x.props.title === Locale.Messages['PREMIUM_SETTINGS']);
 
@@ -57,21 +56,21 @@ function patchSettings() {
             label='General'
             leading={<FormRow.Icon source={{ uri: 'https://files.enmity.app/icon-64.png' }} />}
             trailing={<FormArrow />}
-            onPress={() => void navigation.push('Enmity')}
+            onPress={() => void navigation.push('Enmity', { navigation })}
           />
           <FormDivider />
           <FormRow
             label='Plugins'
             leading={<PluginIcon width={24} height={24} />}
             trailing={<FormArrow />}
-            onPress={() => void navigation.push('EnmityPlugins')}
+            onPress={() => void navigation.push('EnmityPlugins', { navigation })}
           />
           <FormDivider />
           <FormRow
             label='Themes'
             leading={<ThemeIcon width={24} height={24} />}
             trailing={<FormArrow />}
-            onPress={() => void navigation.push('EnmityThemes')}
+            onPress={() => void navigation.push('EnmityThemes', { navigation })}
           />
           <FormDivider />
         </FormSection>
