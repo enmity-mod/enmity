@@ -67,7 +67,7 @@ function unregisterCommands(caller: string): void {
 function initialize() {
   Commands.BUILT_IN_SECTIONS['enmity'] = section;
 
-  Patcher.after(SearchStore.SearchManagerStore, 'getQueryCommands', (_, [, , query], res) => {
+  Patcher.after(SearchStore.default, 'getQueryCommands', (_, [, , query], res) => {
     if (!query || query.startsWith('/')) return;
     res ??= [];
 
@@ -83,6 +83,20 @@ function initialize() {
         // Therefore, re-making the result array is required.
         res = [...res, command];
       }
+    }
+  });
+
+  Patcher.instead(SearchStore.default, 'getApplicationSections', (_, args, orig) => {
+    try {
+      const res = orig.apply(self, args) ?? [];
+
+      if (!res.find(r => r.id === section.id)) {
+        res.push(section);
+      };
+
+      return res;
+    } catch {
+      return [];
     }
   });
 
