@@ -1,3 +1,4 @@
+import { getIDByName } from '@api/assets';
 import { Toasts } from '@metro/common';
 import Settings from '@api/settings';
 import { getByName } from '@metro';
@@ -25,17 +26,29 @@ export function connectWebsocket(host?: string): void {
 
   socket.addEventListener('open', () => {
     console.log('Connected with debug websocket');
-    Toasts.open({ content: 'Connected to the websocket server.' });
+
+    Toasts.open({
+      content: `Connected to the WebSocket server.`,
+      source: getIDByName('Check')
+    });
   });
 
   socket.addEventListener('error', (err: any) => {
     console.log(`Error with debug websocket: ${err.message}`);
-    Toasts.open({ content: 'An error occured with the websocket connection, retrying in 1s.' });
+
+    Toasts.open({
+      content: `An error occured with the websocket connection.`,
+      source: getIDByName('toast_copy_link')
+    });
   });
 
   socket.addEventListener('close', (err: any) => {
     console.log(`Error with debug websocket: ${err.message}`);
-    Toasts.open({ content: 'The websocket connection has been closed.' });
+
+    Toasts.open({
+      content: `The websocket connection has been closed.`,
+      source: getIDByName('toast_copy_link')
+    });
   });
 
   socket.addEventListener('message', message => {
