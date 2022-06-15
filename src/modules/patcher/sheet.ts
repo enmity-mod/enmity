@@ -20,11 +20,7 @@ Patcher.before(Opener, 'openLazy', (_, [component, sheet]) => {
 
         const cb = patch.callback;
         patcher[patch.type](patch.caller, res.type, 'render', (ctx, args, res) => {
-          const children = findInReactTree(args[0], r => r.find?.(c => Array.isArray(c)));
-          if (!children) return;
-          const passedArgs = [children[0]?.props, children[1], ...args];
-
-          return cb.apply(ctx, [ctx, passedArgs, res]);
+          return cb.apply(ctx, [ctx, args, res]);
         });
 
         patch.applied = true;

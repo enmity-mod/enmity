@@ -1,6 +1,8 @@
 import { Clyde, Messages, Avatars } from '@metro/common';
 
-Avatars.BOT_AVATARS.ENMITY = 'https://github.com/enmity-mod.png';
+try {
+  Avatars.BOT_AVATARS.ENMITY = 'https://github.com/enmity-mod.png';
+} catch { }
 
 export function sendReply(channelID: string, content: (string | object), username?: string, avatarURL?: string): void {
   const msg = Clyde.createBotMessage(channelID, '');

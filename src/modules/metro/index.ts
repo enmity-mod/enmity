@@ -9,17 +9,6 @@ type Common = { [key in keyof typeof import('@data/modules').default]: any };
 
 export const common: Common = {};
 
-const blacklist: (Function | number)[] = [
-  id => id >= 951 && id <= 1006,
-  125,
-  203,
-  433,
-  434,
-  445,
-  446,
-  457,
-];
-
 export const filters = {
   byProps: (...mdls) => (mdl) => mdls.every(k => mdl[k] !== void 0),
 
@@ -141,6 +130,7 @@ getters.map(({ id, map, submodule }, index) => {
     };
   }
 
+  if (!results[index]) return;
   const res = mapper(results[index]);
   if (submodule) {
     common[submodule] ??= {};
@@ -163,14 +153,22 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
     }
   };
 
+  const locale = common.Locale && common.Locale.getLocale();
   for (const id in modules) {
-    if (blacklist.some(b => typeof b === 'function' ? b(id) : b === Number(id))) {
+    if (!modules[id].isInitialized) try {
+      __r(id as any as number);
+    } catch (e) {
       continue;
     }
 
-    if (!modules[id].isInitialized) __r(Number(id));
+    if (common.Moment && locale) {
+      common.Moment.locale(locale);
+    }
+
     const mdl = modules[id].publicModule.exports;
-    if (!mdl || mdl === window) continue;
+    if (!mdl || mdl === window || mdl['ihateproxies'] === null) {
+      continue;
+    }
 
     if (typeof mdl === 'object') {
       if (search(mdl, id)) {

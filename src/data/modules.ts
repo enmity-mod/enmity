@@ -131,6 +131,10 @@ const modules = {
   Scenes: {
     name: 'getScreens',
     default: false
+  },
+
+  Moment: {
+    props: ['isMoment']
   }
 };
 

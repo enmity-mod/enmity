@@ -8,18 +8,20 @@ interface Assets {
 
 export const assets: Assets = {};
 
-Patcher.after('enmity-assets', Assets, 'registerAsset', (_, [asset]: [Asset], id: number) => {
-  assets[asset.name] = { ...asset, id };
-});
+try {
+  Patcher.after('enmity-assets', Assets, 'registerAsset', (_, [asset]: [Asset], id: number) => {
+    assets[asset.name] = { ...asset, id };
+  });
 
-// Capture all assets that loaded before our patch
-for (let id = 1; ; id++) {
-  const asset = Assets.getAssetByID(id);
-  if (!asset) break;
-  if (assets[asset.name]) continue;
+  // Capture all assets that loaded before our patch
+  for (let id = 1; ; id++) {
+    const asset = Assets.getAssetByID(id);
+    if (!asset) break;
+    if (assets[asset.name]) continue;
 
-  assets[asset.name] = { ...asset, id };
-}
+    assets[asset.name] = { ...asset, id };
+  }
+} catch { }
 
 export function find(filter): Asset | null {
   return Object.values(assets).find(filter as any);
