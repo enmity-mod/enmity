@@ -140,6 +140,8 @@ getters.map(({ id, map, submodule }, index) => {
   }
 });
 
+const blacklist = [];
+
 export function getModule(filter, { all = false, traverse = false, defaultExport = true } = {}) {
   if (typeof filter !== 'function') return null;
 
@@ -155,9 +157,14 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
 
   const locale = common.Locale && common.Locale.getLocale();
   for (const id in modules) {
+    if (~blacklist.indexOf(id)) {
+      continue;
+    }
+
     if (!modules[id].isInitialized) try {
       __r(id as any as number);
     } catch (e) {
+      blacklist.push(id);
       continue;
     }
 
@@ -166,7 +173,12 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
     }
 
     const mdl = modules[id].publicModule.exports;
-    if (!mdl || mdl === window || mdl['ihateproxies'] === null) {
+    if (!mdl || mdl === window) {
+      continue;
+    }
+
+    if (mdl['ihateproxies'] === null) {
+      blacklist.push(id);
       continue;
     }
 
