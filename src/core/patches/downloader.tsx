@@ -13,7 +13,6 @@ const Icon = getByTypeName('Icon');
 const { ThemeColorMap } = ColorMap;
 
 export default function () {
-  return;
   SheetPatcher.after('enmity-downloader', 'MessageLongPressActionSheet', (_, [{ channel, message }, items]) => {
     const styles = StyleSheet.createThemedStyleSheet({
       icon: {

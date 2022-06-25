@@ -8,6 +8,7 @@ declare const modules: { [id: number]: any; };
 type Common = { [key in keyof typeof import('@data/modules').default]: any };
 
 export const common: Common = {};
+export const blacklist: string[] = [];
 
 export const filters = {
   byProps: (...mdls) => (mdl) => mdls.every(k => mdl[k] !== void 0),
@@ -140,8 +141,6 @@ getters.map(({ id, map, submodule }, index) => {
   }
 });
 
-const blacklist = [];
-
 export function getModule(filter, { all = false, traverse = false, defaultExport = true } = {}) {
   if (typeof filter !== 'function') return null;
 
@@ -157,7 +156,7 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
 
   const locale = common.Locale && common.Locale.getLocale();
   for (const id in modules) {
-    if (~blacklist.indexOf(id)) {
+    if (blacklist.includes(id)) {
       continue;
     }
 
@@ -173,14 +172,11 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
     }
 
     const mdl = modules[id].publicModule.exports;
-    if (!mdl || mdl === window) {
-      continue;
-    }
-
-    if (mdl['ihateproxies'] === null) {
+    if (!mdl || mdl === window || mdl['ihateproxies'] === null) {
       blacklist.push(id);
       continue;
     }
+
 
     if (typeof mdl === 'object') {
       if (search(mdl, id)) {
