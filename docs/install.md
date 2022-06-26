@@ -14,7 +14,7 @@ To install Emnity without jailbreaking, you may use AltStore. [You can get AltSt
 
 ### Installation With AltStore
 
-With AltStore loaded on your device, you can go to the releases page and download the latest [.IPA file for Emnity, which is available here.](https://github.com/enmity-mod/enmity-ios/releases/latest)
+With AltStore loaded on your device, you can go to the releases page and download the latest [.IPA file for Emnity, which is available here.](https://github.com/enmity-mod/tweak/releases/latest)
 
 You will be asked if you want to download the file, tap "Download" then, open the Files app and navigate to the downloads folder on your device, and press the button to share the file, where you will see an option to share it with AltStore.
 
