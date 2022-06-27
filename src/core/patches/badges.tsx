@@ -39,6 +39,10 @@ export default function () {
     if (!user) return;
     user.flags = user.__flags;
 
+    if (user.flags === 0) {
+      res.props.badges = [];
+    }
+
     const [badges, setBadges] = React.useState([]);
     React.useEffect(() => {
       try {
@@ -50,7 +54,6 @@ export default function () {
 
     if (!badges.length || !res) return;
 
-    if (user.flags === 0) res.props.badges = [];
     res.props.badges.push(...badges.map(badge => <View
       style={{
         alignItems: 'center',
