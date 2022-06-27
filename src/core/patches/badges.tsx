@@ -24,8 +24,20 @@ const cache = {
 export default function () {
   const Badges = getByDisplayName('ProfileBadges', { default: false });
 
+  Patcher.before(Badges, 'default', (_, [{ user }]) => {
+    user.__flags = user.flags;
+
+    if (user.flags === 0) {
+      // Force a badge on users without badges, to
+      // allow the component to return something we can modify
+      // in the following patch
+      user.flags = 64;
+    }
+  });
+
   Patcher.after(Badges, 'default', (_, [{ user }], res) => {
     if (!user) return;
+    user.flags = user.__flags;
 
     const [badges, setBadges] = React.useState([]);
     React.useEffect(() => {
@@ -38,9 +50,9 @@ export default function () {
 
     if (!badges.length || !res) return;
 
+    if (user.flags === 0) res.props.badges = [];
     res.props.badges.push(...badges.map(badge => <View
       style={{
-        marginBottom: 4,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'flex-end'
