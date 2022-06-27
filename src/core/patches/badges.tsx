@@ -1,6 +1,6 @@
 import { View, Image, TouchableOpacity } from '@components';
-import { StyleSheet, Toasts, Theme } from '@metro/common';
 import { BadgesDomain, Times } from '@data/constants';
+import { Toasts, Theme } from '@metro/common';
 import { getByDisplayName } from '@metro';
 import { create } from '@patcher';
 import React from 'react';
@@ -38,18 +38,16 @@ export default function () {
 
     if (!badges.length || !res) return;
 
-    const styles = StyleSheet.createThemedStyleSheet({
-      container: {
+    res.props.badges.push(...badges.map(badge => <View
+      style={{
         marginBottom: 4,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'flex-end'
-      }
-    });
-
-    res.props.badges.push(<View style={styles.badges}>
-      {badges.map(badge => <Badge type={badge} />)}
-    </View>);
+      }}
+    >
+      <Badge type={badge} />
+    </View>));
   });
 
   return Patcher.unpatchAll;
@@ -76,15 +74,6 @@ async function fetchUserBadges(id: string): Promise<string[]> {
 function Badge({ type }: { type: string; }): JSX.Element {
   const [badge, setBadge] = React.useState(null);
 
-  const styles = StyleSheet.createThemedStyleSheet({
-    badge: {
-      width: 24,
-      height: 24,
-      resizeMode: 'contain',
-      marginHorizontal: 2
-    }
-  });
-
   React.useEffect(() => {
     try {
       fetchBadge(type).then(setBadge);
@@ -97,15 +86,22 @@ function Badge({ type }: { type: string; }): JSX.Element {
     return null;
   }
 
-  return <TouchableOpacity onPress={() => {
-    Toasts.open({
-      content: badge.name,
-      source: { uri: badge.url[Theme.theme] }
-    });
-  }}>
+  return <TouchableOpacity
+    onPress={() => {
+      Toasts.open({
+        content: badge.name,
+        source: { uri: badge.url[Theme.theme] }
+      });
+    }}
+  >
     <Image
       source={{ uri: badge.url[Theme.theme] }}
-      style={styles.badge}
+      style={{
+        width: 24,
+        height: 24,
+        resizeMode: 'contain',
+        marginHorizontal: 2
+      }}
     />
   </TouchableOpacity>;
 };
