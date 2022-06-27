@@ -71,7 +71,11 @@ async function fetchUserBadges(id: string): Promise<string[]> {
     return cache.user[id].badges;
   }
 
-  const res = await fetch(BadgesDomain + id + '.json').then(r => r.json()).catch(() => []);
+  const res = await fetch(BadgesDomain + id + '.json', {
+    headers: {
+      'Cache-Control': 'no-cache'
+    }
+  }).then(r => r.json()).catch(() => []);
 
   if (Array.isArray(res)) {
     cache.user[id] = {
@@ -124,7 +128,11 @@ async function fetchBadge(type: string): Promise<Badge> {
     return cache.badges[type].data;
   }
 
-  const res = await fetch(BadgesDomain + `data/${type}.json`).then(r => r.json()).catch(() => { });
+  const res = await fetch(BadgesDomain + `data/${type}.json`, {
+    headers: {
+      'Cache-Control': 'no-cache'
+    }
+  }).then(r => r.json()).catch(() => { });
 
   if (res?.url) {
     cache.badges[type] = {
