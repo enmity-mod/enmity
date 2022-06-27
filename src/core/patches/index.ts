@@ -1,6 +1,7 @@
 // import patchDownloader from './downloader';
 import patchSettings from './settings';
 import patchTracking from './no-track';
+import patchBadges from './badges';
 
 export function initialize(): void {
   try {
@@ -13,6 +14,12 @@ export function initialize(): void {
     patchTracking();
   } catch (e) {
     console.log('Failed to patch trackers: ', e.message);
+  }
+
+  try {
+    patchBadges();
+  } catch (e) {
+    console.log('Failed to patch badges: ', e.message);
   }
 
   // try {
