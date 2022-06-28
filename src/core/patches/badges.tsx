@@ -1,9 +1,10 @@
 import { View, Image, TouchableOpacity } from '@components';
 import { BadgesDomain, Times } from '@data/constants';
 import { Toasts, Theme } from '@metro/common';
-import { getByDisplayName } from '@metro';
+import { getByDisplayName, getByProps } from '@metro';
 import { create } from '@patcher';
 import React from 'react';
+import { wrapInHooks } from '@utilities';
 
 interface Badge {
   name: string;
@@ -24,25 +25,8 @@ const cache = {
 export default function () {
   const Badges = getByDisplayName('ProfileBadges', { default: false });
 
-  Patcher.before(Badges, 'default', (_, [{ user }]) => {
-    user.__flags = user.flags;
-
-    if (user.flags === 0) {
-      // Force a badge on users without badges, to
-      // allow the component to return something we can modify
-      // in the following patch
-      user.flags = 64;
-    }
-  });
-
-  Patcher.after(Badges, 'default', (_, [{ user }], res) => {
-    if (!user) return;
-    user.flags = user.__flags;
-
-    if (user.flags === 0) {
-      res.props.badges = [];
-    }
-
+  Patcher.after(Badges, 'default', (_, [{ user, isEnmity, ...rest }], res) => {
+    if (isEnmity) return;
     const [badges, setBadges] = React.useState([]);
     React.useEffect(() => {
       try {
@@ -52,9 +36,28 @@ export default function () {
       }
     }, []);
 
-    if (!badges.length || !res) return;
+    if (!badges.length) return res;
+    if (!res) {
+      res = wrapInHooks(Badges.default)({
+        user: new Proxy({}, {
+          get: (_, prop) => {
+            if (prop === 'flags') {
+              return -1;
+            }
+
+            return user[prop];
+          }
+        }),
+        isEnmity: true,
+        ...rest
+      });
+
+      res.props.badges = [];
+    }
 
     res.props.badges.push(...badges.map(badge => <View
+      key={badge}
+      __enmity={true}
       style={{
         alignItems: 'center',
         flexDirection: 'row',
@@ -63,6 +66,8 @@ export default function () {
     >
       <Badge type={badge} />
     </View>));
+
+    return res;
   });
 
   return Patcher.unpatchAll;
