@@ -30,7 +30,8 @@ const {
   Scenes,
   Navigation,
   NavigationNative,
-  NavigationStack
+  NavigationStack,
+  Moment
 } = common;
 
 export const React = common.React as typeof import('react');
@@ -65,5 +66,6 @@ export {
   Scenes,
   Navigation,
   NavigationNative,
-  NavigationStack
+  NavigationStack,
+  Moment
 };
