@@ -1,9 +1,14 @@
 import { getByProps } from '@metro';
+import { Constants } from '@metro/common';
 import { create } from '@patcher';
 
 const Patcher = create('no-track');
 
 export default function () {
+
+  // Invalidate /science link in case patching fails
+  Constants.TRACK = "/404";
+
   const [
     Metadata,
     Analytics,

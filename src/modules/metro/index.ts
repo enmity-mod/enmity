@@ -242,12 +242,12 @@ export function getByProps(...options) {
   const [props, { bulk = false, ...rest }] = parseOptions(options);
 
   if (bulk) {
-    const filters = props.map(p => Array.isArray(p)
+    const bulked = props.map(p => Array.isArray(p)
       ? filters.byProps(...p)
       : filters.byProps(p)
     ).concat({ ...rest });
 
-    return bulk(...filters);
+    return this["bulk"](...bulked);
   }
 
   return getModule(filters.byProps(...props), rest);
@@ -259,7 +259,7 @@ export function getByDisplayName(...options) {
   if (bulk) {
     const bulked = names.map(filters.byDisplayName).concat({ defaultExport, ...rest });
 
-    return bulk(...bulked);
+    return this["bulk"](...bulked);
   }
 
   return getModule(filters.byDisplayName(names[0]), { defaultExport, ...rest });
@@ -271,7 +271,7 @@ export function getByTypeName(...options) {
   if (bulk) {
     const bulked = names.map(filters.byTypeName).concat({ defaultExport, ...rest });
 
-    return bulk(...bulked);
+    return this["bulk"](...bulked);
   }
 
   return getModule(filters.byTypeName(names[0]), { defaultExport, ...rest });
@@ -283,7 +283,7 @@ export function getByName(...options) {
   if (bulk) {
     const bulked = names.map(filters.byName).concat({ defaultExport, ...rest });
 
-    return bulk(...bulked);
+    return this["bulk"](...bulked);
   }
 
   return getModule(filters.byName(names[0]), { defaultExport, ...rest });
