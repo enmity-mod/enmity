@@ -1,24 +1,12 @@
 import { getByProps } from '@metro';
-import { Constants } from '@metro/common';
 import { create } from '@patcher';
 
 const Patcher = create('no-track');
 
 export default function () {
-
-  // Invalidate /science link in case patching fails
-  Constants.TRACK = "/404";
-
-  const [
-    Metadata,
-    Analytics,
-    Properties
-  ] = getByProps(
-    ['trackWithMetadata'],
-    ['AnalyticsActionHandlers'],
-    ['encodeProperties', 'track'],
-    { bulk: true }
-  );
+  const Metadata = getByProps('trackWithMetadata');
+  const Analytics = getByProps('AnalyticsActionHandlers');
+  const Properties = getByProps('encodeProperties', 'track');
 
   try {
     patchMetadata(Metadata);
