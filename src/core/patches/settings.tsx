@@ -48,9 +48,11 @@ function patchSettings() {
   const unpatch = Patcher.after(Settings, 'default', (_, __, ret) => {
     Patcher.after(ret.type.prototype, 'render', ({ props: { navigation } }, __, res) => {
       const { children } = res.props;
-      const index = children.findIndex(x => x.props.title === Locale.Messages['PREMIUM_SETTINGS']);
 
-      children.splice(index, 0, <>
+      const searchable = [Locale.Messages['BILLING_SETTINGS'], Locale.Messages['PREMIUM_SETTINGS']];
+      const index = children.findIndex(x => searchable.includes(x.props.title));
+
+      children.splice(index === -1 ? 4 : index, 0, <>
         <FormSection key='Enmity' title='Enmity'>
           <FormRow
             label='General'

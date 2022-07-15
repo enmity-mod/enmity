@@ -42,11 +42,11 @@ const modules = {
 
   Toasts: {
     props: ['open', 'close'],
-    ensure: m => !m.openLazy && !m.startDrag && !m.init && !m.openReplay,
+    ensure: m => !m.openLazy && !m.startDrag && !m.init && !m.openReplay && !m.setAlwaysOnTop,
   },
 
   Dialog: {
-    props: ['show', 'openLazy', 'open', 'close'],
+    props: ['show', 'openLazy', 'close'],
   },
 
   Token: {
