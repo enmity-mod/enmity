@@ -1,10 +1,10 @@
 import { FormSection, ScrollView, FormRow, FormSwitch, Text, FormInput, KeyboardAvoidingView } from '@components';
-import { Linking, StyleSheet, ColorMap, Clipboard, Toasts } from '@metro/common';
+import { Linking, StyleSheet, ColorMap, Clipboard, Toasts, Dialog } from '@metro/common';
 import { socket, connectWebsocket } from '@core/debug/websocket';
 import { listThemes } from '@managers/themes';
 import ThemeIcon from './partials/PluginIcon';
 import PluginIcon from './partials/ThemeIcon';
-import { version } from '@api/native';
+import { reload, version } from '@api/native';
 import * as Assets from '@api/assets';
 import { getByProps } from '@metro';
 import React from 'react';
@@ -29,7 +29,8 @@ export function Page({ settings }) {
     GitHub: Assets.getIDByName('img_account_sync_github_white'),
     Addon: Assets.getIDByName('img_nitro_increase_guild_limit'),
     Checkmark: Assets.getIDByName('Check'),
-    Discord: Assets.getIDByName('Discord')
+    Discord: Assets.getIDByName('Discord'),
+    Refresh: Assets.getIDByName('ic_sync_24px')
   };
 
   const Plugins = [...window.plugins.enabled, ...window.plugins.disabled];
@@ -95,6 +96,19 @@ export function Page({ settings }) {
           onPress={() => {
             Toasts.open({ content: 'Copied to clipboard', source: Icons.Checkmark });
             Clipboard.setString(`**Themes**: ${Themes.join(', ')}`);
+          }}
+        />
+        <FormRow
+          label='Reload Discord'
+          leading={<FormRow.Icon source={Icons.Refresh} />}
+          onPress={() => {
+            Dialog.show({
+              title: 'Are You Sure?',
+              body: 'Are you sure you want to reload the discord app? This might crash your app instead of reloading it.',
+              confirmText: 'Yes',
+              cancelText: 'No',
+              onConfirm: reload,
+            });
           }}
         />
         <FormRow
