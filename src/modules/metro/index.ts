@@ -239,9 +239,9 @@ export function bulk(...filters) {
 }
 
 export function getByProps(...options) {
-  const [props, { bulk = false, ...rest }] = parseOptions(options);
+  const [props, { bulk: useBulk = false, ...rest }] = parseOptions(options);
 
-  if (bulk) {
+  if (useBulk) {
     const filters = props.map(p => Array.isArray(p)
       ? filters.byProps(...p)
       : filters.byProps(p)
@@ -254,9 +254,9 @@ export function getByProps(...options) {
 }
 
 export function getByDisplayName(...options) {
-  const [names, { bulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
+  const [names, { bulk: useBulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
 
-  if (bulk) {
+  if (useBulk) {
     const bulked = names.map(filters.byDisplayName).concat({ defaultExport, ...rest });
 
     return bulk(...bulked);
@@ -266,9 +266,9 @@ export function getByDisplayName(...options) {
 }
 
 export function getByTypeName(...options) {
-  const [names, { bulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
+  const [names, { bulk: useBulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
 
-  if (bulk) {
+  if (useBulk) {
     const bulked = names.map(filters.byTypeName).concat({ defaultExport, ...rest });
 
     return bulk(...bulked);
@@ -278,9 +278,9 @@ export function getByTypeName(...options) {
 }
 
 export function getByName(...options) {
-  const [names, { bulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
+  const [names, { bulk: useBulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
 
-  if (bulk) {
+  if (useBulk) {
     const bulked = names.map(filters.byName).concat({ defaultExport, ...rest });
 
     return bulk(...bulked);
