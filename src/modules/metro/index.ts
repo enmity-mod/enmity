@@ -239,51 +239,51 @@ export function bulk(...filters) {
 }
 
 export function getByProps(...options) {
-  const [props, { bulk = false, ...rest }] = parseOptions(options);
+  const [props, { bulk: useBulk = false, ...rest }] = parseOptions(options);
 
-  if (bulk) {
+  if (useBulk) {
     const handlers = props.map(p => Array.isArray(p)
       ? filters.byProps(...p)
       : filters.byProps(p)
     ).concat({ ...rest });
 
-    return this.bulk(...handlers);
+    return bulk(...handlers);
   }
 
   return getModule(filters.byProps(...props), rest);
 }
 
 export function getByDisplayName(...options) {
-  const [names, { bulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
+  const [names, { bulk: useBulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
 
-  if (bulk) {
+  if (useBulk) {
     const bulked = names.map(filters.byDisplayName).concat({ defaultExport, ...rest });
 
-    return this.bulk(...bulked);
+    return bulk(...bulked);
   }
 
   return getModule(filters.byDisplayName(names[0]), { defaultExport, ...rest });
 }
 
 export function getByTypeName(...options) {
-  const [names, { bulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
+  const [names, { bulk: useBulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
 
-  if (bulk) {
+  if (useBulk) {
     const bulked = names.map(filters.byTypeName).concat({ defaultExport, ...rest });
 
-    return this.bulk(...bulked);
+    return bulk(...bulked);
   }
 
   return getModule(filters.byTypeName(names[0]), { defaultExport, ...rest });
 }
 
 export function getByName(...options) {
-  const [names, { bulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
+  const [names, { bulk: useBulk = false, default: defaultExport = true, ...rest }] = parseOptions(options);
 
-  if (bulk) {
+  if (useBulk) {
     const bulked = names.map(filters.byName).concat({ defaultExport, ...rest });
 
-    return this.bulk(...bulked);
+    return bulk(...bulked);
   }
 
   return getModule(filters.byName(names[0]), { defaultExport, ...rest });

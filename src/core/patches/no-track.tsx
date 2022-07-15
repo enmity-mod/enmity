@@ -39,7 +39,6 @@ export default function () {
 function patchMetadata(metadata: any): void {
   Patcher.instead(metadata, 'trackWithMetadata', () => { });
   Patcher.instead(metadata, 'trackWithGroupMetadata', () => { });
-  Patcher.instead(metadata, 'trackWithGroupMetadata', () => { });
 }
 
 function patchAnalytics(analytics: any): void {
