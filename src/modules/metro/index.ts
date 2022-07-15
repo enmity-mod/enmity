@@ -242,12 +242,12 @@ export function getByProps(...options) {
   const [props, { bulk = false, ...rest }] = parseOptions(options);
 
   if (bulk) {
-    const filters = props.map(p => Array.isArray(p)
+    const handlers = props.map(p => Array.isArray(p)
       ? filters.byProps(...p)
       : filters.byProps(p)
     ).concat({ ...rest });
 
-    return this.bulk(...filters);
+    return this.bulk(...handlers);
   }
 
   return getModule(filters.byProps(...props), rest);
