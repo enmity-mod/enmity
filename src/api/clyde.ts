@@ -9,7 +9,7 @@ try {
 
 export function sendReply(channelID: string, content: (string | object), username?: string, avatarURL?: string): void {
   const channel = channelID ?? Channels?.getChannelId?.();
-  const msg = Clyde.createBotMessage(channel, '');
+  const msg = Clyde.createBotMessage({ channelId: channel, content: '' });
 
   msg.author.username = username ?? 'Enmity';
   msg.author.avatar = avatarURL ? username : 'ENMITY';
