@@ -14,16 +14,19 @@ Patcher.before(Opener, 'openLazy', (_, [component, sheet]) => {
 
   component.then(instance => {
     const unpatchInstance = Patcher.after(instance, 'default', (_, __, res) => {
-      for (let i = 0; i < patches[sheet].length; i++) {
-        const patch = patches[sheet][i];
+      const sheetPatches = [...patches[sheet]];
+      for (let i = 0; i < sheetPatches.length; i++) {
+        const patch = sheetPatches[i];
         if (patch.applied) continue;
 
-        const cb = patch.callback;
-        patcher[patch.type](patch.caller, res.type, 'render', (ctx, args, res) => {
-          return cb.apply(ctx, [ctx, args, res]);
-        });
+        (() => {
+          const cb = patch.callback;
+          patcher[patch.type](patch.caller, res.type, 'render', (ctx, args, res) => {
+            return cb.apply(ctx, [ctx, args, res]);
+          });
 
-        patch.applied = true;
+          patch.applied = true;
+        })();
       }
 
       unpatchInstance();
