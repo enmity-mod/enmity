@@ -1,7 +1,5 @@
-import { readFileSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
 import { defineConfig } from 'rollup';
-import { createHash } from 'crypto';
 
 // Rollup Plugins
 import { typescriptPaths } from 'rollup-plugin-typescript-paths';
@@ -87,8 +85,7 @@ export default defineConfig({
     replace({
       preventAssignment: true,
       '__VERSION__': revision
-    }),
-    getHash()
+    })
   ],
   onwarn(warning, warn) {
     // suppress eval warnings
@@ -96,18 +93,3 @@ export default defineConfig({
     warn(warning);
   }
 });
-
-function getHash() {
-  return {
-    name: 'plugin-info',
-    writeBundle() {
-      const buffer = readFileSync('dist/Enmity.js');
-      const hash = createHash('sha256');
-      hash.update(buffer);
-
-      const hex = hash.digest('hex');
-
-      writeFileSync('dist/hash', hex);
-    }
-  };
-};
