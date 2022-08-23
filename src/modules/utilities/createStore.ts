@@ -14,11 +14,11 @@ export default function createStore(data) {
 
   const handlers = {
     get: (key, defaults) => storage[key] ?? defaults,
-    set: (key, value) => Dispatcher.dirtyDispatch({
+    set: (key, value) => Dispatcher.wait(() => Dispatcher.dispatch({
       type: `ENMITY_FLUX_${id}_SET`,
       key,
       value
-    }),
+    })),
     delete: (key) => handlers.set(key, void 0)
   };
 
