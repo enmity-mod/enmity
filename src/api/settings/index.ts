@@ -44,12 +44,12 @@ export function set(file: string, setting: string, value: any): void {
     throw new TypeError('the second argument setting must be of type string');
   }
 
-  return Dispatcher.dirtyDispatch({
+  return Dispatcher.wait(() => Dispatcher.dispatch({
     type: 'ENMITY_SET_SETTING',
     file,
     setting,
     value
-  });
+  }));
 }
 
 export function get(file: string, setting: string, defaults?: any): any {
@@ -83,12 +83,12 @@ export function toggle(file: string, setting: string, defaults: boolean): void {
     throw new TypeError('the third argument defaults must be of type boolean');
   }
 
-  return Dispatcher.dirtyDispatch({
+  return Dispatcher.wait(() => Dispatcher.dispatch({
     type: 'ENMITY_TOGGLE_SETTING',
     file,
     setting,
     defaults
-  });
+  }));
 }
 
 export function connectComponent(component: React.ComponentType, file: string): React.ComponentType {

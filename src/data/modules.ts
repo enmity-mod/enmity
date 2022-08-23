@@ -33,7 +33,7 @@ const modules = {
   },
 
   Dispatcher: {
-    props: ['dirtyDispatch'],
+    props: ['_dispatch', 'dispatch'],
   },
 
   Storage: {
