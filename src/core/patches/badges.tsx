@@ -55,6 +55,7 @@ export default function () {
       res.props.badges = [];
     }
 
+    if (!res) return res;
     res.props.badges.push(...badges.map(badge => <View
       key={badge}
       __enmity={true}
