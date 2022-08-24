@@ -74,7 +74,6 @@ function patchSettings() {
             trailing={<FormArrow />}
             onPress={() => void navigation.push('EnmityThemes', { navigation })}
           />
-          <FormDivider />
         </FormSection>
       </>);
     });

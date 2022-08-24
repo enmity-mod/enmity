@@ -52,7 +52,9 @@ export default function () {
         ...rest
       });
 
-      res.props.badges = [];
+      if (res?.props) {
+        res.props.badges = [];
+      }
     }
 
     if (!res) return res;
