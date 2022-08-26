@@ -167,7 +167,7 @@ export function HeaderRight() {
         (url: string) => {
           if (!url.endsWith('js')) {
             return Toasts.open({
-              content: 'Invalid URL for theme',
+              content: 'Invalid URL for plugin',
               source: Assets.getIDByName('ic_close_16px')
             });
           }
