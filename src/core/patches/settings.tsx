@@ -1,6 +1,7 @@
 import { FormArrow, FormDivider, FormRow, FormSection } from '@components';
 import { connectComponent } from '@api/settings';
 import { Locale, Scenes } from '@metro/common';
+import { findInReactTree } from '@utilities';
 import * as Screens from '@screens/index';
 import { getByTypeName } from '@metro';
 import { create } from '@patcher';
@@ -46,7 +47,9 @@ function patchSettings() {
   const Settings = getByTypeName('UserSettingsOverviewWrapper', { default: false });
 
   const unpatch = Patcher.after(Settings, 'default', (_, __, ret) => {
-    Patcher.after(ret.type.prototype, 'render', ({ props: { navigation } }, __, res) => {
+    const Overview = findInReactTree(ret, m => m.type?.name === 'UserSettingsOverview');
+
+    Patcher.after(Overview.type.prototype, 'render', ({ props: { navigation } }, __, res) => {
       const { children } = res.props;
 
       const searchable = [Locale.Messages['BILLING_SETTINGS'], Locale.Messages['PREMIUM_SETTINGS']];
