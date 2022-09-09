@@ -1,5 +1,5 @@
 import { Alert, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
-import { StyleSheet, ColorMap, Constants, Toasts, Navigation } from '@metro/common';
+import { StyleSheet, ColorMap, Constants, Clipboard, Toasts, Navigation } from '@metro/common';
 import { Plugin } from 'enmity/managers/plugins';
 import { connectComponent } from '@api/settings';
 import PluginSettings from './PluginSettings';
@@ -160,7 +160,8 @@ export function HeaderRight() {
   });
 
   return (
-    <TouchableOpacity styles={styles.wrapper} onPress={(): void => {
+    <TouchableOpacity styles={styles.wrapper} onPress={async (): Promise<void> => {
+      const defaultValue = await Clipboard.getString();
       Alert.prompt(
         'Install a plugin',
         'Please enter the URL of the plugin to install.',
@@ -192,6 +193,8 @@ export function HeaderRight() {
             Toasts.open({ content: res.text, source: res.icon });
           });
         },
+        undefined,
+        defaultValue.endsWith('.js') ? defaultValue : null,
       );
     }}>
       <Image
