@@ -3,7 +3,7 @@ import { connectComponent } from '@api/settings';
 import { Locale, Scenes } from '@metro/common';
 import { findInReactTree } from '@utilities';
 import * as Screens from '@screens/index';
-import { getByTypeName } from '@metro';
+import { getByName } from '@metro';
 import { create } from '@patcher';
 import React from 'react';
 
@@ -44,7 +44,7 @@ function patchScreens() {
 }
 
 function patchSettings() {
-  const Settings = getByTypeName('UserSettingsOverviewWrapper', { default: false });
+  const Settings = getByName('UserSettingsOverviewWrapper', { default: false });
 
   const unpatch = Patcher.after(Settings, 'default', (_, __, ret) => {
     const Overview = findInReactTree(ret, m => m.type?.name === 'UserSettingsOverview');
