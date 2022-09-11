@@ -27,9 +27,9 @@ export const filters = {
     if (!mdl) return false;
 
     if (!defaultExport) {
-      return typeof mdl.default === 'function' && mdl.default.type?.name === name;
+      return typeof mdl.default?.type === 'function' && mdl.default.type.name === name;
     } else {
-      return typeof mdl === 'function' && mdl.name === name;
+      return typeof mdl.type === 'function' && mdl.type.name === name;
     }
   },
 
@@ -37,9 +37,9 @@ export const filters = {
     if (!mdl) return false;
 
     if (!defaultExport) {
-      return typeof mdl.default === 'function' && mdl.default.name === name;
+      return typeof mdl.default === 'function' && mdl.default.displayName === name;
     } else {
-      return typeof mdl === 'function' && mdl.name === name;
+      return typeof mdl === 'function' && mdl.displayName === name;
     }
   }
 };
