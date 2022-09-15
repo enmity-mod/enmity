@@ -49,7 +49,7 @@ export function Page({ settings }) {
           label='Discord Server'
           leading={<FormRow.Icon source={Icons.Discord} />}
           trailing={FormRow.Arrow}
-          onPress={() => Invites.acceptInviteAndTransitionToInviteChannel('enmityapp')}
+          onPress={() => Invites.acceptInviteAndTransitionToInviteChannel('enmity')}
         />
         <FormRow
           label='GitHub'
