@@ -7,7 +7,9 @@ const overrides = {
   useEffect: () => { },
   useLayoutEffect: () => { },
   useRef: () => ({ current: null }),
-  useCallback: callback => callback
+  useCallback: callback => callback,
+  useImperativeHandle: () => { },
+  useContext: (ctx) => ctx._currentValue
 };
 
 const keys = Object.keys(overrides);
