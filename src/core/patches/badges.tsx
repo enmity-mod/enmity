@@ -45,6 +45,10 @@ export default function () {
               return -1;
             }
 
+            if (prop === 'hasFlag') {
+              return () => true;
+            }
+
             return user[prop];
           }
         }),
