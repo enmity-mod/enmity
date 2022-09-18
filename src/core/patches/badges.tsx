@@ -1,8 +1,8 @@
 import { View, Image, TouchableOpacity } from '@components';
 import { BadgesDomain, Times } from '@data/constants';
 import { Toasts, Theme } from '@metro/common';
-import { getByDisplayName } from '@metro';
 import { wrapInHooks } from '@utilities';
+import { getByName } from '@metro';
 import { create } from '@patcher';
 import React from 'react';
 
@@ -23,7 +23,7 @@ const cache = {
 };
 
 export default function () {
-  const Badges = getByDisplayName('ProfileBadges', { default: false });
+  const Badges = getByName('ProfileBadges', { default: false });
 
   Patcher.after(Badges, 'default', (_, [{ user, isEnmity, ...rest }], res) => {
     if (isEnmity) return;
