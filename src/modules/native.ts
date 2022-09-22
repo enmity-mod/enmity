@@ -1,40 +1,27 @@
-import { Linking } from '@metro/common';
-import uuid from '@utilities/uuid';
+const BASE_URL = "http://localhost:6900";
 
-interface URL {
-  url: string;
-}
+export enum Endpoints {
+  CHECK_PLUGIN = "plugins/check",
+  INSTALL_PLUGIN = "plugins/install",
+  UNINSTALL_PLUGIN = "plugins/uninstall",
+  ENABLE_PLUGIN = "plugins/enable",
+  DISABLE_PLUGIN = "plugins/disable",
 
-interface Response {
-  id: string;
-  data: string;
-}
+  CHECK_THEME = "themes/check",
+  INSTALL_THEME = "themes/install",
+  UNINSTALL_THEME = "themes/uninstall",
+  APPLY_THEME = "themes/apply",
+  REMOVE_THEME = "themes/remove"
+};
 
-const replies = {};
-
-Linking.addEventListener('url', (url: URL) => {
-  let responseUrl = url.url;
-  responseUrl = decodeURIComponent(responseUrl.replace('com.hammerandchisel.discord://', ''));
-
+export async function sendCommand(endpoint: Endpoints, params: Record<string, string>): Promise<string> {
   try {
-    const response: Response = JSON.parse(responseUrl);
-    if (response.data === undefined) return;
+    const data = "?" + Object.entries(params).map(([key, value]) => `${key}=${value}`).join("&");
+    const response = await fetch(`${BASE_URL}/${endpoint}${Object.keys(params).length > 0 ? data : ""}`);
+    const text = await response.text();
 
-    if (replies[response.id]) {
-      replies[response.id](response.data);
-      delete replies[response.id];
-    }
-  } catch (e) {
-    return;
+    return text;
+  } catch(err) {
+    return null;
   }
-});
-
-export function sendCommand(name: string, params: string[] = [], reply?: (data) => void): void {
-  const id = uuid();
-
-  Linking.openURL(`com.hammerandchisel.discord://enmity?id=${id}&command=${name}&params=${params.join(',')}`).then(() => {
-    if (reply) {
-      replies[id] = reply;
-    }
-  });
 }
