@@ -11,7 +11,15 @@ export const common: Common = {};
 export const blacklist: string[] = [];
 
 export const filters = {
-  byProps: (...mdls) => (mdl) => mdls.every(k => mdl[k] !== void 0),
+  byProps: (...mdls) => (mdl) => {
+    for (let i = 0, len = mdls.length; i < len; i++) {
+      if (mdl[mdls[i]] === void 0) {
+        return false;
+      };
+    }
+
+    return true;
+  },
 
   byName: (name, defaultExport = true) => (mdl) => {
     if (!mdl) return false;
@@ -154,11 +162,12 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
     }
   };
 
-  const locale = common.Locale && common.Locale.getLocale();
   for (const id in modules) {
     if (blacklist.includes(id)) {
       continue;
     }
+
+    const previous = common.Moment?.locale();
 
     if (!modules[id].isInitialized) try {
       __r(id as any as number);
@@ -167,8 +176,15 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
       continue;
     }
 
-    if (common.Moment && locale) {
-      common.Moment.locale(locale);
+    const current = common.Moment?.locale();
+    const wanted = common.Locale?.getLocale();
+    if (common.Moment && common.Locale && current !== wanted) {
+      common.Moment.locale(wanted);
+
+      if (previous && current && previous !== current) {
+        blacklist.push(id);
+        continue;
+      }
     }
 
     const mdl = modules[id].publicModule.exports;
