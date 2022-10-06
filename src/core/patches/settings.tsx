@@ -24,8 +24,7 @@ function patchScreens() {
       Enmity: {
         key: 'Enmity',
         title: 'Enmity',
-        render: connectComponent(Screens.Enmity.Page, 'enmity'),
-        headerRight: Screens.Enmity.HeaderRight
+        render: connectComponent(Screens.Enmity.Page, 'enmity')
       },
       EnmityPlugins: {
         key: 'EnmityPlugins',

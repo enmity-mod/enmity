@@ -11,11 +11,15 @@ export default [
     execute: (_, message) => {
       const content = [];
 
-      content.push('**Debug Info:**');
-      content.push(`> Enmity: ${window.enmity.version}`);
-      content.push(`> Discord: ${version} (${build})`);
-      content.push(`> Device: ${device}`);
-      content.push(`> System: ${os}`);
+      const Runtime = HermesInternal.getRuntimeProperties();
+
+      content.push('**Debug Info:**\n');
+      content.push(`> **Enmity Version:** ${window.enmity.version}`);
+      content.push(`> **Discord Version:** ${version} (Build ${build})`);
+      content.push(`> **Hermes Version:** ${Runtime['OSS Release Version']}`);
+      content.push(`> **Bytecode Version:** ${Runtime['Bytecode Version']}`);
+      content.push(`> **Device:** ${device}`);
+      content.push(`> **System:** ${os}`);
 
       Messages.sendMessage(message.channel.id, {
         validNonShortcutEmojis: [],

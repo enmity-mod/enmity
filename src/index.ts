@@ -1,10 +1,3 @@
-declare global {
-  interface Window {
-    [key: PropertyKey]: any;
-    enmity: typeof import('@api').API;
-  }
-}
-
 try {
   // Setup asset handler early to capture most assets then initialize enmity
   import('@api/assets').then(() => {
