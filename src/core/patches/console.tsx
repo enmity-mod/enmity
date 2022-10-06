@@ -13,7 +13,7 @@ const methods = ['error', 'info', 'log', 'warn', 'trace', 'debug'];
 
 export default () => {
   for (const method of methods) {
-    console[method].__ORIGINAL__ = console[method];
+    const orig = console[method];
 
     console[method] = (...args) => {
       const payload = [];
@@ -30,5 +30,7 @@ export default () => {
 
       nativeLoggingHook(output, levels[method] ?? levels.info);
     };
+
+    console[method].__ORIGINAL__ = orig;
   }
 };

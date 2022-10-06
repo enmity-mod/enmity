@@ -1,14 +1,20 @@
 import type { Theme as ThemeType } from 'enmity/managers/themes';
+import { Theme, REST, EventEmitter } from '@metro/common';
 import { sendCommand } from '@modules/native';
-import { Theme, REST } from '@metro/common';
-import { getByProps } from '@metro';
 
 type Theme = ThemeType;
 
-let theme = window['themes']?.theme ?? '';
-let themes: Theme[] = window['themes']?.list ?? [];
+/**
+ * Initialize storage
+ */
+const { applied, list } = window.themes ?? {};
 
-const EventEmitter = getByProps('EventEmitter').EventEmitter;
+export let themes = list ?? {};
+export let theme = applied;
+
+/**
+ * Initialize an event emitter for plugins to use
+ */
 const Events = new EventEmitter();
 
 export const on = Events.on.bind(Events);
@@ -16,55 +22,49 @@ export const once = Events.once.bind(Events);
 export const off = Events.off.bind(Events);
 
 /**
- * Get the currently loaded theme name
- */
-export function getTheme(): string {
-  return theme;
-}
-
-/**
  * Get a theme by name
  */
-export function getThemeByName(name): Theme {
-  return themes.find(t => t.name === name);
+export function get(name): Theme {
+  return themes[name] || Object.values(themes).find(t => t.name === name);
 }
 
 /**
  * List registered themes
  */
-export function listThemes(): Theme[] {
-  return themes;
+export function getAll(): Theme[] {
+  return Object.values(themes);
 }
 
 /**
  * Install a theme
  */
-export async function installTheme(url: string, callback?: (data) => void): Promise<void> {
+export function install(url: string, callback?: (data) => void): Promise<void> {
   return new Promise(resolve => {
-    sendCommand('install-theme', [url], data => {
-      REST.get(url).then(response => {
-        const theme = JSON.parse(response.text);
-        if (!theme) {
-          throw new Error('Invalid theme structure');
-        }
+    resolve();
+    // sendCommand('install-theme', [url], data => {
+    //   REST.get(url).then(response => {
+    //     const theme = JSON.parse(response.text);
+    //     if (!theme) {
+    //       throw new Error('Invalid theme structure');
+    //     }
 
-        const index = themes.findIndex(t => t.name === theme.name);
-        if (index > -1) themes.splice(index, 1);
-        themes.push(theme);
+    //     const index = themes.findIndex(t => t.name === theme.name);
+    //     if (index > -1) themes.splice(index, 1);
+    //     themes.push(theme);
 
-        const res = { theme, url, data, restart: getTheme() === theme.name };
-        if (callback) callback(res);
-        Events.emit('installed');
-        resolve(res as any);
-      });
-    });
+    //     const res = { theme, url, data, restart: getTheme() === theme.name };
+    //     if (callback) callback(res);
+    //     Events.emit('installed');
+    //     resolve(res as any);
+    //   });
+    // });
   });
 }
 
 /**
  * Apply a theme to Discord
  */
-export function applyTheme(name, callback?: (data) => void): Promise<void> {
+export function apply(name, callback?: (data) => void): Promise<void> {
   return new Promise(resolve => {
     sendCommand('apply-theme', [name, Theme.theme], data => {
       theme = name;
@@ -78,7 +78,7 @@ export function applyTheme(name, callback?: (data) => void): Promise<void> {
 /**
  * Remove the currently applied theme
  */
-export function removeTheme(callback?: (data) => void): Promise<void> {
+export function remove(callback?: (data) => void): Promise<void> {
   return new Promise(resolve => {
     sendCommand('remove-theme', [], data => {
       theme = '';
@@ -92,17 +92,18 @@ export function removeTheme(callback?: (data) => void): Promise<void> {
 /**
  * Uninstall a theme
  */
-export async function uninstallTheme(name: string, callback?: (data) => void): Promise<void> {
-  if (getTheme() === name) removeTheme();
+export async function uninstall(name: string, callback?: (data) => void): Promise<void> {
+  if (theme === name) remove();
 
   return new Promise(resolve => {
-    sendCommand('uninstall-theme', [name], data => {
-      const index = themes.findIndex(t => t.name === name);
-      if (index > -1) themes.splice(index, 1);
+    resolve();
+    // sendCommand('uninstall-theme', [name], data => {
+    //   const index = themes.findIndex(t => t.name === name);
+    //   if (index > -1) themes.splice(index, 1);
 
-      Events.emit('uninstalled');
-      if (callback) callback(data);
-      resolve(data);
-    });
+    //   Events.emit('uninstalled');
+    //   if (callback) callback(data);
+    //   resolve(data);
+    // });
   });
 }

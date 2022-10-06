@@ -27,6 +27,8 @@ export const API = {
 
 export function initialize(): void {
   window.enmity = API;
+
+  Components.Image.prefetch('https://files.enmity.app/icon.png');
 }
 
 export default { API, initialize };

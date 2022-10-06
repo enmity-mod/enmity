@@ -1,3 +1,5 @@
+import { Theme } from 'enmity/managers/themes';
+
 declare type Fn = (...args: any) => any;
 
 declare global {
@@ -5,6 +7,10 @@ declare global {
   var enmity: typeof import('@api').API;
   var HermesInternal: any;
   var plugins: any;
+  var themes: {
+    applied: string | null,
+    list: Record<string, Theme>;
+  };
 }
 
 export { };

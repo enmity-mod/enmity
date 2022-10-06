@@ -10,7 +10,8 @@ export const assets: Assets = {};
 
 try {
   Patcher.after('enmity-assets', Assets, 'registerAsset', (_, [asset]: [Asset], id: number) => {
-    assets[asset.name] = { ...asset, id };
+    asset.id = id;
+    assets[asset.name] = asset;
   });
 
   // Capture all assets that loaded before our patch
@@ -19,9 +20,12 @@ try {
     if (!asset) break;
     if (assets[asset.name]) continue;
 
-    assets[asset.name] = { ...asset, id };
+    asset.id = id;
+    assets[asset.name] = asset;
   }
-} catch { }
+} catch (e) {
+  console.error('Failed to initialize Asset interceptor.', e.message);
+}
 
 export function find(filter): Asset | null {
   return Object.values(assets).find(filter as any);

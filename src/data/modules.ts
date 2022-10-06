@@ -135,6 +135,11 @@ const modules = {
 
   Moment: {
     props: ['isMoment']
+  },
+
+  EventEmitter: {
+    props: ['EventEmitter'],
+    export: 'EventEmitter'
   }
 };
 

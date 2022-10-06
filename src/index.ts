@@ -1,13 +1,4 @@
-try {
-  // Setup asset handler early to capture most assets then initialize enmity
-  import('@api/assets').then(() => {
-    import('@core').then(Enmity => {
-      Enmity.initialize();
-    });
-  });
-} catch (error) {
-  alert(`Enmity failed to initialize: ${error.message}`);
-  console.error(error);
-}
+import '@api/assets';
+import Enmity from '@core';
 
-export { };
+Enmity.initialize();

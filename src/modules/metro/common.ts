@@ -2,6 +2,7 @@ import { common } from '@metro';
 
 const {
   Clipboard,
+  EventEmitter,
   Assets,
   Messages,
   Clyde,
@@ -45,6 +46,7 @@ export {
   Native,
   Dispatcher,
   Storage,
+  EventEmitter,
   Toasts,
   Dialog,
   Token,

@@ -35,7 +35,8 @@ export function Page({ settings }) {
   };
 
   const Runtime = HermesInternal.getRuntimeProperties();
-  const Plugins = [...window.plugins.enabled, ...window.plugins.disabled];
+  const Plugins = [];
+  // ||[...window.plugins?.enabled ?? [], ...window.plugins?.disabled ?? []];
   const Themes = listThemes().map(t => t.name);
 
   return <ScrollView>

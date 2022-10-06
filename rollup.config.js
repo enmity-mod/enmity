@@ -28,15 +28,24 @@ export default defineConfig({
       jsnext: true
     }),
     swc({
+      minify: true,
       jsc: {
+        externalHelpers: false,
         minify: {
-          compress: true
+          compress: true,
+          mangle: true
         },
         parser: {
-          'syntax': 'typescript',
-          'tsx': true
+          syntax: 'typescript',
+          dynamicImport: true,
+          tsx: true,
         },
         target: 'es2022',
+        transform: {
+          react: {
+            useBuiltins: true
+          }
+        },
         baseUrl: './src/',
         paths: {
           '@metro/*': [

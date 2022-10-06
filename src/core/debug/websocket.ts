@@ -1,12 +1,10 @@
-import { getIDByName } from '@api/assets';
-import { Toasts } from '@metro/common';
-import Settings from '@api/settings';
-import { getByName } from '@metro';
+// import { getIDByName } from '@api/assets';
+// import { Toasts } from '@metro/common';
+// import Settings from '@api/settings';
+// import { getByName } from '@metro';
 
-declare const nativeLoggingHook: (message: string, level: number) => void;
-
-const Logger = getByName('Logger');
-const EnmityLogger = new Logger('Enmity');
+// const Logger = getByName('Logger');
+// const EnmityLogger = new Logger('Enmity');
 export let socket: WebSocket;
 
 /**
@@ -20,35 +18,35 @@ export function connectWebsocket(host?: string): void {
     socket = null;
   }
 
-  const address = Boolean(Settings.get('enmity', 'autoConnectWS', false)) && Settings.get('enmity', 'debugWSAddress');
-  if (!address && !host) return;
-  socket = new WebSocket(`ws://${host ?? address}`);
+  // const address = Boolean(Settings.get('enmity', 'autoConnectWS', false)) && Settings.get('enmity', 'debugWSAddress');
+  // if (!address && !host) return;
+  socket = new WebSocket(`ws://${this.__DEBUG_IP__}:9090`);
 
   socket.addEventListener('open', () => {
     console.log('Connected with debug websocket');
 
-    Toasts.open({
-      content: `Connected to the WebSocket server.`,
-      source: getIDByName('Check')
-    });
+    // Toasts.open({
+    //   content: `Connected to the WebSocket server.`,
+    //   source: getIDByName('Check')
+    // });
   });
 
   socket.addEventListener('error', (err: any) => {
     console.log(`Error with debug websocket: ${err.message}`);
 
-    Toasts.open({
-      content: `An error occured with the websocket connection.`,
-      source: getIDByName('toast_copy_link')
-    });
+    // Toasts.open({
+    //   content: `An error occured with the websocket connection.`,
+    //   source: getIDByName('toast_copy_link')
+    // });
   });
 
   socket.addEventListener('close', (err: any) => {
     console.log(`Error with debug websocket: ${err.message}`);
 
-    Toasts.open({
-      content: `The websocket connection has been closed.`,
-      source: getIDByName('toast_copy_link')
-    });
+    // Toasts.open({
+    //   content: `The websocket connection has been closed.`,
+    //   source: getIDByName('toast_copy_link')
+    // });
   });
 
   socket.addEventListener('message', message => {
@@ -70,13 +68,13 @@ export function initialize(): void {
       socket.send(JSON.stringify({ level, message }));
     }
 
-    EnmityLogger.log(message);
+    // EnmityLogger.log(message);
     return oNativeLoggingHook.apply(this, arguments);
   };
 
-  if (Settings.get('enmity', 'autoConnectWS', false)) {
-    connectWebsocket();
-  }
+  // if (Settings.get('enmity', 'autoConnectWS', false)) {
+  connectWebsocket();
+  // }
 }
 
 /**

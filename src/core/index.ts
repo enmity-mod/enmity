@@ -4,7 +4,7 @@ import Commands from '@core/commands';
 import API from '@api';
 
 export function initialize(): void {
-  WebSocket.initialize();
+  // WebSocket.initialize();
   API.initialize();
   CorePatches.initialize();
   Commands.initialize();
