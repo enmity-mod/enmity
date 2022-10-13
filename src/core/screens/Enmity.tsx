@@ -1,6 +1,7 @@
 import { FormSection, ScrollView, FormRow, FormSwitch, Text, FormInput, KeyboardAvoidingView, FormDivider } from '@components';
 import { Linking, StyleSheet, ColorMap, Clipboard, Toasts, Dialog } from '@metro/common';
 import { socket, connectWebsocket } from '@core/debug/websocket';
+import { getPlugins } from '@managers/plugins';
 import { listThemes } from '@managers/themes';
 import ThemeIcon from './partials/PluginIcon';
 import PluginIcon from './partials/ThemeIcon';
@@ -35,7 +36,7 @@ export function Page({ settings }) {
   };
 
   const Runtime = HermesInternal.getRuntimeProperties();
-  const Plugins = [...window.plugins.enabled, ...window.plugins.disabled];
+  const Plugins = getPlugins();
   const Themes = listThemes().map(t => t.name);
 
   return <ScrollView>

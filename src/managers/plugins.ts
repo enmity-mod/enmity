@@ -7,8 +7,8 @@ import { REST } from '@metro/common';
 const EventEmitter = getByProps('EventEmitter').EventEmitter;
 
 let plugins: EnmityPlugin[] = [];
-let enabled: string[] = window['plugins'].enabled;
-let disabled: string[] = window['plugins'].disabled;
+let enabled: string[] = window['plugins']?.enabled ?? [];
+let disabled: string[] = window['plugins']?.disabled ?? [];
 
 const Events = new EventEmitter();
 
