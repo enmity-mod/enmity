@@ -38,6 +38,7 @@ export default [
     description: "Show your Discord's token",
 
     execute: function (_, message) {
+      sendReply(message.channel.id, "This is your Discord token. Please keep it **__REALLY__** safe.");
       sendReply(message.channel.id, Token.getToken());
     },
   },
