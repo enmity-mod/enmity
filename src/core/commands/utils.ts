@@ -1,7 +1,8 @@
 import { build, os, device, version, reload } from '@api/native';
-import { Messages, Token } from '@metro/common';
+import { Messages, Token, Toasts, Clipboard } from '@metro/common';
 import { Command, ApplicationCommandOptionType } from 'enmity/api/commands';
 import { sendReply } from '@api/clyde';
+import { getIDByName } from "@api/assets";
 
 export default [
   {
@@ -56,9 +57,30 @@ export default [
     name: 'token',
     description: "Show your Discord's token",
 
-    execute: function (_, message) {
+    options : [
+      {
+        name: "clipboard",
+        displayName: "clipboard",
+
+        description: "Copy your token directly to the clipboard.",
+        displayDescription: "Copy your token directly to the clipboard.",
+
+        type: ApplicationCommandOptionType.Boolean,
+        required: false
+      }
+    ],
+
+    execute: function (args, message) {
+      const copyToClip = args[args.findIndex(x => x.name === "clipboard")];
       sendReply(message.channel.id, "This is your Discord token. Please keep it **__REALLY__** safe.");
       sendReply(message.channel.id, Token.getToken());
+      if (copyToClip) {
+        Clipboard.setString(Token.getToken());
+        Toasts.open({
+          content: "Token succesfully copied into your clipboard",
+          source: getIDByName("Check")
+        })
+      }
     },
   },
 ] as Command[];
