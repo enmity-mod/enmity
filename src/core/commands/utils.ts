@@ -1,14 +1,26 @@
 import { build, os, device, version, reload } from '@api/native';
 import { Messages, Token } from '@metro/common';
-import { Command } from 'enmity/api/commands';
+import { Command, ApplicationCommandOptionType } from 'enmity/api/commands';
 import { sendReply } from '@api/clyde';
 
 export default [
   {
     name: 'debug',
     description: 'Print out your device information',
+    options : [
+      {
+        name: "silent",
+        displayName: "silent",
 
-    execute: (_, message) => {
+        description: "Prints the debug informations in silent mode. Only you will see them.",
+        displayDescription: "Prints the debug informations in silent mode. Only you will see them.",
+
+        type: ApplicationCommandOptionType.Boolean,
+        required: false
+      }
+    ],
+
+    execute: (args, message) => {
       const content = [];
 
       const Runtime = HermesInternal.getRuntimeProperties();
@@ -21,10 +33,17 @@ export default [
       content.push(`> **Device:** ${device}`);
       content.push(`> **System:** ${os}`);
 
-      Messages.sendMessage(message.channel.id, {
-        validNonShortcutEmojis: [],
-        content: content.join('\n')
+      const silent = args[args.findIndex(x => x.name === 'silent')];
+      const debugInfos = content.join("\n");
+
+      if (silent) {
+        Messages.sendMessage(message.channel.id, {
+          validNonShortcutEmojis: [],
+          content: debugInfos
       });
+    } else {
+      sendReply(message.channel.id, debugInfos)
+    }
     },
   },
   {
