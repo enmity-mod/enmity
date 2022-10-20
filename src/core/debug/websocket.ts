@@ -65,7 +65,7 @@ export function connectWebsocket(host?: string): void {
  */
 export function initialize(): void {
   const oNativeLoggingHook = nativeLoggingHook;
-  global.nativeLoggingHook = function (message: string, level: number): void {
+  globalThis.nativeLoggingHook = function (message: string, level: number): void {
     if (socket?.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify({ level, message }));
     }
