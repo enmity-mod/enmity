@@ -1,4 +1,6 @@
-import { getByProps } from '@metro';
+import { getByProps, getModule } from '@metro';
+import findInReactTree from '@utilities/findInReactTree';
+import findInTree from '@utilities/findInTree';
 
 import patcher from '.';
 
@@ -53,7 +55,7 @@ export function unpatchAll(caller: string): void {
     patches[sheet] = sheet.filter(e => e.caller !== caller);
   }
 
-  return patcher.unpatchAll(caller);
+  return Patcher.unpatchAll(caller);
 }
 
 export function create(caller: string) {

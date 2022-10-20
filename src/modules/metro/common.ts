@@ -3,7 +3,6 @@ import { common } from '@metro';
 const {
   Clipboard,
   Assets,
-  EventEmitter,
   Messages,
   Clyde,
   Avatars,
@@ -41,7 +40,6 @@ export {
   Clipboard,
   Assets,
   Messages,
-  EventEmitter,
   Clyde,
   Avatars,
   Native,

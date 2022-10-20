@@ -7,5 +7,7 @@
 export default function memoize(func) {
   let cache;
 
-  return (...args) => cache ??= func.apply(null, args);
+  return (...args) => {
+    return cache ??= func.apply(null, args);
+  };
 };

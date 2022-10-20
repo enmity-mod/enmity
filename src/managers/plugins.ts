@@ -1,7 +1,10 @@
 import { registerCommands, unregisterCommands } from '@api/commands';
 import { Plugin as EnmityPlugin } from 'enmity/managers/plugins';
-import { EventEmitter, REST } from '@metro/common';
 import { sendCommand } from '@modules/native';
+import { getByProps } from '@metro';
+import { REST } from '@metro/common';
+
+const EventEmitter = getByProps('EventEmitter').EventEmitter;
 
 let plugins: EnmityPlugin[] = [];
 let enabled: string[] = window['plugins']?.enabled ?? [];

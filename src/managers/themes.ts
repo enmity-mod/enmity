@@ -1,12 +1,14 @@
 import type { Theme as ThemeType } from 'enmity/managers/themes';
-import { EventEmitter, Theme, REST } from '@metro/common';
 import { sendCommand } from '@modules/native';
+import { Theme, REST } from '@metro/common';
+import { getByProps } from '@metro';
 
 type Theme = ThemeType;
 
 let theme = window['themes']?.theme ?? '';
 let themes: Theme[] = window['themes']?.list ?? [];
 
+const EventEmitter = getByProps('EventEmitter').EventEmitter;
 const Events = new EventEmitter();
 
 export const on = Events.on.bind(Events);
@@ -37,7 +39,7 @@ export function listThemes(): Theme[] {
 /**
  * Install a theme
  */
-export function installTheme(url: string, callback?: (data) => void): Promise<void> {
+export async function installTheme(url: string, callback?: (data) => void): Promise<void> {
   return new Promise(resolve => {
     sendCommand('install-theme', [url], data => {
       REST.get(url).then(response => {
@@ -90,7 +92,7 @@ export function removeTheme(callback?: (data) => void): Promise<void> {
 /**
  * Uninstall a theme
  */
-export function uninstallTheme(name: string, callback?: (data) => void): Promise<void> {
+export async function uninstallTheme(name: string, callback?: (data) => void): Promise<void> {
   if (getTheme() === name) removeTheme();
 
   return new Promise(resolve => {

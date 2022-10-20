@@ -1,18 +1,10 @@
 {
-  "exclude": [
-    "typings",
-    "node_modules"
-  ],
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "./src/",
     "module": "esnext",
     "outDir": "dist",
     "target": "ESNext",
     "jsx": "react",
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "downlevelIteration": true,
@@ -73,7 +65,7 @@
       "@core/*": [
         "core/*"
       ],
-      "react-types": [
+      "reactTypes": [
         "../node_modules/@types/react"
       ]
     }

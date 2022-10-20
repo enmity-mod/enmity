@@ -1,5 +1,7 @@
+/* eslint-disable */
 import Common from '@data/modules';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const __r: (moduleId: number) => any;
 declare const modules: { [id: number]: any; };
 

@@ -5,7 +5,6 @@ import { defineConfig } from 'rollup';
 import { typescriptPaths } from 'rollup-plugin-typescript-paths';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import cjs from '@rollup/plugin-commonjs';
 import { swc } from 'rollup-plugin-swc3';
 
 const revision = execSync('git rev-parse --short HEAD').toString().trim();
@@ -22,17 +21,20 @@ export default defineConfig({
     }
   ],
   plugins: [
-    typescriptPaths({ preserveExtensions: true }),
-    nodeResolve({ jsnext: true }),
-    cjs(),
+    typescriptPaths({
+      preserveExtensions: true
+    }),
+    nodeResolve({
+      jsnext: true
+    }),
     swc({
       jsc: {
         minify: {
           compress: true
         },
         parser: {
-          syntax: 'typescript',
-          tsx: true
+          'syntax': 'typescript',
+          'tsx': true
         },
         target: 'es2022',
         baseUrl: './src/',
@@ -86,7 +88,7 @@ export default defineConfig({
     })
   ],
   onwarn(warning, warn) {
-    // Supress eval warnings
+    // suppress eval warnings
     if (warning.code === 'EVAL') return;
     warn(warning);
   }
