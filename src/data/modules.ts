@@ -65,6 +65,10 @@ const modules = {
     props: ['getCurrentUser'],
   },
 
+  AsyncUsers: {
+    props: ['getUser', 'fetchProfile']
+  },
+
   Navigation: {
     props: ['pushLazy'],
   },

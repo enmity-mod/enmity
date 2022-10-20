@@ -1,4 +1,4 @@
-import { StyleSheet, ColorMap, Constants, Profiles } from '@metro/common';
+import { StyleSheet, Users, ColorMap, Constants, Profiles, AsyncUsers } from '@metro/common';
 import { Text, TouchableOpacity, View } from '@components';
 import React from 'react';
 
@@ -51,7 +51,15 @@ export default function ({ authors }) {
         return (
           <TouchableOpacity
             key={author.id}
-            onPress={() => Profiles.showUserProfile({ userId: author.id })}
+            onPress={() => {
+              if (!Users.getUser(author.id)) {
+                AsyncUsers.fetchProfile(author.id).then(() => {
+                  Profiles.showUserProfile({ userId: author.id });
+                });
+              } else {
+                Profiles.showUserProfile({ userId: author.id });
+              }
+            }}
           >
             <Text style={styles.link}>
               {author.name}{isFirst && ','}
