@@ -2,14 +2,14 @@ import React from 'react';
 
 const overrides = {
   useMemo: factory => factory(),
-  useState: initialState => [initialState, () => void 0],
-  useReducer: initialValue => [initialValue, () => void 0],
+  useState: s => [s, () => void 0],
+  useReducer: v => [v, () => void 0],
   useEffect: () => { },
   useLayoutEffect: () => { },
   useRef: () => ({ current: null }),
-  useCallback: callback => callback,
+  useCallback: c => c,
   useImperativeHandle: () => { },
-  useContext: (ctx) => ctx._currentValue
+  useContext: c => c._currentValue
 };
 
 const keys = Object.keys(overrides);

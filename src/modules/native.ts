@@ -12,13 +12,12 @@ interface Response {
 
 const replies = {};
 
-Linking.addEventListener('url', (url: URL) => {
-  let responseUrl = url.url;
-  responseUrl = decodeURIComponent(responseUrl.replace('com.hammerandchisel.discord://', ''));
+Linking.addEventListener('url', ({ url }: URL) => {
+  const payload = decodeURIComponent(url.replace('com.hammerandchisel.discord://', ''));
 
   try {
-    const response: Response = JSON.parse(responseUrl);
-    if (response.data === undefined) return;
+    const response: Response = JSON.parse(payload);
+    if (!response.data) return;
 
     if (replies[response.id]) {
       replies[response.id](response.data);

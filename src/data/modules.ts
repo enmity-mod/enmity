@@ -28,6 +28,11 @@ const modules = {
     export: 'NativeModules',
   },
 
+  EventEmitter: {
+    props: ['EventEmitter'],
+    export: 'EventEmitter'
+  },
+
   React: {
     props: ['createElement'],
   },
