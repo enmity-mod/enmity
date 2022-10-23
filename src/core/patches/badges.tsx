@@ -1,7 +1,6 @@
 import { View, Image, TouchableOpacity } from '@components';
 import { BadgesDomain, Times } from '@data/constants';
 import { Toasts, Theme } from '@metro/common';
-import { wrapInHooks } from '@utilities';
 import { getByName } from '@metro';
 import { create } from '@patcher';
 import React from 'react';
@@ -23,59 +22,40 @@ const cache = {
 };
 
 export default function () {
-  const Badges = getByName('ProfileBadges', { default: false });
+  const Badges = getByName('ProfileBadges', { all: true, default: false });
 
-  Patcher.after(Badges, 'default', (_, [{ user, isEnmity, ...rest }], res) => {
-    if (isEnmity) return;
-    const [badges, setBadges] = React.useState([]);
-    React.useEffect(() => {
-      try {
-        fetchUserBadges(user.id).then(setBadges);
-      } catch (e) {
-        console.error(`Failed to request/parse badges for ${user.id}`);
-      }
-    }, []);
+  for (const ProfileBadges of Badges) {
+    Patcher.after(ProfileBadges, 'default', (_, [{ user, isEnmity, ...rest }], res) => {
+      if (isEnmity) return;
+      const [badges, setBadges] = React.useState([]);
+      React.useEffect(() => {
+        try {
+          fetchUserBadges(user.id).then(setBadges);
+        } catch (e) {
+          console.error(`Failed to request/parse badges for ${user.id}`);
+        }
+      }, []);
 
-    if (!badges.length) return res;
-    if (!res) {
-      res = wrapInHooks(Badges.default)({
-        user: new Proxy({}, {
-          get: (_, prop) => {
-            if (prop === 'flags') {
-              return -1;
-            }
+      const payload = badges.map(badge => <View
+        key={badge}
+        __enmity={true}
+        style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'flex-end'
+        }}
+      >
+        <Badge type={badge} />
+      </View>);
 
-            if (prop === 'hasFlag') {
-              return () => true;
-            }
+      if (!badges.length) return res;
+      if (!res) return payload;
 
-            return user[prop];
-          }
-        }),
-        isEnmity: true,
-        ...rest
-      });
+      res.props.badges.push(...payload);
 
-      if (res?.props) {
-        res.props.badges = [];
-      }
-    }
-
-    if (!res) return res;
-    res.props.badges.push(...badges.map(badge => <View
-      key={badge}
-      __enmity={true}
-      style={{
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'flex-end'
-      }}
-    >
-      <Badge type={badge} />
-    </View>));
-
-    return res;
-  });
+      return res;
+    });
+  }
 
   return Patcher.unpatchAll;
 };
