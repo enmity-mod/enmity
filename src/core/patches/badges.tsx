@@ -25,9 +25,9 @@ export default function () {
   const Badges = getByName('ProfileBadges', { all: true, default: false });
 
   for (const ProfileBadges of Badges) {
-    Patcher.after(ProfileBadges, 'default', (_, [{ user, isEnmity, ...rest }], res) => {
-      if (isEnmity) return;
+    Patcher.after(ProfileBadges, 'default', (_, [{ user }], res) => {
       const [badges, setBadges] = React.useState([]);
+
       React.useEffect(() => {
         try {
           fetchUserBadges(user.id).then(setBadges);
@@ -36,17 +36,7 @@ export default function () {
         }
       }, []);
 
-      const payload = badges.map(badge => <View
-        key={badge}
-        __enmity={true}
-        style={{
-          alignItems: 'center',
-          flexDirection: 'row',
-          justifyContent: 'flex-end'
-        }}
-      >
-        <Badge type={badge} />
-      </View>);
+      const payload = badges.map(makeBadge);
 
       if (!badges.length) return res;
       if (!res) return payload;
@@ -82,7 +72,25 @@ async function fetchUserBadges(id: string): Promise<string[]> {
   return res;
 }
 
-function Badge({ type }: { type: string; }): JSX.Element {
+const makeBadge = (badge): JSX.Element => {
+  const styles = {
+    wrapper: {
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'flex-end'
+    }
+  };
+
+  return <View
+    enmity={true}
+    key={badge}
+    style={styles.wrapper}
+  >
+    <Badge type={badge} />
+  </View>;
+};
+
+const Badge = ({ type }: { type: string; }): JSX.Element => {
   const [badge, setBadge] = React.useState(null);
 
   React.useEffect(() => {
@@ -97,22 +105,28 @@ function Badge({ type }: { type: string; }): JSX.Element {
     return null;
   }
 
+  const styles = {
+    image: {
+      width: 24,
+      height: 24,
+      resizeMode: 'contain',
+      marginHorizontal: 2
+    }
+  };
+
+  const uri = badge.url[Theme.theme];
+
   return <TouchableOpacity
     onPress={() => {
       Toasts.open({
         content: badge.name,
-        source: { uri: badge.url[Theme.theme] }
+        source: { uri }
       });
     }}
   >
     <Image
-      source={{ uri: badge.url[Theme.theme] }}
-      style={{
-        width: 24,
-        height: 24,
-        resizeMode: 'contain',
-        marginHorizontal: 2
-      }}
+      source={{ uri }}
+      style={styles.image}
     />
   </TouchableOpacity>;
 };

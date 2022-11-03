@@ -11,14 +11,22 @@ export const common: Common = {};
 export const blacklist: string[] = [];
 
 export const filters = {
-  byProps: (...mdls) => (mdl) => {
-    for (let i = 0, len = mdls.length; i < len; i++) {
-      if (mdl[mdls[i]] === void 0) {
-        return false;
+  byProps: (...mdls) => {
+    if (mdls.length > 1) {
+      return (mdl) => {
+        for (let i = 0, len = mdls.length; i < len; i++) {
+          if (mdl[mdls[i]] === void 0) {
+            return false;
+          };
+        }
+
+        return true;
       };
     }
 
-    return true;
+    const prop = mdls[0];
+
+    return (mdl) => mdl[prop] !== void 0;
   },
 
   byName: (name, defaultExport = true) => (mdl) => {
