@@ -1,6 +1,8 @@
 import { View, Image, TouchableOpacity } from '@components';
 import { BadgesDomain, Times } from '@data/constants';
 import { Toasts, Theme } from '@metro/common';
+import { wrapInHooks } from '@utilities';
+import { version } from '@api/native';
 import { getByName } from '@metro';
 import { create } from '@patcher';
 import React from 'react';
@@ -25,7 +27,8 @@ export default function () {
   const Badges = getByName('ProfileBadges', { all: true, default: false });
 
   for (const ProfileBadges of Badges) {
-    Patcher.after(ProfileBadges, 'default', (_, [{ user }], res) => {
+    Patcher.after(ProfileBadges, 'default', (_, [{ user, isEnmity, ...rest }], res) => {
+      if (isEnmity) return;
       const [badges, setBadges] = React.useState([]);
 
       React.useEffect(() => {
@@ -39,9 +42,38 @@ export default function () {
       const payload = badges.map(makeBadge);
 
       if (!badges.length) return res;
-      if (!res) return payload;
+      if (!res && Number(version) >= 151) {
+        res = wrapInHooks(ProfileBadges.default)({
+          user: new Proxy({}, {
+            get: (_, prop) => {
+              if (prop === 'flags') {
+                return -1;
+              }
 
-      res.props.badges.push(...payload);
+              if (prop === 'hasFlag') {
+                return () => true;
+              }
+
+              return user[prop];
+            }
+          }),
+          isEnmity: true,
+          ...rest
+        });
+
+        res.props.children = [];
+        if (res.props.badges) {
+          res.props.badges = [];
+        }
+      } else if (!res) {
+        return payload;
+      }
+
+      if (res.props.badges) {
+        res.props.badges.push(...payload);
+      } else {
+        res.props.children.push(...payload);
+      }
 
       return res;
     });
@@ -117,12 +149,10 @@ const Badge = ({ type }: { type: string; }): JSX.Element => {
   const uri = badge.url[Theme.theme];
 
   return <TouchableOpacity
-    onPress={() => {
-      Toasts.open({
-        content: badge.name,
-        source: { uri }
-      });
-    }}
+    onPress={() => Toasts.open({
+      content: badge.name,
+      source: { uri }
+    })}
   >
     <Image
       source={{ uri }}

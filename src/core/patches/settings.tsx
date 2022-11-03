@@ -51,8 +51,8 @@ function patchSettings() {
     Patcher.after(Overview.type.prototype, 'render', ({ props: { navigation } }, __, res) => {
       const { children } = res.props;
 
-      const searchable = [Locale.Messages['BILLING_SETTINGS'], Locale.Messages['PREMIUM_SETTINGS']];
-      const index = children.findIndex(x => searchable.includes(x.props.title));
+      const searchable = [Locale.Messages.BILLING_SETTINGS, Locale.Messages.PREMIUM_SETTINGS];
+      const index = children.findIndex(c => searchable.includes(c.props.title));
 
       children.splice(index === -1 ? 4 : index, 0, <>
         <FormSection key='Enmity' title='Enmity'>
@@ -78,6 +78,14 @@ function patchSettings() {
           />
         </FormSection>
       </>);
+
+      // Remove "Upload Debug Logs" button
+      const supporter = children.find(c => c.props.title === Locale.Messages.SUPPORT);
+      const entries = supporter?.props.children;
+
+      if (entries) {
+        supporter.props.children = entries.filter(e => e?.type?.name !== 'UploadLogsButton');
+      }
     });
 
     unpatch();
