@@ -18,6 +18,6 @@ With AltStore loaded on your device, you can go to the releases page and downloa
 
 You will be asked if you want to download the file, tap "Download" then, open the Files app and navigate to the downloads folder on your device, and press the button to share the file, where you will see an option to share it with AltStore.
 
-You may be prompted on whether you want to keep or remove app extensions,do NOT click "Remove App Extensions", it will cause the installation of plugins and themes to fail in the future. 
+You may be prompted on whether you want to keep or remove app extensions, do NOT click "Remove App Extensions", it will cause the installation of plugins and themes to fail in the future. 
 
 Enmity should now be on your home screen.
