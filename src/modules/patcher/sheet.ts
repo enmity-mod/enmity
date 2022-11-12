@@ -1,10 +1,7 @@
 import { getByProps, getModule } from '@metro';
-import findInReactTree from '@utilities/findInReactTree';
-import findInTree from '@utilities/findInTree';
+import oPatcher from '.';
 
-import patcher from '.';
-
-const Patcher = patcher.create('enmity-sheet-patcher');
+const Patcher = oPatcher.create('enmity-sheet-patcher');
 
 const patches = {};
 
@@ -13,23 +10,22 @@ Patcher.before(Opener, 'openLazy', (_, [component, sheet]) => {
   if (!patches[sheet]) return;
 
   component.then(instance => {
-    const unpatchInstance = Patcher.after(instance, 'default', (_, __, res) => {
-      const sheetPatches = [...patches[sheet]];
-      for (let i = 0; i < sheetPatches.length; i++) {
-        const patch = sheetPatches[i];
+    const unpatch = Patcher.after(instance, 'default', (_, __, res) => {
+      const payload = [...patches[sheet]];
+      
+      for (let i = 0; i < payload.length; i++) {
+        const patch = payload[i];
         if (patch.applied) continue;
-
-        (() => {
-          const cb = patch.callback;
-          patcher[patch.type](patch.caller, res.type, 'render', (ctx, args, res) => {
+          
+        const cb = patch.callback;
+        patcher[patch.type](patch.caller, res.type, 'render', (ctx, args, res) => {
             return cb.apply(ctx, [ctx, args, res]);
-          });
+        });
 
-          patch.applied = true;
-        })();
+        patch.applied = true;
       }
 
-      unpatchInstance();
+      unpatch();
       return res;
     });
 
