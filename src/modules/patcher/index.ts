@@ -84,7 +84,7 @@ function override(patch: Patch) {
     let res;
     let args = arguments as any;
 
-    const before = patch.patches.before;
+    const before = [...patch.patches.before];
     for (let i = 0; i < before.length; i++) {
       const instance = before[i];
       if (!instance) continue;
@@ -98,7 +98,7 @@ function override(patch: Patch) {
       }
     }
 
-    const instead = patch.patches.instead;
+    const instead = [...patch.patches.instead];
     if (!instead.length) {
       if (new.target) {
         res = new (patch.original as Constructor)(...args as any as []);
@@ -120,7 +120,7 @@ function override(patch: Patch) {
       }
     }
 
-    const after = patch.patches.after;
+    const after = [...patch.patches.after];
     for (let i = 0; i < after.length; i++) {
       const instance = after[i];
       if (!instance) continue;
