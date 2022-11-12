@@ -10,7 +10,7 @@ export const assets: Assets = {};
 
 try {
   Patcher.after('enmity-assets', Assets, 'registerAsset', (_, [asset]: [Asset], id: number) => {
-    assets[asset.name] = { ...asset, id };
+    assets[asset.name] = Object.assign(asset, { id });
   });
 
   // Capture all assets that loaded before our patch
@@ -19,7 +19,7 @@ try {
     if (!asset) break;
     if (assets[asset.name]) continue;
 
-    assets[asset.name] = { ...asset, id };
+    assets[asset.name] = Object.assign(asset, { id });
   }
 } catch { }
 
@@ -38,5 +38,11 @@ export function getByID(id: number): Asset | null {
 export function getIDByName(name: string): number | null {
   return assets[name]?.id;
 }
+
+export const Icons = new Proxy({}, {
+  get: (_, name: string) => {
+    return getIDByName(name);
+  }
+})
 
 export default { assets, getByName, getByID, getIDByName };
