@@ -19,10 +19,7 @@ export default [
       },
     ],
 
-    execute: (args) => {
-      const host = args[0].value;
-      connectWebsocket(host);
-    },
+    execute: ([host]) => connectWebsocket(host.value)
   },
   {
     name: 'dump',
