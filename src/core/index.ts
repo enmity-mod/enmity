@@ -10,8 +10,8 @@ export function initialize(): void {
   CorePatches.initialize();
   Commands.initialize();
 
-  // Update theme state
-  Settings.set({ theme_mode: Theme.theme === 'dark' ? 0 : 1 });
+  // go away
+  Settings.set({ theme_mode: null });
 }
 
 export default { initialize };

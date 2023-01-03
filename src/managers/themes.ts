@@ -1,6 +1,6 @@
 import type { Theme as ThemeType } from 'enmity/managers/themes';
-import { Theme, REST, Dispatcher, Settings } from '@metro/common';
 import { sendCommand } from '@modules/native';
+import { Theme, REST } from '@metro/common';
 import { getByProps } from '@metro';
 
 type Theme = ThemeType;
@@ -106,16 +106,3 @@ export async function uninstallTheme(name: string, callback?: (data) => void): P
     });
   });
 }
-
-const data = { current: Theme.theme };
-
-Dispatcher.subscribe('USER_SETTINGS_PROTO_UPDATE', () => {
-  if (Theme.theme === data.current) return;
-
-  try {
-    data.current = Theme.theme;
-    Settings.set({ theme_mode: Theme.theme === 'dark' ? 0 : 1 });
-  } catch {
-    console.error('Failed to declare appearance change.');
-  }
-});
