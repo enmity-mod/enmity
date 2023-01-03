@@ -19,7 +19,7 @@ export default () => {
       const payload = [];
 
       for (let i = 0, len = args.length; len > i; i++) {
-        payload.push(typeof args[i] === 'string ' ? args[i] : Util.inspect(args[i]));
+        payload.push(typeof args[i] === 'string' ? args[i] : Util.inspect(args[i]));
       }
 
       let output = '';
