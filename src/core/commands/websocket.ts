@@ -34,7 +34,7 @@ export default [
 
       function parseValue(value): any {
         if (typeof value === 'function') {
-          return value.toString();
+          return value.name ? `[Function: ${value.name}]` : '[Function]';
         } else if (Array.isArray(value)) {
           return value.map(parseValue);
         } else if (typeof value === 'object') {
