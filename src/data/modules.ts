@@ -4,7 +4,7 @@ const modules = {
   },
 
   Clipboard: {
-    props: ['setString', 'getString'],
+    props: ['setString', 'getString', 'setImage', 'getImage'],
   },
 
   Assets: {
