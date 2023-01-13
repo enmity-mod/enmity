@@ -52,7 +52,11 @@ export function Page({ settings }) {
           label='Discord Server'
           leading={<FormRow.Icon source={Icons.Discord} />}
           trailing={FormRow.Arrow}
-          onPress={() => Invites.acceptInviteAndTransitionToInviteChannel('enmity')}
+          onPress={() => Invites.acceptInviteAndTransitionToInviteChannel({
+            inviteKey: 'enmity',
+            context: {location: 'Invite Button Embed'},
+            callback: () => {}
+          })}
         />
         <FormDivider />
         <FormRow
