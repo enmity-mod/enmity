@@ -252,7 +252,7 @@ export function Page() {
       return true;
     };
 
-    if (p.authors?.find?.(a => (a.name ?? a).toLowerCase().includes(search.toLowerCase()))) {
+    if ((p.authors as any[])?.find?.(a => (a.name ?? a).toLowerCase().includes(search.toLowerCase()))) {
       return true;
     };
 

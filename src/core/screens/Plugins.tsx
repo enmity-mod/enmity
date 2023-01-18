@@ -104,7 +104,7 @@ export function PluginCard({ plugin }: PluginCardProps) {
               onPress={(): void => {
                 Navigation.push(PluginSettings, {
                   name: plugin.name,
-                  children: connectComponent(Settings, plugin.name)
+                  children: connectComponent(Settings as any, plugin.name)
                 });
               }}
             >
@@ -233,7 +233,7 @@ export function Page() {
       return true;
     };
 
-    if (p.authors?.find?.(a => (a.name ?? a).toLowerCase().includes(search.toLowerCase()))) {
+    if ((p.authors as any[])?.find?.(a => (a.name ?? a).toLowerCase().includes(search.toLowerCase()))) {
       return true;
     };
 
