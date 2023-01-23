@@ -29,7 +29,7 @@ export default function ({ name = 'hi', children = (<Text>hi</Text>) } = {}) {
     }
   });
 
-  return <NavigationNative.NavigationContainer>
+  return <NavigationNative.NavigationContainer independent={true}>
     <Settings.Navigator
       initialRouteName={name}
       style={styles.container}
