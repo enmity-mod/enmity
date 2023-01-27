@@ -1,8 +1,6 @@
-import { Alert, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
-import { StyleSheet, ColorMap, Constants, Toasts, Navigation } from '@metro/common';
+import { Alert, FlatList, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
+import { StyleSheet, ColorMap, Constants, Toasts, NavigationNative } from '@metro/common';
 import { Plugin } from 'enmity/managers/plugins';
-import { connectComponent } from '@api/settings';
-import PluginSettings from './PluginSettings';
 import * as Plugins from '@managers/plugins';
 import Authors from './partials/Authors';
 import { getModule } from '@metro';
@@ -19,6 +17,7 @@ interface PluginCardProps {
 export function PluginCard({ plugin }: PluginCardProps) {
   const plugins = Plugins.getEnabledPlugins();
   const [enabled, setEnabled] = React.useState(plugins.includes(plugin.name));
+  const navigation = NavigationNative.useNavigation()
 
   const styles = StyleSheet.createThemedStyleSheet({
     container: {
@@ -102,10 +101,7 @@ export function PluginCard({ plugin }: PluginCardProps) {
             {Settings && <TouchableOpacity
               style={styles.delete}
               onPress={(): void => {
-                Navigation.push(PluginSettings, {
-                  name: plugin.name,
-                  children: connectComponent(Settings as any, plugin.name)
-                });
+                navigation.push("EnmityCustomPage", { navigation, pageName: plugin.name, pagePanel: plugin.getSettingsPanel });
               }}
             >
               <Image style={styles.settingsIcon} source={Assets.getIDByName('settings')} />
@@ -311,8 +307,11 @@ export function Page() {
                 Install some by clicking the + icon!
               </Text>
             </View>
-          :
-          entities.map(plugin => <PluginCard plugin={plugin} />)
+          : <FlatList
+            data={entities}
+            renderItem={({ item }) => <PluginCard plugin={item} />}
+            keyExtractor={plugin => plugin.name}
+          />
         }
       </ScrollView>
     </View>
