@@ -40,13 +40,18 @@ function patchScreens() {
       },
       EnmityCustomPage: {
         key: 'EnmityCustomPage',
-        title: "Page",
+        title: 'Page',
         render: ({ pageName, pagePanel }: { pageName: string, pagePanel: React.ComponentType }) => {
-          !pageName ?? NavigationNative.useNavigation().setOptions({ title: pageName })
-          const RenderableComponent = connectComponent(pagePanel, pageName ?? "Page")
-          return <>
-            <RenderableComponent />
-          </>
+          const navigation = NavigationNative.useNavigation();
+          const Component = pagePanel;
+
+          React.useEffect(() => {
+            if (pageName) {
+              navigation.setOptions({ title: pageName });
+            }
+          }, []);
+
+          return <Component />;
         }
       }
     };

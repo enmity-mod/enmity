@@ -1,6 +1,7 @@
 import { Alert, FlatList, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
 import { StyleSheet, ColorMap, Constants, Toasts, NavigationNative } from '@metro/common';
 import { Plugin } from 'enmity/managers/plugins';
+import { connectComponent } from '@api/settings';
 import * as Plugins from '@managers/plugins';
 import Authors from './partials/Authors';
 import { getModule } from '@metro';
@@ -17,7 +18,7 @@ interface PluginCardProps {
 export function PluginCard({ plugin }: PluginCardProps) {
   const plugins = Plugins.getEnabledPlugins();
   const [enabled, setEnabled] = React.useState(plugins.includes(plugin.name));
-  const navigation = NavigationNative.useNavigation()
+  const navigation = NavigationNative.useNavigation();
 
   const styles = StyleSheet.createThemedStyleSheet({
     container: {
@@ -101,7 +102,10 @@ export function PluginCard({ plugin }: PluginCardProps) {
             {Settings && <TouchableOpacity
               style={styles.delete}
               onPress={(): void => {
-                navigation.push("EnmityCustomPage", { navigation, pageName: plugin.name, pagePanel: plugin.getSettingsPanel });
+                navigation.push('EnmityCustomPage', {
+                  pageName: plugin.name,
+                  pagePanel: connectComponent(Settings, plugin.name)
+                });
               }}
             >
               <Image style={styles.settingsIcon} source={Assets.getIDByName('settings')} />
