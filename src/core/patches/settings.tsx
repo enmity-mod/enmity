@@ -1,6 +1,6 @@
 import { FormArrow, FormDivider, FormRow, FormSection } from '@components';
 import { connectComponent } from '@api/settings';
-import { Locale, Scenes } from '@metro/common';
+import { Locale, NavigationNative, Scenes } from '@metro/common';
 import { findInReactTree } from '@utilities';
 import * as Screens from '@screens/index';
 import { getByName } from '@metro';
@@ -37,6 +37,22 @@ function patchScreens() {
         title: 'Themes',
         render: Screens.Themes.Page,
         headerRight: Screens.Themes.HeaderRight
+      },
+      EnmityCustomPage: {
+        key: 'EnmityCustomPage',
+        title: 'Page',
+        render: ({ pageName, pagePanel }: { pageName: string, pagePanel: React.ComponentType }) => {
+          const navigation = NavigationNative.useNavigation();
+          const Component = pagePanel;
+
+          React.useEffect(() => {
+            if (pageName) {
+              navigation.setOptions({ title: pageName });
+            }
+          }, []);
+
+          return <Component />;
+        }
       }
     };
   });

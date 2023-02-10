@@ -1,4 +1,4 @@
-import { Alert, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
+import { Alert, FlatList, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
 import { Dialog, StyleSheet, ColorMap, Constants, Toasts } from '@metro/common';
 import * as Themes from '@managers/themes';
 import Authors from './partials/Authors';
@@ -252,7 +252,7 @@ export function Page() {
       return true;
     };
 
-    if (p.authors?.find?.(a => (a.name ?? a).toLowerCase().includes(search.toLowerCase()))) {
+    if ((p.authors as any[])?.find?.(a => (a.name ?? a).toLowerCase().includes(search.toLowerCase()))) {
       return true;
     };
 
@@ -330,8 +330,11 @@ export function Page() {
                 Install some by clicking the + icon!
               </Text>
             </View>
-          :
-          entities.map(theme => <ThemeCard theme={theme} />)
+          : <FlatList
+            data={entities}
+            renderItem={({ item }) => <ThemeCard theme={item} />}
+            keyExtractor={theme => theme.name}
+          />
         }
       </ScrollView>
     </View>
