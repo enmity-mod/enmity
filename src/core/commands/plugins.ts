@@ -9,26 +9,26 @@ export default [
 
     execute: (_, message) => {
       const channel = message.channel.id;
-      const pluginsList = Plugins.getPlugins();
+      const list = Plugins.getPlugins();
 
-      if (pluginsList.length === 0) {
+      if (list.length === 0) {
         sendReply(channel, 'No plugins installed.');
         return;
       }
 
-      const enabledPlugins = Plugins.getEnabledPlugins();
-      const disabledPlugins = Plugins.getDisabledPlugins();
+      const enabled = Plugins.getEnabledPlugins();
+      const disabled = Plugins.getDisabledPlugins();
 
       let plugins = '';
 
-      if (enabledPlugins.length > 0) {
-        plugins = `**Enabled plugins (${enabledPlugins.length})**:\n`;
-        plugins += `> ${enabledPlugins.join(', ')}\n`;
+      if (enabled.length > 0) {
+        plugins = `**Enabled plugins (${enabled.length})**:\n`;
+        plugins += `> ${enabled.join(', ')}\n`;
       }
 
-      if (disabledPlugins.length > 0) {
-        plugins += `**Disabled plugins (${disabledPlugins.length})**:\n`;
-        plugins += `> ${disabledPlugins.join(', ')}`;
+      if (disabled.length > 0) {
+        plugins += `**Disabled plugins (${disabled.length})**:\n`;
+        plugins += `> ${disabled.join(', ')}`;
       }
 
       sendReply(channel, plugins);
@@ -39,19 +39,19 @@ export default [
     description: 'Install a plugin',
     options: [
       {
-        name: 'plugin',
-        displayName: 'plugin',
+        name: 'url',
+        displayName: 'url',
 
-        description: 'Plugin url',
-        displayDescription: 'Plugin url',
+        description: 'The URL of the plugin you\'d like to install.',
+        displayDescription: 'The URL of the plugin you\'d like to install.',
 
         required: true,
         type: ApplicationCommandOptionType.String,
-      },
+      }
     ],
 
-    execute: (args, message) => {
-      const url = args[0].value;
+    execute: ([link], message) => {
+      const url = link.value;
       const channel = message.channel.id;
 
       Plugins.installPlugin(url, data => {
@@ -75,8 +75,8 @@ export default [
       },
     ],
 
-    execute: (args, message) => {
-      const name = args[0].value;
+    execute: ([plugin], message) => {
+      const name = plugin.value;
       const channel = message.channel.id;
 
       Plugins.uninstallPlugin(name, data => {
@@ -100,8 +100,8 @@ export default [
       },
     ],
 
-    execute: (args, message) => {
-      const name = args[0].value;
+    execute: ([plugin], message) => {
+      const name = plugin.value;
       const channel = message.channel.id;
 
       // @ts-ignore
