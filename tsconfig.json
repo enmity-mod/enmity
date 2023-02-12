@@ -1,18 +1,34 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src/",
-    "module": "esnext",
-    "outDir": "dist",
-    "target": "ESNext",
-    "jsx": "react",
+    "downlevelIteration": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "downlevelIteration": true,
-    "noUnusedParameters": false,
-    "useDefineForClassFields": false,
+    "target": "es2022",
+    "resolveJsonModule": true,
+    "module": "es2022",
+    "jsx": "react",
+    "baseUrl": "src",
     "paths": {
+      "react": [
+        "modules/metro/react.ts"
+      ],
+      "@core": [
+        "core/index.ts"
+      ],
       "@metro": [
-        "modules/metro/index"
+        "modules/metro/index.ts"
+      ],
+      "@utilities": [
+        "modules/utilities/index.ts"
+      ],
+      "@patcher": [
+        "modules/patcher/index.ts"
+      ],
+      "@api": [
+        "api/index.ts"
+      ],
+      "@components": [
+        "components/index.ts"
       ],
       "@metro/*": [
         "modules/metro/*"
@@ -20,29 +36,17 @@
       "@data/*": [
         "data/*"
       ],
-      "@utilities": [
-        "modules/utilities/index"
-      ],
       "@utilities/*": [
         "modules/utilities/*"
-      ],
-      "@patcher": [
-        "modules/patcher/index"
       ],
       "@patcher/*": [
         "modules/patcher/*"
       ],
+      "@api/assets": [
+        "api/assets.ts"
+      ],
       "@api/*": [
         "api/*"
-      ],
-      "@api": [
-        "api/index"
-      ],
-      "@api/settings": [
-        "api/settings/index"
-      ],
-      "@components": [
-        "components/index"
       ],
       "@components/*": [
         "components/*"
@@ -56,16 +60,10 @@
       "@modules/*": [
         "modules/*"
       ],
-      "react": [
-        "modules/metro/react"
-      ],
-      "@core": [
-        "core/index"
-      ],
       "@core/*": [
         "core/*"
       ],
-      "reactTypes": [
+      "react-types": [
         "../node_modules/@types/react"
       ]
     }
