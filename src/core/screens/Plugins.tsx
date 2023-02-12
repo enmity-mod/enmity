@@ -1,5 +1,5 @@
 import { Alert, FlatList, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
-import { StyleSheet, ColorMap, Constants, Toasts, NavigationNative } from '@metro/common';
+import { StyleSheet, Clipboard, ColorMap, Constants, Toasts, NavigationNative } from '@metro/common';
 import { Plugin } from 'enmity/managers/plugins';
 import { connectComponent } from '@api/settings';
 import * as Plugins from '@managers/plugins';
@@ -77,7 +77,7 @@ export function PluginCard({ plugin }: PluginCardProps) {
     }
   });
 
-  const Settings = plugin.getSettingsPanel;
+  const Settings = plugin.getSettingsPanel as unknown as React.ComponentType;
 
   return (
     <View style={styles.container}>
@@ -160,7 +160,9 @@ export function HeaderRight() {
   });
 
   return (
-    <TouchableOpacity styles={styles.wrapper} onPress={(): void => {
+    <TouchableOpacity styles={styles.wrapper} onPress={async (): Promise<void> => {
+      const clipboard = await Clipboard.getString();
+
       Alert.prompt(
         'Install a plugin',
         'Please enter the URL of the plugin to install.',
@@ -192,6 +194,8 @@ export function HeaderRight() {
             Toasts.open({ content: res.text, source: res.icon });
           });
         },
+        undefined,
+        clipboard.endsWith('.js') ? clipboard : null
       );
     }}>
       <Image

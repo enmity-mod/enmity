@@ -1,5 +1,5 @@
 import { Alert, FlatList, FormRow, FormSwitch, Image, RefreshControl, ScrollView, Text, TouchableOpacity, View } from '@components';
-import { Dialog, StyleSheet, ColorMap, Constants, Toasts } from '@metro/common';
+import { Dialog, Clipboard, StyleSheet, ColorMap, Constants, Toasts } from '@metro/common';
 import * as Themes from '@managers/themes';
 import Authors from './partials/Authors';
 import { reload } from '@api/native';
@@ -164,7 +164,9 @@ export function HeaderRight() {
   });
 
   return (
-    <TouchableOpacity styles={styles.wrapper} onPress={(): void => {
+    <TouchableOpacity styles={styles.wrapper} onPress={async (): Promise<void> => {
+      const clipboard = await Clipboard.getString();
+
       Alert.prompt(
         'Install a theme',
         'Please enter the URL of a theme to install.',
@@ -211,6 +213,8 @@ export function HeaderRight() {
             Toasts.open({ content: e.message });
           }
         },
+        undefined,
+        clipboard.endsWith('.js') ? clipboard : null
       );
     }}>
       <Image
