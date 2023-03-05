@@ -35,6 +35,7 @@ export function Page({ settings }) {
     Server: Assets.getIDByName('ic_server_security_24px')
   };
 
+  // @ts-ignore
   const Runtime = HermesInternal.getRuntimeProperties();
   const Plugins = getPlugins().map(p => p.name);
   const Themes = listThemes().map(t => t.name);

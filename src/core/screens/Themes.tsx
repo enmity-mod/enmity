@@ -20,7 +20,7 @@ export function ThemeCard({ theme }: ThemeCardProps) {
 
   const styles = StyleSheet.createThemedStyleSheet({
     container: {
-      backgroundColor: ThemeColorMap.BACKGROUND_SECONDARY,
+      backgroundColor: ThemeColorMap.BACKGROUND_FLOATING,
       borderRadius: 5,
       borderLeftColor: theme.color ?? '#524FBF',
       borderLeftWidth: 5,
