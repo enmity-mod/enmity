@@ -76,8 +76,6 @@ for (const id in modules) {
       const currentThemeName = window['themes']?.theme ?? '';
       const themes = window['themes']?.list ?? [];
       const currentTheme: Theme = themes?.find(t => t.name === currentThemeName);
-      const map = ["dark", "light", "amoled"];
-
       currentTheme["colours"] ??= currentTheme["colors"];
 
       if (currentTheme.colours) {
