@@ -87,29 +87,18 @@ for (const id in modules) {
         })
       }
 
-      if (currentTheme.theme_color_map) {
-        Object.entries(currentTheme.theme_color_map).forEach(([key, value]) => {
-          if (!mdl["SemanticColor"][key]) return;
-  
-          for (const index in currentTheme.theme_color_map[key]) {
-            const color = value[index];
-            if (!color) continue;
-  
-            const themeSymbol = Symbol(key) as symbol;
-  
-            Object.defineProperty(mdl["RawColor"], themeSymbol, {
-              value: color,
-              enumerable: false,
-            });
-  
-            mdl["SemanticColor"][key][map[index]] = {
-              raw: themeSymbol,
-              opacity: 1,
-              spring: ["dark", "light"].some(e => e === index) ? () => {} : undefined
-            };
-          }
-        })
-      }
+      const originalResolveSemanticColor = mdl["default"]["meta"]["resolveSemanticColor"];
+      mdl["default"]["meta"]["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
+        const key = ref[Object.getOwnPropertySymbols(ref)[0]];
+
+        if (currentTheme.theme_color_map?.[key]) {
+          const index = { dark: 0, light: 1, amoled: 2 }[theme.toLowerCase()] || 0;
+          const colorOrNone = currentTheme.theme_color_map[key][index];
+          if (colorOrNone) return colorOrNone;
+        }
+
+        return originalResolveSemanticColor(theme, ref);
+      };
 
       break;
     } catch(e) {
