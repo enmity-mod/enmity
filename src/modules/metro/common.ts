@@ -35,6 +35,8 @@ const {
   Moment
 } = common;
 
+Constants["ThemeColorMap"] = ColorMap?.["colors"];
+Constants["Colors"] = ColorMap?.["unsafe_rawColors"];
 export const React = common.React as typeof import('react');
 
 export {

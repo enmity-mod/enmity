@@ -1,11 +1,15 @@
 /* eslint-disable */
 import Common from '@data/modules';
+import { Theme } from 'enmity/managers/themes';
+import { create } from '@patcher';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const __r: (moduleId: number) => any;
 declare const modules: { [id: number]: any; };
 
+const Patcher = create('metro')
 type Common = { [key in keyof typeof import('@data/modules').default]: any };
+
 
 export const common: Common = {};
 export const blacklist: string[] = [];
@@ -60,13 +64,67 @@ export const filters = {
   }
 };
 
+for (const id in modules) {
+  const mdl = modules[id].publicModule.exports;
+  if (!mdl || mdl === window || mdl['ihateproxies'] === null) {
+    blacklist.push(id);
+    continue;
+  }
+
+  if (mdl["SemanticColor"] && mdl["RawColor"]) {
+    try {
+      const currentThemeName = window['themes']?.theme ?? '';
+      const themes = window['themes']?.list ?? [];
+      const currentTheme: Theme = themes?.find(t => t.name === currentThemeName);
+      const map = ["dark", "light", "amoled"];
+
+      currentTheme["colours"] ??= currentTheme["colors"];
+
+      if (currentTheme.colours) {
+        Object.entries(currentTheme.colours).forEach(([key, value]) => {
+          mdl["RawColor"][key] = value;
+          mdl["default"]["unsafe_rawColors"][key] = value;
+        })
+      }
+
+      if (currentTheme.theme_color_map) {
+        Object.entries(currentTheme.theme_color_map).forEach(([key, value]) => {
+          if (!mdl["SemanticColor"][key]) return;
+  
+          for (const index in currentTheme.theme_color_map[key]) {
+            const color = value[index];
+            if (!color) continue;
+  
+            const themeSymbol = Symbol(key) as symbol;
+  
+            Object.defineProperty(mdl["RawColor"], themeSymbol, {
+              value: color,
+              enumerable: false,
+            });
+  
+            mdl["SemanticColor"][key][map[index]] = {
+              raw: themeSymbol,
+              opacity: 1,
+              spring: ["dark", "light"].some(e => e === index) ? () => {} : undefined
+            };
+          }
+        })
+      }
+
+      break;
+    } catch(e) {
+      const err = new Error(`[Enmity] ${e}`);
+      console.error(err.stack);
+    }
+  }
+}
 
 // Export common modules
 const getters = [];
 
-Object.entries(Common).map(([name, m]) => {
-  if (m.multiple) {
-    Object.entries(m.props).map(([mdl, filter]) => {
+Object.entries(Common).map(([name, module]) => {
+  if (module.multiple) {
+    Object.entries(module.props).map(([mdl, filter]) => {
       getters.push({
         id: mdl,
         filter: (mdl) => {
@@ -77,15 +135,15 @@ Object.entries(Common).map(([name, m]) => {
         submodule: name
       });
     });
-  } else if (m.props) {
-    if ((m.props as string[]).every(props => Array.isArray(props))) {
+  } else if (module.props) {
+    if ((module.props as string[]).every(props => Array.isArray(props))) {
       const found = [];
 
       getters.push({
         id: name,
         filter: (mdl) => {
-          const res = (m.props as string[]).some(props => (props as any).every(p => mdl[p]));
-          if (res && m.ensure && !m.ensure(mdl)) {
+          const res = (module.props as string[]).some(props => (props as any).every(p => mdl[p]));
+          if (res && module.ensure && !module.ensure(mdl)) {
             return false;
           } else if (res) {
             found.push(mdl);
@@ -99,33 +157,33 @@ Object.entries(Common).map(([name, m]) => {
       getters.push({
         id: name,
         filter: (mdl) => {
-          const res = filters.byProps(...(m.props as string[]))(mdl);
-          if (res && m.ensure && m.ensure(mdl) === false) {
+          const res = filters.byProps(...(module.props as string[]))(mdl);
+          if (res && module.ensure && module.ensure(mdl) === false) {
             return false;
           }
 
           return res;
         },
-        map: m.export
+        map: module.export
       });
     }
-  } else if (m.displayName) {
+  } else if (module.displayName) {
     getters.push({
       id: name,
-      filter: filters.byDisplayName(m.displayName, m.default),
-      map: m.export
+      filter: filters.byDisplayName(module.displayName, module.default),
+      map: module.export
     });
-  } else if (m.name) {
+  } else if (module.name) {
     getters.push({
       id: name,
-      filter: filters.byName(m.name, m.default),
-      map: m.export
+      filter: filters.byName(module.name, module.default),
+      map: module.export
     });
-  } else if (m.filter) {
+  } else if (module.filter) {
     getters.push({
       id: name,
-      filter: m.filter,
-      map: m.export
+      filter: module.filter,
+      map: module.export
     });
   }
 });
@@ -200,7 +258,6 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
       blacklist.push(id);
       continue;
     }
-
 
     if (typeof mdl === 'object') {
       if (search(mdl, id)) {

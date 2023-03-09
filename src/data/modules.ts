@@ -94,7 +94,7 @@ const modules = {
   },
 
   ColorMap: {
-    props: ['ThemeColorMap'],
+    props: ['colors', 'meta'],
   },
 
   Components: {

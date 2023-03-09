@@ -1,4 +1,4 @@
-import { Settings, Theme } from '@metro/common';
+import { Settings } from '@metro/common';
 import WebSocket from '@core/debug/websocket';
 import CorePatches from '@core/patches';
 import Commands from '@core/commands';

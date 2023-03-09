@@ -9,7 +9,7 @@ import Assets from '@api/assets';
 import React from 'react';
 
 const { createThemedStyleSheet } = StyleSheet;
-const { ThemeColorMap } = ColorMap;
+const { colors } = ColorMap;
 
 interface PluginCardProps {
   plugin: Plugin;
@@ -22,19 +22,19 @@ export function PluginCard({ plugin }: PluginCardProps) {
 
   const styles = StyleSheet.createThemedStyleSheet({
     container: {
-      backgroundColor: ThemeColorMap.BACKGROUND_FLOATING,
+      backgroundColor: colors.BACKGROUND_FLOATING,
       borderRadius: 5,
       borderLeftColor: plugin.color ?? '#524FBF',
       borderLeftWidth: 5,
       marginBottom: 15,
     },
     name: {
-      color: ThemeColorMap.HEADER_PRIMARY,
+      color: colors.HEADER_PRIMARY,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
       fontSize: 16,
     },
     version: {
-      color: ThemeColorMap.HEADER_SECONDARY,
+      color: colors.HEADER_SECONDARY,
       fontSize: 16,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
       marginLeft: 2.5,
@@ -52,7 +52,7 @@ export function PluginCard({ plugin }: PluginCardProps) {
       alignItems: 'center'
     },
     description: {
-      color: ThemeColorMap.HEADER_SECONDARY,
+      color: colors.HEADER_SECONDARY,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
     },
     info: {
@@ -68,12 +68,12 @@ export function PluginCard({ plugin }: PluginCardProps) {
     trashIcon: {
       width: 22,
       height: 22,
-      tintColor: ThemeColorMap.INTERACTIVE_NORMAL
+      tintColor: colors.INTERACTIVE_NORMAL
     },
     settingsIcon: {
       width: 22,
       height: 22,
-      tintColor: ThemeColorMap.INTERACTIVE_NORMAL
+      tintColor: colors.INTERACTIVE_NORMAL
     }
   });
 
@@ -147,7 +147,7 @@ export function PluginCard({ plugin }: PluginCardProps) {
 export function HeaderRight() {
   const styles = createThemedStyleSheet({
     header: {
-      tintColor: ThemeColorMap.HEADER_PRIMARY,
+      tintColor: colors.HEADER_PRIMARY,
       marginRight: 15,
       width: 18,
       height: 18
@@ -258,7 +258,7 @@ export function Page() {
     },
     notFoundText: {
       marginTop: 10,
-      color: ThemeColorMap.TEXT_MUTED,
+      color: colors.TEXT_MUTED,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
       textAlign: 'center'
     },

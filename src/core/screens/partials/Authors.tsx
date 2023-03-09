@@ -2,7 +2,7 @@ import { StyleSheet, Users, ColorMap, Constants, Profiles, AsyncUsers } from '@m
 import { Text, TouchableOpacity, View } from '@components';
 import React from 'react';
 
-const { ThemeColorMap } = ColorMap;
+const { colors } = ColorMap;
 
 export default function ({ authors }) {
   if (!authors || !Array.isArray(authors) || !authors.length) {
@@ -11,7 +11,7 @@ export default function ({ authors }) {
 
   const styles = StyleSheet.createThemedStyleSheet({
     linkless: {
-      color: ThemeColorMap.HEADER_SECONDARY,
+      color: colors.HEADER_SECONDARY,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
       display: 'flex',
       fontSize: 16,
@@ -21,7 +21,7 @@ export default function ({ authors }) {
     },
 
     link: {
-      color: ThemeColorMap.HEADER_PRIMARY,
+      color: colors.HEADER_PRIMARY,
       fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
       display: 'flex',
       alignItems: 'center',

@@ -10,19 +10,27 @@ import * as Assets from '@api/assets';
 import { getByProps } from '@metro';
 import React from 'react';
 
-const ThemeColorMap = ColorMap.ThemeColorMap;
+try {
+  const { colors } = ColorMap;
+  throw new Error(colors)
+} catch(e) {
+  const err = new Error(e);
+  console.error(err);
+}
+const { colors } = ColorMap;
+
+const styles = StyleSheet.createThemedStyleSheet({
+  debugText: {
+    color: colors.TEXT_MUTED
+  },
+  container: {
+    marginBottom: 50
+  }
+});
 
 const Invites = getByProps('acceptInviteAndTransitionToInviteChannel');
 
 export function Page({ settings }) {
-  const styles = StyleSheet.createThemedStyleSheet({
-    debugText: {
-      color: ThemeColorMap.TEXT_MUTED
-    },
-    container: {
-      marginBottom: 50
-    }
-  });
 
   const Icons = {
     Twitter: Assets.getIDByName('img_account_sync_twitter_white'),

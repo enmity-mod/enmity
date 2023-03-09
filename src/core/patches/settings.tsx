@@ -1,6 +1,6 @@
 import { FormArrow, FormDivider, FormRow, FormSection } from '@components';
 import { connectComponent } from '@api/settings';
-import { Locale, NavigationNative, Scenes } from '@metro/common';
+import { Locale, NavigationNative, Scenes, ColorMap } from '@metro/common';
 import { findInReactTree } from '@utilities';
 import * as Screens from '@screens/index';
 import { getByName } from '@metro';
@@ -18,7 +18,7 @@ export default function (): void {
 }
 
 function patchScreens() {
-  Patcher.after(Scenes, 'default', (_, args, res) => {
+  Patcher.after(Scenes, 'default', (_, __, res) => {
     return {
       ...res,
       Enmity: {

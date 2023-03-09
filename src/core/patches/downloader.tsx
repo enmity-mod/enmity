@@ -10,16 +10,15 @@ import { reload } from '@api/native';
 import React from 'react';
 
 const Icon = getByTypeName('Icon');
-const { ThemeColorMap } = ColorMap;
+const { colors } = ColorMap;
+const styles = StyleSheet.createThemedStyleSheet({
+  icon: {
+    color: colors.INTERACTIVE_NORMAL
+  }
+});
 
 export default function () {
   SheetPatcher.after('enmity-downloader', 'MessageLongPressActionSheet', (_, [{ channel, message }, items]) => {
-    const styles = StyleSheet.createThemedStyleSheet({
-      icon: {
-        color: ThemeColorMap.INTERACTIVE_NORMAL
-      }
-    });
-
     if (AddonChannels.Plugins.includes(channel.id)) {
       const url = message.content.match(/http(|s).+.js/gmi)?.[0];
       if (!url) return;
