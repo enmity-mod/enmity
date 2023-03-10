@@ -76,6 +76,8 @@ for (const id in modules) {
       const currentThemeName = window['themes']?.theme ?? '';
       const themes = window['themes']?.list ?? [];
       const currentTheme: Theme = themes?.find(t => t.name === currentThemeName);
+
+      if (!currentTheme) break;
       currentTheme["colours"] ??= currentTheme["colors"];
 
       if (currentTheme.colours) {
@@ -85,19 +87,21 @@ for (const id in modules) {
         })
       }
 
-      const originalResolveSemanticColor = mdl["default"]["meta"]["resolveSemanticColor"];
-      mdl["default"]["meta"]["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
-        const key = ref[Object.getOwnPropertySymbols(ref)[0]];
-
-        if (currentTheme.theme_color_map?.[key]) {
-          const index = { dark: 0, light: 1, amoled: 2 }[theme.toLowerCase()] || 0;
-          const colorOrNone = currentTheme.theme_color_map[key][index];
-          if (colorOrNone) return colorOrNone;
-        }
-
-        return originalResolveSemanticColor(theme, ref);
-      };
-
+      if (currentTheme.theme_color_map) {
+        const originalResolveSemanticColor = mdl["default"]["meta"]["resolveSemanticColor"];
+        mdl["default"]["meta"]["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
+          const key = ref[Object.getOwnPropertySymbols(ref)[0]];
+  
+          if (currentTheme.theme_color_map?.[key]) {
+            const index = { dark: 0, light: 1, amoled: 2 }[theme.toLowerCase()] || 0;
+            const colorOrNone = currentTheme.theme_color_map[key][index];
+            if (colorOrNone) return colorOrNone;
+          }
+  
+          return originalResolveSemanticColor(theme, ref);
+        };
+      }
+      
       break;
     } catch(e) {
       const err = new Error(`[Enmity] ${e}`);
