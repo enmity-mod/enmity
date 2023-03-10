@@ -37,6 +37,9 @@ const {
 
 Constants["ThemeColorMap"] = ColorMap?.["colors"];
 Constants["Colors"] = ColorMap?.["unsafe_rawColors"];
+ColorMap["ThemeColorMap"] = ColorMap?.["colors"];
+StyleSheet["ThemeColorMap"] = ColorMap?.["colors"];
+
 export const React = common.React as typeof import('react');
 
 export {
