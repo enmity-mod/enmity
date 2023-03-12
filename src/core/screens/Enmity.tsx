@@ -53,7 +53,7 @@ export function Page({ settings }) {
           leading={<FormRow.Icon source={Icons.Discord} />}
           trailing={FormRow.Arrow}
           onPress={() => Invites.acceptInviteAndTransitionToInviteChannel({
-            inviteKey: 'enmity',
+            inviteKey: 'ZyJUgu5KDW',
             context: {location: 'Invite Button Embed'},
             callback: () => {}
           })}
