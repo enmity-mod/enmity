@@ -78,23 +78,40 @@ for (const id in modules) {
       const currentTheme: Theme = themes?.find(t => t.name === currentThemeName);
 
       if (!currentTheme) break;
-      currentTheme["colours"] ??= currentTheme["colors"];
+      currentTheme.colours ??= currentTheme["colors"];
 
-      if (currentTheme.colours) {
-        Object.entries(currentTheme.colours).forEach(([key, value]) => {
+      if (currentTheme.spec === 1 || !currentTheme.spec) {
+        if (currentTheme.theme_color_map) {
+          currentTheme.semanticColors = currentTheme.theme_color_map
+          currentTheme.semanticColors.CHAT_BACKGROUND = currentTheme.theme_color_map.BACKGROUND_PRIMARY
+        };
+
+        if (currentTheme.colours) {
+          currentTheme.rawColors = currentTheme.colours
+          Object.entries(currentTheme.colours).forEach(([key, value]) => {
+            if (key.startsWith("PRIMARY_DARK")) currentTheme.rawColors[key.replace("PRIMARY_DARK", "PRIMARY")] = value
+            if (key.startsWith("PRIMARY_LIGHT")) currentTheme.rawColors[key.replace("PRIMARY_LIGHT", "PRIMARY")] = value
+            if (key.startsWith("BRAND_NEW")) currentTheme.rawColors[key.replace("BRAND_NEW", "BRAND")] = value
+            if (key.startsWith("STATUS")) currentTheme.rawColors[key.replace("STATUS_", "")] = value
+          })
+        };
+      }
+
+      if (currentTheme.rawColors) {
+        Object.entries(currentTheme.rawColors).forEach(([key, value]) => {
           mdl["RawColor"][key] = value;
           mdl["default"]["unsafe_rawColors"][key] = value;
         })
       }
 
-      if (currentTheme.theme_color_map) {
+      if (currentTheme.semanticColors) {
         const originalResolveSemanticColor = mdl["default"]["meta"]["resolveSemanticColor"];
         mdl["default"]["meta"]["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
           const key = ref[Object.getOwnPropertySymbols(ref)[0]];
   
-          if (currentTheme.theme_color_map?.[key]) {
+          if (currentTheme.semanticColors[key]) {
             const index = { dark: 0, light: 1, amoled: 2 }[theme.toLowerCase()] || 0;
-            const colorOrNone = currentTheme.theme_color_map[key][index];
+            const colorOrNone = currentTheme.semanticColors[key][index];
             if (colorOrNone) return colorOrNone;
           }
   
