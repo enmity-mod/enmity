@@ -9,6 +9,7 @@ import { reload, version } from '@api/native';
 import * as Assets from '@api/assets';
 import { getByProps } from '@metro';
 import React from 'react';
+import { getIDByName } from '../../api/assets';
 
 try {
   const { colors } = ColorMap;
@@ -150,6 +151,13 @@ export function Page({ settings }) {
           label='Enmity Version'
           leading={<FormRow.Icon source={{ uri: 'https://files.enmity.app/icon-64.png' }} />}
           trailing={() => <Text style={styles.debugText}>{window.enmity.version}</Text>}
+          onPress={() => Linking.openURL(`https://github.com/enmity-mod/enmity/commit/${window.enmity.version}`)}
+        />
+        <FormDivider />
+        <FormRow
+          label='Tweak Version'
+          leading={<FormRow.Icon source={getIDByName("ic_settings_white_24px")} />}
+          trailing={() => <Text style={styles.debugText}>{window["tweak"]?.version ?? "2.1.5" /* Anything that hasn't got this patch with version added will be 2.1.5 or lower anyway */}</Text>}
           onPress={() => Linking.openURL(`https://github.com/enmity-mod/enmity/commit/${window.enmity.version}`)}
         />
         <FormDivider />
