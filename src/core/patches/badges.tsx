@@ -27,7 +27,7 @@ export default function () {
   const Badges = getByName('ProfileBadges', { all: true, default: false });
 
   for (const ProfileBadges of Badges) {
-    Patcher.after(ProfileBadges, 'default', (_, [{ user, isEnmity, ...rest }], res) => {
+    Patcher.after(ProfileBadges, 'default', (_, [{ user, isEnmity, style, ...rest }], res) => {
       if (isEnmity) return;
       const [badges, setBadges] = React.useState([]);
 
@@ -39,7 +39,7 @@ export default function () {
         }
       }, []);
 
-      const payload = badges.map(makeBadge);
+      const payload = badges.map((badge) => makeBadge(badge, style));
 
       if (!badges.length) return res;
       if (!res && Number(version) >= 151) {
@@ -104,7 +104,7 @@ async function fetchUserBadges(id: string): Promise<string[]> {
   return res;
 }
 
-const makeBadge = (badge): JSX.Element => {
+const makeBadge = (badge, style): JSX.Element => {
   const styles = {
     wrapper: {
       alignItems: 'center',
@@ -118,11 +118,21 @@ const makeBadge = (badge): JSX.Element => {
     key={badge}
     style={styles.wrapper}
   >
-    <Badge type={badge} />
+    <Badge 
+      type={badge}
+      size={Array.isArray(style) 
+        ? style.find(r => r.paddingVertical && r.paddingHorizontal)
+          ? 16
+          : 22
+        : 16}
+      margin={Array.isArray(style)
+        ? 2
+        : 6}
+    />
   </View>;
 };
 
-const Badge = ({ type }: { type: string; }): JSX.Element => {
+const Badge = ({ type, size, margin }: { type: string; size: number; margin: number; }): JSX.Element => {
   const [badge, setBadge] = React.useState(null);
 
   React.useEffect(() => {
@@ -139,10 +149,10 @@ const Badge = ({ type }: { type: string; }): JSX.Element => {
 
   const styles = {
     image: {
-      width: 24,
-      height: 24,
+      width: size,
+      height: size,
       resizeMode: 'contain',
-      marginHorizontal: 2
+      marginHorizontal: margin
     }
   };
 

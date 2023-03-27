@@ -25,7 +25,7 @@ export function getTheme(): string {
 /**
  * Get a theme by name
  */
-export function getThemeByName(name): Theme {
+export function getThemeByName(name): ThemeType {
   return themes.find(t => t.name === name);
 }
 

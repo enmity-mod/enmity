@@ -83,7 +83,9 @@ for (const id in modules) {
       if (currentTheme.spec === 1 || !currentTheme.spec) {
         if (currentTheme.theme_color_map) {
           currentTheme.semanticColors = currentTheme.theme_color_map
-          currentTheme.semanticColors.CHAT_BACKGROUND = currentTheme.theme_color_map.BACKGROUND_PRIMARY
+          currentTheme.semanticColors.CHAT_BACKGROUND = currentTheme.background.url
+            ? ["transparent", "transparent"]
+            : currentTheme.theme_color_map.BACKGROUND_PRIMARY
         };
 
         if (currentTheme.colours) {
