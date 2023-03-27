@@ -123,8 +123,8 @@ const makeBadge = (badge, style): JSX.Element => {
       size={Array.isArray(style) 
         ? style.find(r => r.paddingVertical && r.paddingHorizontal)
           ? 16
-          : 22
-        : 16}
+          : 24
+        : 18}
       margin={Array.isArray(style)
         ? 2
         : 6}
