@@ -7,9 +7,7 @@ import { create } from '@patcher';
 declare const __r: (moduleId: number) => any;
 declare const modules: { [id: number]: any; };
 
-const Patcher = create('metro')
 type Common = { [key in keyof typeof import('@data/modules').default]: any };
-
 
 export const common: Common = {};
 export const blacklist: string[] = [];
@@ -83,7 +81,7 @@ for (const id in modules) {
       if (currentTheme.spec === 1 || !currentTheme.spec) {
         if (currentTheme.theme_color_map) {
           currentTheme.semanticColors = currentTheme.theme_color_map
-          currentTheme.semanticColors.CHAT_BACKGROUND = currentTheme.background.url
+          currentTheme.semanticColors.CHAT_BACKGROUND = currentTheme?.background?.url
             ? ["transparent", "transparent"]
             : currentTheme.theme_color_map.BACKGROUND_PRIMARY
         };
