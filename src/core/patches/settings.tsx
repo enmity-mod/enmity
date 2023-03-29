@@ -34,37 +34,41 @@ function patchScreens() {
         key: 'EnmityPlugins',
         title: 'Plugins',
         render: () => <Page data={"plugin"} />,
-        headerRight: () => <HeaderRight
-          data={"plugin"}
-          onConfirm={(url: string) => {
-            if (!url.endsWith('js')) {
-              return Toasts.open({
-                content: 'Invalid URL for plugin',
-                source: Assets.getIDByName('ic_close_16px')
-              });
-            }
-  
-            Plugins.installPlugin(url, ({ data }) => {
-              const res = { icon: null, text: null };
-              switch (data) {
-                case 'fucky_wucky':
-                  res.text = 'Failed plugin installation.';
-                  res.icon = Assets.getIDByName('ic_close_16px');
-                  break;
-                case 'installed_plugin':
-                  res.text = 'Plugin has been installed.';
-                  res.icon = Assets.getIDByName('Check');
-                  break;
-                case 'overridden_plugin':
-                  res.text = 'Plugin has been overriden.';
-                  res.icon = Assets.getIDByName('Check');
-                  break;
-              }
-  
-              Toasts.open({ content: res.text, source: res.icon });
-            });
-          }}
-        />
+        // headerRight: () => <HeaderRight
+        //   data={"plugin"}
+        //   onConfirm={(url: string) => {
+        //     if (!url.endsWith('js')) {
+        //       return Toasts.open({
+        //         content: 'Invalid URL for plugin',
+        //         source: Assets.getIDByName('ic_close_16px')
+        //       });
+        //     }
+
+        //     try {
+        //       Plugins.installPlugin(url, ({ data }) => {
+        //         const res = { icon: null, text: null };
+        //         switch (data) {
+        //           case 'fucky_wucky':
+        //             res.text = 'Failed plugin installation.';
+        //             res.icon = Assets.getIDByName('ic_close_16px');
+        //             break;
+        //           case 'installed_plugin':
+        //             res.text = 'Plugin has been installed.';
+        //             res.icon = Assets.getIDByName('Check');
+        //             break;
+        //           case 'overridden_plugin':
+        //             res.text = 'Plugin has been overriden.';
+        //             res.icon = Assets.getIDByName('Check');
+        //             break;
+        //         }
+    
+        //         Toasts.open({ content: res.text, source: res.icon });
+        //       });
+        //     } catch (e) {
+        //       Toasts.open({ content: e.message });
+        //     }
+        //   }}
+        // />
       },
       EnmityThemes: {
         key: 'EnmityThemes',
