@@ -42,14 +42,9 @@ export default [
       
       const payload = content.join('\n');
 
-      if (silent) {
-        sendReply(message.channel.id, payload)
-        return {}
-      }
-        
-      return {
-        content: payload
-      }
+      if (!silent) return { content: payload }
+      sendReply(message.channel.id, payload)
+      return {}
     },
   },
   {
