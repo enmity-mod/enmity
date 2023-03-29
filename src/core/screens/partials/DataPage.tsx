@@ -96,7 +96,9 @@ export default function Page({ data }: { data: "plugin" | "theme" }) {
             refreshing={refreshing}
             onRefresh={(): void => {
               setRefreshing(true);
-              setEntries(isPlugin ? Plugins.getPlugins() : Themes.listThemes());
+              setEntries((isPlugin
+                ? Plugins.getPlugins() 
+                : Themes.listThemes()).sort((a, b) => a.name.localeCompare(b.name)));
               setRefreshing(false);
             }}
           />
@@ -126,7 +128,7 @@ export default function Page({ data }: { data: "plugin" | "theme" }) {
           : <FlatList
             data={entities}
             renderItem={({ item }) => <Card data={item} />}
-            keyExtractor={plugin => plugin.name}
+            keyExtractor={item => item.name + item.version + item.authors[0].name ?? "" }
           />
         }
       </ScrollView>

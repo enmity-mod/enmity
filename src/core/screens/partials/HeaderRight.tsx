@@ -59,7 +59,6 @@ const showAlert = ({ data, url, state: { getter, setter }, onConfirm }: { data: 
         </>,
         confirmText: "Install",
         cancelText: "Cancel",
-
         onConfirm
     })
 }
@@ -68,12 +67,10 @@ export default function HeaderRight({ data, onConfirm }: { data: "plugin" | "the
     const [dataUrl, setDataUrl] = React.useState("");
 
     return (
-      <TouchableOpacity styles={styles.wrapper} onPress={async (): Promise<void> => {
-        const clipboard = await Clipboard.getString();
-  
+      <TouchableOpacity styles={styles.wrapper} onPress={async function() {  
         showAlert({ 
             data, 
-            url: clipboard,
+            url: await Clipboard.getString(),
             state: {
                 getter: dataUrl,
                 setter: setDataUrl
