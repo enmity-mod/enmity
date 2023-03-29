@@ -1,5 +1,4 @@
-import { SVG, StyleSheet, ColorMap } from '@metro/common';
-import React from 'react';
+import { SVG, StyleSheet, ColorMap, React } from '@metro/common';
 
 const { colors } = ColorMap;
 

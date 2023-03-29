@@ -1,5 +1,5 @@
 import { FormSection, ScrollView, FormRow, FormSwitch, Text, FormInput, KeyboardAvoidingView, FormDivider } from '@components';
-import { Linking, StyleSheet, ColorMap, Clipboard, Toasts, Dialog } from '@metro/common';
+import { Linking, StyleSheet, ColorMap, Clipboard, Toasts, Dialog, React } from '@metro/common';
 import { socket, connectWebsocket } from '@core/debug/websocket';
 import { getPlugins } from '@managers/plugins';
 import { listThemes } from '@managers/themes';
@@ -8,7 +8,6 @@ import PluginIcon from './partials/ThemeIcon';
 import { reload, version } from '@api/native';
 import * as Assets from '@api/assets';
 import { getByProps } from '@metro';
-import React from 'react';
 import { getIDByName } from '../../api/assets';
 
 try {

@@ -1,11 +1,10 @@
 import { View, Image, TouchableOpacity } from '@components';
 import { BadgesDomain, Times } from '@data/constants';
-import { Toasts, Theme } from '@metro/common';
+import { Toasts, Theme, React } from '@metro/common';
 import { wrapInHooks } from '@utilities';
 import { version } from '@api/native';
 import { getByName } from '@metro';
 import { create } from '@patcher';
-import React from 'react';
 
 interface Badge {
   name: string;

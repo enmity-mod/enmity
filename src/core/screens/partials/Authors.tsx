@@ -1,6 +1,5 @@
-import { StyleSheet, Users, ColorMap, Constants, Profiles, AsyncUsers } from '@metro/common';
+import { StyleSheet, Users, ColorMap, Constants, Profiles, AsyncUsers, React } from '@metro/common';
 import { Text, TouchableOpacity, View } from '@components';
-import React from 'react';
 
 const { colors } = ColorMap;
 

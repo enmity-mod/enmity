@@ -62,9 +62,6 @@
       ],
       "@core/*": [
         "core/*"
-      ],
-      "react-types": [
-        "../node_modules/@types/react"
       ]
     }
   }

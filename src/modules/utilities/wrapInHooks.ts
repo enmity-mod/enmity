@@ -1,4 +1,4 @@
-import React from 'react';
+import { React } from "@metro/common";
 
 const overrides = {
   useMemo: factory => factory(),
