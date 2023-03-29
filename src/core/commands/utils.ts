@@ -25,7 +25,8 @@ export default [
       }
     ],
 
-    execute: ([silent = { value: false }], message) => {
+    execute: (args, message) => {
+      const silent = args.find(a => a.name === "silent")?.value;
       const content = [];
 
       const Runtime = HermesInternal.getRuntimeProperties();
@@ -40,13 +41,14 @@ export default [
       content.push(`> **System:** ${os}`);
       
       const payload = content.join('\n');
+
       if (silent) {
-        Messages.sendMessage(message.channel.id, {
-          validNonShortcutEmojis: [],
-          content: payload
-        });
-      } else {
         sendReply(message.channel.id, payload)
+        return {}
+      }
+        
+      return {
+        content: payload
       }
     },
   },
