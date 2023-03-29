@@ -33,7 +33,7 @@ export default [
 
       content.push('**Debug Info:**\n');
       content.push(`> **Enmity:** ${window.enmity.version}`);
-      content.push(`> **Tweak:** ${window["tweak"]?.version ?? "N/A"}`)
+      content.push(`> **Tweak:** ${window["tweak"]?.version ?? "N/A"}`);
       content.push(`> **Discord:** ${version} (Build ${build})`);
       content.push(`> **Hermes:** ${Runtime['OSS Release Version']}`);
       content.push(`> **Bytecode:** ${Runtime['Bytecode Version']}`);
@@ -42,7 +42,10 @@ export default [
       
       const payload = content.join('\n');
 
-      if (!silent) return { content: payload }
+      if (!silent) return {
+        validNonShortcutEmojis: [],
+        content: payload 
+      }
       sendReply(message.channel.id, payload)
       return {}
     },
