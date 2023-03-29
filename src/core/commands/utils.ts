@@ -31,10 +31,11 @@ export default [
       const Runtime = HermesInternal.getRuntimeProperties();
 
       content.push('**Debug Info:**\n');
-      content.push(`> **Enmity Version:** ${window.enmity.version}`);
-      content.push(`> **Discord Version:** ${version} (Build ${build})`);
-      content.push(`> **Hermes Version:** ${Runtime['OSS Release Version']}`);
-      content.push(`> **Bytecode Version:** ${Runtime['Bytecode Version']}`);
+      content.push(`> **Enmity:** ${window.enmity.version}`);
+      content.push(`> **Tweak:** ${window["tweak"]?.version ?? "N/A"}`)
+      content.push(`> **Discord:** ${version} (Build ${build})`);
+      content.push(`> **Hermes:** ${Runtime['OSS Release Version']}`);
+      content.push(`> **Bytecode:** ${Runtime['Bytecode Version']}`);
       content.push(`> **Device:** ${device}`);
       content.push(`> **System:** ${os}`);
       

@@ -148,21 +148,24 @@ export function Page({ settings }) {
       </FormSection>
       <FormSection title='Runtime Versions'>
         <FormRow
-          label='Enmity Version'
+          label='Enmity'
           leading={<FormRow.Icon source={{ uri: 'https://files.enmity.app/icon-64.png' }} />}
           trailing={() => <Text style={styles.debugText}>{window.enmity.version}</Text>}
-          onPress={() => Linking.openURL(`https://github.com/enmity-mod/enmity/commit/${window.enmity.version}`)}
+          onPress={() => Linking.openURL(`https://github.com/acquitelol/enmity/commit/${window.enmity.version}`)}
         />
         <FormDivider />
         <FormRow
-          label='Tweak Version'
+          label='Tweak'
           leading={<FormRow.Icon source={getIDByName("ic_settings_white_24px")} />}
-          trailing={() => <Text style={styles.debugText}>{window["tweak"]?.version ?? "2.1.5" /* Anything that hasn't got this patch with version added will be 2.1.5 or lower anyway */}</Text>}
-          onPress={() => Linking.openURL(`https://github.com/enmity-mod/enmity/commit/${window.enmity.version}`)}
+          trailing={() => <Text style={styles.debugText}>{window["tweak"]?.version ?? "N/A" /* Anything that hasn't got this patch with version added will be 2.1.5 or lower anyway */}</Text>}
+          onPress={() => {
+            Toasts.open({ content: 'Copied to clipboard', source: Icons.Checkmark });
+            Clipboard.setString(window["tweak"]?.version);
+          }}
         />
         <FormDivider />
         <FormRow
-          label='Discord Version'
+          label='Discord'
           leading={<FormRow.Icon source={Icons.Discord} />}
           trailing={() => <Text style={styles.debugText}>{version}</Text>}
           onPress={() => {
@@ -172,7 +175,7 @@ export function Page({ settings }) {
         />
         <FormDivider />
         <FormRow
-          label='Bytecode Version'
+          label='Bytecode'
           leading={<FormRow.Icon source={Icons.Hammer} />}
           trailing={() => <Text style={styles.debugText}>{Runtime['Bytecode Version']}</Text>}
           onPress={() => {
@@ -182,7 +185,7 @@ export function Page({ settings }) {
         />
         <FormDivider />
         <FormRow
-          label='Hermes Version'
+          label='Hermes'
           leading={<FormRow.Icon source={Icons.Server} />}
           trailing={() => <Text style={styles.debugText}>{Runtime['OSS Release Version']}</Text>}
           onPress={() => {
