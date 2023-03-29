@@ -66,9 +66,13 @@ const styles = StyleSheet.createThemedStyleSheet({
 });
 
 export function Card({ data }: { data: Plugin | Theme }) {
-    const [enabled, setEnabled] = React.useState(plugins.includes(data.name));
+    const [enabled, setEnabled] = React.useState(data["getSettingsPanel"] 
+        ? Plugins.getEnabledPlugins().includes(data.name)
+        : Themes.getTheme() === data.name)
     const navigation = NavigationNative.useNavigation();
-    const Settings = data["getSettingsPanel"] ? data["getSettingsPanel"] as unknown as React.ComponentType : undefined;
+    const Settings = data["getSettingsPanel"] 
+        ? data["getSettingsPanel"] as unknown as React.ComponentType 
+        : undefined;
 
     return (
       <View style={[styles.container, { borderLeftColor: data?.color ?? '#524FBF' }]}>

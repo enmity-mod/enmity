@@ -66,7 +66,7 @@ export default function Page({ data }: { data: "plugin" | "theme" }) {
     };
   }, []);
 
-  const entities = search ? (entries as any[]).filter(p => {
+  const entities = search ? (entries as any[])?.filter(p => {
     if (p.name.toLowerCase().includes(search.toLowerCase())) {
       return true;
     };
