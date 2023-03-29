@@ -67,9 +67,9 @@ const styles = StyleSheet.createThemedStyleSheet({
 
 export function Card({ data }: { data: Plugin | Theme }) {
     const [enabled, setEnabled] = React.useState(data["getSettingsPanel"] 
-        ? Plugins.getEnabledPlugins().includes(data.name)
-        : Themes.getTheme() === data.name)
-    const navigation = NavigationNative.useNavigation();
+        ? Plugins?.getEnabledPlugins()?.includes(data.name)
+        : Themes?.getTheme() === data.name)
+    const navigation = NavigationNative?.useNavigation();
     const Settings = data["getSettingsPanel"] 
         ? data["getSettingsPanel"] as unknown as React.ComponentType 
         : undefined;
@@ -98,9 +98,9 @@ export function Card({ data }: { data: Plugin | Theme }) {
               {Settings && <TouchableOpacity
                 style={styles.delete}
                 onPress={(): void => {
-                  navigation.push('EnmityCustomPage', {
+                  navigation?.push('EnmityCustomPage', {
                     pageName: data.name,
-                    pagePanel: connectComponent(Settings, data.name)
+                    pagePanel: connectComponent?.(Settings, data.name)
                   });
                 }}
               >
@@ -109,26 +109,24 @@ export function Card({ data }: { data: Plugin | Theme }) {
               <TouchableOpacity
                 style={styles.delete}
                 onPress={(): void => void (data["getSettingsPanel"] 
-                    ? Plugins.uninstallPlugin(data.name) 
-                    : Themes.uninstallTheme(data.name))}
+                    ? Plugins?.uninstallPlugin(data.name) 
+                    : Themes?.uninstallTheme(data.name))}
               >
                 <Image style={styles.trashIcon} source={Assets.getIDByName('ic_trash_filled_16px')} />
               </TouchableOpacity>
               <FormSwitch
                 value={enabled}
-                onValueChange={(value): void => {
+                onValueChange={(value: boolean): void => {
                   setEnabled(value);
   
-                  const showThemeDialog = () => {
-                    Dialog.show({
-                        title: `Theme ${value ? "Enabled" : "Disabled"}`,
-                        body: `${value ? "Enabling" : "Disabling"} a theme requires a restart, would you like to restart Discord to ${value ? "apply" : "remove"} the theme?`,
-                        confirmText: 'Yes',
-                        cancelText: 'No',
-                        onConfirm: reload,
-                        onCancel: setEnabled((previous: boolean) => !previous)
-                    });
-                  }
+                  const showThemeDialog = () => Dialog.show({
+                    title: `Theme ${value ? "Enabled" : "Disabled"}`,
+                    body: `${value ? "Enabling" : "Disabling"} a theme requires a restart, would you like to restart Discord to ${value ? "apply" : "remove"} the theme?`,
+                    confirmText: 'Yes',
+                    cancelText: 'No',
+                    onConfirm: reload,
+                    onCancel: setEnabled((previous: boolean) => !previous)
+                  });
 
                   Toasts.open({
                     content: `${data.name} has been ${value ? 'enabled' : 'disabled'}.`,
@@ -136,12 +134,12 @@ export function Card({ data }: { data: Plugin | Theme }) {
   
                   if (value) {
                     data["getSettingsPanel"] 
-                        ? Plugins.enablePlugin(data.name) 
-                        : Themes.applyTheme(data.name);
+                        ? Plugins?.enablePlugin(data.name) 
+                        : Themes?.applyTheme(data.name);
                   } else {
                     data["getSettingsPanel"] 
-                        ? Plugins.disablePlugin(data.name) 
-                        : Themes.removeTheme();
+                        ? Plugins?.disablePlugin(data.name) 
+                        : Themes?.removeTheme();
                   }
 
                   !data["getSettingsPanel"] && showThemeDialog()
