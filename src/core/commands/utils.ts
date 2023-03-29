@@ -42,10 +42,11 @@ export default [
       
       const payload = content.join('\n');
 
-      if (!silent) return {
+      if (!silent) return Messages.sendMessage(message.channel.id, {
         validNonShortcutEmojis: [],
         content: payload 
-      }
+      })
+      
       sendReply(message.channel.id, payload)
       return {}
     },
