@@ -31,7 +31,7 @@ const styles = StyleSheet.createThemedStyleSheet({
 
 const Invites = getByProps('acceptInviteAndTransitionToInviteChannel');
 
-export function Page({ settings }) {
+export default function Page({ settings }) {
 
   const Icons = {
     Twitter: Assets.getIDByName('img_account_sync_twitter_white'),
