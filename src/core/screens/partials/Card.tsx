@@ -111,9 +111,17 @@ export function Card({ data }: { data: Plugin | Theme }) {
                         </TouchableOpacity>}
                         <TouchableOpacity
                             style={styles.delete}
-                            onPress={(): void => void (data["getSettingsPanel"] 
-                                ? Plugins?.uninstallPlugin(data.name) 
-                                : Themes?.uninstallTheme(data.name))}
+                            onPress={(): void => void (Dialog.show({
+                                title: "Are you sure?",
+                                body: `Are you sure you want to uninstall ${data.name}?`,
+                                confirmText: "Confirm",
+                                cancelText: "Cancel",
+                                onConfirm: () => {
+                                    data["getSettingsPanel"] 
+                                        ? Plugins?.uninstallPlugin(data.name) 
+                                        : Themes?.uninstallTheme(data.name)
+                                }
+                            }))}
                         >
                             <Image style={styles.trashIcon} source={getIDByName('ic_trash_filled_16px')} />
                         </TouchableOpacity>

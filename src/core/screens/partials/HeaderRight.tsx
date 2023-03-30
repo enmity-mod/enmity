@@ -31,14 +31,14 @@ const styles = createThemedStyleSheet?.({
     }
 });
 
-const showAlert = ({ data, url }: { data: string, url: string }) => {
-    if (!url?.endsWith(data === "plugin" ? ".js" : ".json")) url = "";
+const showAlert = ({ type, url }: { type: string, url: string }) => {
+    if (!url?.endsWith(type === "plugin" ? ".js" : ".json")) url = "";
 
     Dialog?.show({
-        title: `Install ${data}`,
+        title: `Install ${type}`,
         children: <>
             <Text style={styles.text}>
-                Paste {data} URL here:
+                Paste {type} URL here:
             </Text>
             <View style={{
                 paddingHorizontal: 0,
@@ -50,7 +50,7 @@ const showAlert = ({ data, url }: { data: string, url: string }) => {
             }}>
                 <View style={{ marginBottom: -25 }} />
                 <FormInput
-                    placeholder={data === "plugin"
+                    placeholder={type === "plugin"
                         ? "https://github.com/discord-modifications/enmity-addons/blob/main/Plugins/ShowHiddenChannels/dist/ShowHiddenChannels.js"
                         : "https://raw.githubusercontent.com/discord-modifications/enmity-addons/main/Themes/AMOLED.json"}
                     value={url ?? ""}
@@ -67,18 +67,19 @@ const showAlert = ({ data, url }: { data: string, url: string }) => {
         confirmText: "Install",
         cancelText: "Cancel",
         onConfirm: () => {
-            if (!url?.endsWith(data === "plugin" ? 'js' : 'json')) {
+            if (!url?.endsWith(type === "plugin" ? 'js' : 'json')) {
                 return Toasts.open({
-                    content: `Invalid URL for ${data}`,
+                    content: `Invalid URL for ${type}`,
                     source: getIDByName('ic_close_16px')
                 });
             }
       
             try {
-              (data === "plugin"
+              (type === "plugin"
                 ? Plugins.installPlugin
                 : Themes.installTheme)(url, ({ data, restart } /* <- restart will be undefined when its a plugin which is falsey, so this is fine */) => {
                 const res = { icon: null, text: null, restart: false };
+
                 switch (data) {
                     case 'fucky_wucky':
                         res.text = `Failed ${data} installation.`;
@@ -118,7 +119,7 @@ export default function ({ data }: { data: "plugin" | "theme" }) {
     return (
       <TouchableOpacity styles={styles.wrapper} onPress={async function() {  
         showAlert({ 
-            data, 
+            type: data, 
             url: await Clipboard?.getString?.(),
         })
       }}>
