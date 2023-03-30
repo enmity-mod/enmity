@@ -1,12 +1,13 @@
 import { Plugin } from 'enmity/managers/plugins';
 import { Theme } from 'enmity/managers/themes';
-import { NavigationNative, React, StyleSheet, ColorMap, Constants, Assets, Toasts, Dialog } from '@metro/common';
+import { NavigationNative, React, StyleSheet, ColorMap, Constants, Toasts, Dialog } from '@metro/common';
 import { FormRow, View, Text, TouchableOpacity, Image, FormSwitch } from '@components';
 import Authors from './Authors';
 import { connectComponent } from '@api/settings';
 import * as Plugins from "@managers/plugins"
 import * as Themes from "@managers/themes"
 import { reload } from '@api/native';
+import { getIDByName } from '@api/assets';
 
 const { colors } = ColorMap;
 const styles = StyleSheet.createThemedStyleSheet({
@@ -91,61 +92,67 @@ export function Card({ data }: { data: Plugin | Theme }) {
               >
                 {data.version}
               </Text>}
-              {data.authors && <Text styles={styles.version}>by</Text>}
+              {data.authors && <Text style={styles.version}>by</Text>}
               <Authors authors={data.authors} />
             </View>}
-            trailing={() => <View style={styles.actions}>
-              {Settings && <TouchableOpacity
-                style={styles.delete}
-                onPress={(): void => {
-                  navigation?.push('EnmityCustomPage', {
-                    pageName: data.name,
-                    pagePanel: connectComponent?.(Settings, data.name)
-                  });
-                }}
-              >
-                <Image style={styles.settingsIcon} source={Assets.getIDByName('settings')} />
-              </TouchableOpacity>}
-              <TouchableOpacity
-                style={styles.delete}
-                onPress={(): void => void (data["getSettingsPanel"] 
-                    ? Plugins?.uninstallPlugin(data.name) 
-                    : Themes?.uninstallTheme(data.name))}
-              >
-                <Image style={styles.trashIcon} source={Assets.getIDByName('ic_trash_filled_16px')} />
-              </TouchableOpacity>
-              <FormSwitch
-                value={enabled}
-                onValueChange={(value: boolean): void => {
-                  setEnabled(value);
-  
-                  const showThemeDialog = () => Dialog.show({
-                    title: `Theme ${value ? "Enabled" : "Disabled"}`,
-                    body: `${value ? "Enabling" : "Disabling"} a theme requires a restart, would you like to restart Discord to ${value ? "apply" : "remove"} the theme?`,
-                    confirmText: 'Yes',
-                    cancelText: 'No',
-                    onConfirm: reload,
-                    onCancel: setEnabled((previous: boolean) => !previous)
-                  });
+            trailing={() => {
+                try {
+                    return <View style={styles.actions}>
+                        {Settings && <TouchableOpacity
+                            style={styles.delete}
+                            onPress={(): void => {
+                            navigation?.push('EnmityCustomPage', {
+                                pageName: data.name,
+                                pagePanel: connectComponent?.(Settings, data.name)
+                            });
+                            }}
+                        >
+                            <Image style={styles.settingsIcon} source={getIDByName('settings')} />
+                        </TouchableOpacity>}
+                        <TouchableOpacity
+                            style={styles.delete}
+                            onPress={(): void => void (data["getSettingsPanel"] 
+                                ? Plugins?.uninstallPlugin(data.name) 
+                                : Themes?.uninstallTheme(data.name))}
+                        >
+                            <Image style={styles.trashIcon} source={getIDByName('ic_trash_filled_16px')} />
+                        </TouchableOpacity>
+                        <FormSwitch
+                            value={enabled}
+                            onValueChange={(value: boolean): void => {
+                                setEnabled(value);
+                
+                                const showThemeDialog = () => Dialog?.show({
+                                    title: `Theme ${value ? "Enabled" : "Disabled"}`,
+                                    body: `${value ? "Enabling" : "Disabling"} a theme requires a restart, would you like to restart Discord to ${value ? "apply" : "remove"} the theme?`,
+                                    confirmText: 'Yes',
+                                    cancelText: 'No',
+                                    onConfirm: reload,
+                                    onCancel: setEnabled((previous: boolean) => !previous)
+                                });
 
-                  Toasts.open({
-                    content: `${data.name} has been ${value ? 'enabled' : 'disabled'}.`,
-                  });
-  
-                  if (value) {
-                    data["getSettingsPanel"] 
-                        ? Plugins?.enablePlugin(data.name) 
-                        : Themes?.applyTheme(data.name);
-                  } else {
-                    data["getSettingsPanel"] 
-                        ? Plugins?.disablePlugin(data.name) 
-                        : Themes?.removeTheme();
-                  }
+                                Toasts.open({
+                                    content: `${data.name} has been ${value ? 'enabled' : 'disabled'}.`,
+                                });
+                
+                                if (value) {
+                                    data["getSettingsPanel"] 
+                                        ? Plugins.enablePlugin(data.name) 
+                                        : Themes.applyTheme(data.name);
+                                } else {
+                                    data["getSettingsPanel"] 
+                                        ? Plugins.disablePlugin(data.name) 
+                                        : Themes.removeTheme();
+                                }
 
-                  !data["getSettingsPanel"] && showThemeDialog()
-                }}
-              />
-            </View>}
+                                !data["getSettingsPanel"] && showThemeDialog()
+                            }}
+                        />
+                    </View>
+                } catch (e) {
+                    console.log("A " + e + " has occured")
+                }
+            }}
           />
         </View>
         <View style={styles.content}>

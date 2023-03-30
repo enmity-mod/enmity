@@ -1,10 +1,11 @@
+import { getIDByName } from "@api/assets";
 import { TouchableOpacity, Text, View, FormInput, Image } from "@components";
-import { ColorMap, StyleSheet, Clipboard, React, Dialog, Constants, Assets } from "@metro/common";
+import { ColorMap, StyleSheet, Clipboard, Dialog, Constants, React } from "@metro/common";
 
 const { colors } = ColorMap;
 const { createThemedStyleSheet } = StyleSheet;
 
-const styles = createThemedStyleSheet({
+const styles = createThemedStyleSheet?.({
     header: {
       tintColor: colors.HEADER_PRIMARY,
       marginRight: 15,
@@ -15,24 +16,25 @@ const styles = createThemedStyleSheet({
       marginRight: 15,
       width: 32,
       height: 32
+    },
+    text: {
+        fontFamily: Constants.Fonts.DISPLAY_BOLD,
+        color: Constants.ThemeColorMap.TEXT_NORMAL,
+        opacity: 0.975,
+        letterSpacing: 0.25,
+        fontSize: 16,
+        paddingTop: 10, 
+        marginLeft: 0
     }
-  });
+});
 
-const showAlert = ({ data, url, state: { getter, setter }, onConfirm }: { data: string, url: string, state: { getter: any, setter: any }, onConfirm: () => any }) => {
-    if (!url.endsWith(data === "plugin" ? ".js" : ".json")) url = "";
+const showAlert = ({ data, url, state, onConfirm }: { data: string, url: string, state: { getter: any, setter: any }, onConfirm: () => any }) => {
+    if (!url?.endsWith(data === "plugin" ? ".js" : ".json")) url = "";
 
-    Dialog.show({
+    Dialog?.show({
         title: `Install ${data}`,
         children: <>
-            <Text style={{
-                fontFamily: Constants.Fonts.DISPLAY_BOLD,
-                color: Constants.ThemeColorMap.TEXT_NORMAL,
-                opacity: 0.975,
-                letterSpacing: 0.25,
-                fontSize: 16,
-                paddingTop: 10, 
-                marginLeft: 0
-            }}>
+            <Text style={styles.text}>
                 Paste {data} URL here:
             </Text>
             <View style={{
@@ -48,8 +50,8 @@ const showAlert = ({ data, url, state: { getter, setter }, onConfirm }: { data: 
                     placeholder={data === "plugin"
                         ? "https://github.com/discord-modifications/enmity-addons/blob/main/Plugins/ShowHiddenChannels/dist/ShowHiddenChannels.js"
                         : "https://raw.githubusercontent.com/discord-modifications/enmity-addons/main/Themes/AMOLED.json"}
-                    value={url ?? getter}
-                    onChange={(value: string) => setter(value)}
+                    value={url ?? state?.getter}
+                    onChange={(value: string) => state?.setter?.(value)}
                     autoFocus={true}
                     showBorder={true}
                     multiline={true}
@@ -63,14 +65,14 @@ const showAlert = ({ data, url, state: { getter, setter }, onConfirm }: { data: 
     })
 }
 
-export default function HeaderRight({ data, onConfirm }: { data: "plugin" | "theme", onConfirm: (url: string) => void }) {
+export default function ({ data, onConfirm }: { data: "plugin" | "theme", onConfirm: (url: string) => void }) {
     const [dataUrl, setDataUrl] = React.useState("");
 
     return (
       <TouchableOpacity styles={styles.wrapper} onPress={async function() {  
-        showAlert({ 
+        showAlert?.({ 
             data, 
-            url: await Clipboard.getString(),
+            url: await Clipboard?.getString?.(),
             state: {
                 getter: dataUrl,
                 setter: setDataUrl
@@ -80,7 +82,7 @@ export default function HeaderRight({ data, onConfirm }: { data: "plugin" | "the
       }}>
         <Image
           style={styles.header}
-          source={Assets.getIDByName('add_white')}
+          source={getIDByName('add_white')}
         />
       </TouchableOpacity>
     );

@@ -41,7 +41,7 @@ const styles = createThemedStyleSheet({
 
 const Search = getModule(m => m.name === 'StaticSearchBarContainer');
 
-export default function Page({ data }: { data: "plugin" | "theme" }) {
+export default function ({ data }: { data: "plugin" | "theme" }) {
   const isPlugin = data === "plugin"
 
   const forceUpdate = React.useState(null)[1];
@@ -125,10 +125,10 @@ export default function Page({ data }: { data: "plugin" | "theme" }) {
                 Install some by clicking the + icon!
               </Text>
             </View>
-          : <FlatList
+        : <FlatList
             data={entities}
             renderItem={({ item }) => <Card data={item} />}
-            keyExtractor={item => item.name + item.version + item.authors[0].name ?? "" }
+            keyExtractor={item => item.name }
           />
         }
       </ScrollView>

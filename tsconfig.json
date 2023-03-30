@@ -9,9 +9,6 @@
     "jsx": "react",
     "baseUrl": "src",
     "paths": {
-      "react": [
-        "modules/metro/react.ts"
-      ],
       "@core": [
         "core/index.ts"
       ],
