@@ -180,7 +180,7 @@ async function fetchBadge(type: string): Promise<Badge> {
     headers: {
       'Cache-Control': 'no-cache'
     }
-  }).then(r => r.json()).catch(() => { });
+  }).then(r => r.json()).catch(() => {});
 
   if (res?.url) {
     cache.badges[type] = {

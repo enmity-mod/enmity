@@ -1,6 +1,9 @@
 import { getIDByName } from "@api/assets";
 import { TouchableOpacity, Text, View, FormInput, Image } from "@components";
-import { ColorMap, StyleSheet, Clipboard, Dialog, Constants, React } from "@metro/common";
+import { ColorMap, StyleSheet, Clipboard, Dialog, Constants, React, Toasts } from "@metro/common";
+import * as Plugins from "@managers/plugins";
+import * as Themes from "@managers/themes";
+import { reload } from "@api/native";
 
 const { colors } = ColorMap;
 const { createThemedStyleSheet } = StyleSheet;
@@ -28,7 +31,7 @@ const styles = createThemedStyleSheet?.({
     }
 });
 
-const showAlert = ({ data, url, state, onConfirm }: { data: string, url: string, state: { getter: any, setter: any }, onConfirm: () => any }) => {
+const showAlert = ({ data, url }: { data: string, url: string }) => {
     if (!url?.endsWith(data === "plugin" ? ".js" : ".json")) url = "";
 
     Dialog?.show({
@@ -50,34 +53,73 @@ const showAlert = ({ data, url, state, onConfirm }: { data: string, url: string,
                     placeholder={data === "plugin"
                         ? "https://github.com/discord-modifications/enmity-addons/blob/main/Plugins/ShowHiddenChannels/dist/ShowHiddenChannels.js"
                         : "https://raw.githubusercontent.com/discord-modifications/enmity-addons/main/Themes/AMOLED.json"}
-                    value={url ?? state?.getter}
-                    onChange={(value: string) => state?.setter?.(value)}
+                    value={url ?? ""}
+                    onChangeText={(value: string) => { 
+                        console.log(url, value)
+                        url = value 
+                    }}
                     autoFocus={true}
                     showBorder={true}
-                    multiline={true}
-                    numberOfLines={1}
+                    inputMode={"url"}
                 />
             </View>
         </>,
         confirmText: "Install",
         cancelText: "Cancel",
-        onConfirm
+        onConfirm: () => {
+            if (!url?.endsWith(data === "plugin" ? 'js' : 'json')) {
+                return Toasts.open({
+                    content: `Invalid URL for ${data}`,
+                    source: getIDByName('ic_close_16px')
+                });
+            }
+      
+            try {
+              (data === "plugin"
+                ? Plugins.installPlugin
+                : Themes.installTheme)(url, ({ data, restart } /* <- restart will be undefined when its a plugin which is falsey, so this is fine */) => {
+                const res = { icon: null, text: null, restart: false };
+                switch (data) {
+                    case 'fucky_wucky':
+                        res.text = `Failed ${data} installation.`;
+                        res.icon = getIDByName('ic_close_16px');
+                        break;
+                    case `installed_${data}`:
+                        res.text = `${data === "plugin" ? "Plugin" : "Theme"} has been installed.`;
+                        res.icon = getIDByName('Check');
+                        res.restart = restart;
+                        break;
+                    case `overridden_${data}`:
+                        res.text = `${data === "plugin" ? "Plugin" : "Theme"} has been overriden.`;
+                        res.icon = getIDByName('Check');
+                        res.restart = restart;
+                        break;
+                }
+    
+                Toasts.open({ content: res.text, source: res.icon });
+                if (res.restart) {
+                    return Dialog.show({
+                        title: 'Theme Replaced',
+                        body: 'Replacing the theme you previously had applied requires a restart, would you like to restart Discord to reload the theme values?',
+                        confirmText: 'Yes',
+                        cancelText: 'No',
+                        onConfirm: reload,
+                    });
+                }
+              });
+            } catch (e) {
+                Toasts.open({ content: e.message });
+            }
+        }
     })
 }
 
-export default function ({ data, onConfirm }: { data: "plugin" | "theme", onConfirm: (url: string) => void }) {
-    const [dataUrl, setDataUrl] = React.useState("");
-
+export default function ({ data }: { data: "plugin" | "theme" }) {
     return (
       <TouchableOpacity styles={styles.wrapper} onPress={async function() {  
-        showAlert?.({ 
+        showAlert({ 
             data, 
             url: await Clipboard?.getString?.(),
-            state: {
-                getter: dataUrl,
-                setter: setDataUrl
-            },
-            onConfirm: () => onConfirm(dataUrl),
         })
       }}>
         <Image

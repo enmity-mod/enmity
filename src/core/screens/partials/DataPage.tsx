@@ -1,11 +1,10 @@
 import { RefreshControl, ScrollView, View, Image, Text, FlatList } from "@components";
 import { getModule } from "@metro";
-import { Assets, ColorMap, Constants, React, StyleSheet } from "@metro/common";
-import { Plugin } from "enmity/managers/plugins";
-import { Theme } from "enmity/managers/themes";
+import { ColorMap, Constants, React, StyleSheet } from "@metro/common";
 import * as Plugins from "@managers/plugins";
 import * as Themes from "@managers/themes";
 import { Card } from "./Card";
+import { getIDByName } from "@api/assets";
 
 const { colors } = ColorMap;
 const { createThemedStyleSheet } = StyleSheet;
@@ -107,19 +106,19 @@ export default function ({ data }: { data: "plugin" | "theme" }) {
         {!entities.length ?
           search ?
             <View style={styles.notFound}>
-              <Image source={Assets.getIDByName('img_no_results_dark')} />
+              <Image source={getIDByName('img_no_results_dark')} />
               <Text style={styles.notFoundText}>
                 We searched far and wide.
               </Text>
-              <Text style={{ ...styles.notFoundText, marginTop: 0 }}>
+              <Text style={[ styles.notFoundText, { marginTop: 0 }]}>
                 Unfortunately, no results were found.
               </Text>
             </View>
             :
             <View style={styles.notFound}>
-              <Image source={Assets.getIDByName('img_connection_empty_dark')} />
+              <Image source={getIDByName('img_connection_empty_dark')} />
               <Text style={styles.notFoundText}>
-                You don't have any plugins.
+                You don't have any {data}s installed.
               </Text>
               <Text style={{ ...styles.notFoundText, marginTop: 0 }}>
                 Install some by clicking the + icon!
@@ -128,7 +127,7 @@ export default function ({ data }: { data: "plugin" | "theme" }) {
         : <FlatList
             data={entities}
             renderItem={({ item }) => <Card data={item} />}
-            keyExtractor={item => item.name }
+            keyExtractor={(item: any) => item.name + item?.version + item.authors?.reduce((acc: string, cur: { name: string }) => acc + cur.name, "")}
           />
         }
       </ScrollView>

@@ -4,11 +4,11 @@ const overrides = {
   useMemo: factory => factory(),
   useState: initialState => [initialState, () => void 0],
   useReducer: initialValue => [initialValue, () => void 0],
-  useEffect: () => { },
-  useLayoutEffect: () => { },
+  useEffect: () => {},
+  useLayoutEffect: () => {},
   useRef: () => ({ current: null }),
   useCallback: callback => callback,
-  useImperativeHandle: () => { },
+  useImperativeHandle: () => {},
   useContext: (ctx) => ctx._currentValue
 };
 

@@ -37,14 +37,14 @@ export default function () {
 };
 
 function patchMetadata(metadata: any): void {
-  Patcher.instead(metadata, 'trackWithMetadata', () => { });
-  Patcher.instead(metadata, 'trackWithGroupMetadata', () => { });
+  Patcher.instead(metadata, 'trackWithMetadata', () => {});
+  Patcher.instead(metadata, 'trackWithGroupMetadata', () => {});
 }
 
 function patchAnalytics(analytics: any): void {
-  Patcher.instead(analytics.AnalyticsActionHandlers, 'handleTrack', () => { });
+  Patcher.instead(analytics.AnalyticsActionHandlers, 'handleTrack', () => {});
 }
 
 function patchProperties(properties: any): void {
-  Patcher.instead(properties, 'track', () => { });
+  Patcher.instead(properties, 'track', () => {});
 }

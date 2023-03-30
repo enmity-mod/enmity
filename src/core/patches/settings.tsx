@@ -34,92 +34,13 @@ function patchScreens() {
         key: 'EnmityPlugins',
         title: 'Plugins',
         render: () => <Page data={"plugin"} />,
-        headerRight: () => <HeaderRight
-          data={"plugin"}
-          onConfirm={(url: string) => {
-            if (!url.endsWith('js')) {
-              return Toasts.open({
-                content: 'Invalid URL for plugin',
-                source: Assets.getIDByName('ic_close_16px')
-              });
-            }
-
-            try {
-              Plugins.installPlugin(url, ({ data }) => {
-                const res = { icon: null, text: null };
-                switch (data) {
-                  case 'fucky_wucky':
-                    res.text = 'Failed plugin installation.';
-                    res.icon = Assets.getIDByName('ic_close_16px');
-                    break;
-                  case 'installed_plugin':
-                    res.text = 'Plugin has been installed.';
-                    res.icon = Assets.getIDByName('Check');
-                    break;
-                  case 'overridden_plugin':
-                    res.text = 'Plugin has been overriden.';
-                    res.icon = Assets.getIDByName('Check');
-                    break;
-                }
-    
-                Toasts.open({ content: res.text, source: res.icon });
-              });
-            } catch (e) {
-              Toasts.open({ content: e.message });
-            }
-          }}
-        />
+        headerRight: () => <HeaderRight data={"plugin"} />
       },
       EnmityThemes: {
         key: 'EnmityThemes',
         title: 'Themes',
         render: () => <Page data={"theme"} />,
-        headerRight: () => <HeaderRight 
-          data={"theme"}
-          onConfirm={(url: string) => {
-            if (!url.endsWith('json')) {
-              return Toasts.open({
-                content: 'Invalid URL for theme',
-                source: Assets.getIDByName('ic_close_16px')
-              });
-            }
-  
-            try {
-              Themes.installTheme(url, ({ data, restart }) => {
-                const res = { icon: null, text: null, restart: false };
-                switch (data) {
-                  case 'fucky_wucky':
-                    res.text = 'Failed theme installation.';
-                    res.icon = Assets.getIDByName('ic_close_16px');
-                    break;
-                  case 'installed_theme':
-                    res.text = 'Theme has been installed.';
-                    res.icon = Assets.getIDByName('Check');
-                    res.restart = restart;
-                    break;
-                  case 'overridden_theme':
-                    res.text = 'Theme has been overriden.';
-                    res.icon = Assets.getIDByName('Check');
-                    res.restart = restart;
-                    break;
-                }
-  
-                Toasts.open({ content: res.text, source: res.icon });
-                if (res.restart) {
-                  return Dialog.show({
-                    title: 'Theme Replaced',
-                    body: 'Replacing the theme you previously had applied requires a restart, would you like to restart Discord to reload the theme values?',
-                    confirmText: 'Yes',
-                    cancelText: 'No',
-                    onConfirm: reload,
-                  });
-                }
-              });
-            } catch (e) {
-              Toasts.open({ content: e.message });
-            }
-          }}        
-        />
+        headerRight: () => <HeaderRight data={"theme"} />
       },
       EnmityCustomPage: {
         key: 'EnmityCustomPage',
