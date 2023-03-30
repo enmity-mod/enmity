@@ -54,8 +54,7 @@ const showAlert = ({ type, url }: { type: string, url: string }) => {
                         ? "https://github.com/discord-modifications/enmity-addons/blob/main/Plugins/ShowHiddenChannels/dist/ShowHiddenChannels.js"
                         : "https://raw.githubusercontent.com/discord-modifications/enmity-addons/main/Themes/AMOLED.json"}
                     value={url ?? ""}
-                    onChangeText={(value: string) => { 
-                        console.log(url, value)
+                    onChangeText={(value: string) => {
                         url = value 
                     }}
                     autoFocus={true}
