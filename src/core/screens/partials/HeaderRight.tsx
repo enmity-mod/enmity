@@ -81,16 +81,16 @@ const showAlert = ({ type, url }: { type: string, url: string }) => {
 
                 switch (data) {
                     case 'fucky_wucky':
-                        res.text = `Failed ${data} installation.`;
+                        res.text = `Failed ${type} installation.`;
                         res.icon = getIDByName('ic_close_16px');
                         break;
-                    case `installed_${data}`:
-                        res.text = `${data === "plugin" ? "Plugin" : "Theme"} has been installed.`;
+                    case `installed_${type}`:
+                        res.text = `${type === "plugin" ? "Plugin" : "Theme"} has been installed.`;
                         res.icon = getIDByName('Check');
                         res.restart = restart;
                         break;
-                    case `overridden_${data}`:
-                        res.text = `${data === "plugin" ? "Plugin" : "Theme"} has been overriden.`;
+                    case `overridden_${type}`:
+                        res.text = `${type === "plugin" ? "Plugin" : "Theme"} has been overriden.`;
                         res.icon = getIDByName('Check');
                         res.restart = restart;
                         break;
