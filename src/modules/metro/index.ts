@@ -62,70 +62,73 @@ export const filters = {
   }
 };
 
-for (const id in modules) {
-  const mdl = modules[id].publicModule.exports;
-  if (!mdl || mdl === window || mdl['ihateproxies'] === null) {
-    blacklist.push(id);
-    continue;
-  }
+// this is a self invoked function so that i can use return lol
+(() => {
+  try {
+    // this module cannot be found through looping modules anymore, through trial and error apparently this module appears here when found with the filters at this point, which is the same point as where it was done with the loop :shrug:
+    // this works fine on 41968 and higher. loading this module and later than this will make it not fully theme everything, depending on how much later you do it.
+    const mdl = getByProps("SemanticColor", "RawColor");
+    const currentThemeName = window['themes']?.theme ?? '';
+    const themes = window['themes']?.list ?? [];
+    const currentTheme = themes?.find(t => t.name === currentThemeName);
+  
+    if (!currentTheme) return;
+    currentTheme.colours ??= currentTheme["colors"];
+  
+    // patch old themes into new format
+    if (currentTheme.spec === 1 || !currentTheme.spec) {
+      if (currentTheme.theme_color_map) {
+        currentTheme.semanticColors = currentTheme.theme_color_map
 
-  if (mdl["SemanticColor"] && mdl["RawColor"]) {
-    try {
-      const currentThemeName = window['themes']?.theme ?? '';
-      const themes = window['themes']?.list ?? [];
-      const currentTheme: Theme = themes?.find(t => t.name === currentThemeName);
+        currentTheme.semanticColors.CHAT_BACKGROUND = currentTheme?.background?.url
+          ? ["transparent", "transparent"]
+          : currentTheme.theme_color_map.BACKGROUND_PRIMARY
+      };
+  
+      if (currentTheme.colours) {
+        const keys = {
+          "PRIMARY_DARK": "PRIMARY",
+          "PRIMARY_LIGHT": "PRIMARY",
+          "BRAND_NEW": "BRAND",
+          "STATUS_": ""
+        }
 
-      if (!currentTheme) break;
-      currentTheme.colours ??= currentTheme["colors"];
-
-      if (currentTheme.spec === 1 || !currentTheme.spec) {
-        if (currentTheme.theme_color_map) {
-          currentTheme.semanticColors = currentTheme.theme_color_map
-          currentTheme.semanticColors.CHAT_BACKGROUND = currentTheme?.background?.url
-            ? ["transparent", "transparent"]
-            : currentTheme.theme_color_map.BACKGROUND_PRIMARY
-        };
-
-        if (currentTheme.colours) {
-          currentTheme.rawColors = currentTheme.colours
-          Object.entries(currentTheme.colours).forEach(([key, value]) => {
-            if (key.startsWith("PRIMARY_DARK")) currentTheme.rawColors[key.replace("PRIMARY_DARK", "PRIMARY")] = value
-            if (key.startsWith("PRIMARY_LIGHT")) currentTheme.rawColors[key.replace("PRIMARY_LIGHT", "PRIMARY")] = value
-            if (key.startsWith("BRAND_NEW")) currentTheme.rawColors[key.replace("BRAND_NEW", "BRAND")] = value
-            if (key.startsWith("STATUS")) currentTheme.rawColors[key.replace("STATUS_", "")] = value
+        currentTheme.rawColors = currentTheme.colours
+        Object.entries(currentTheme.colours).forEach(([key, value]) => {
+          Object.entries(keys).forEach(([k, v]) => {
+            if (key.startsWith(k)) currentTheme.rawColors[key.replace(k, v)] = value;
           })
-        };
-      }
-
-      if (currentTheme.rawColors) {
-        Object.entries(currentTheme.rawColors).forEach(([key, value]) => {
-          mdl["RawColor"][key] = value;
-          mdl["default"]["unsafe_rawColors"][key] = value;
         })
-      }
-
-      if (currentTheme.semanticColors) {
-        const originalResolveSemanticColor = mdl["default"]["meta"]["resolveSemanticColor"];
-        mdl["default"]["meta"]["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
-          const key = ref[Object.getOwnPropertySymbols(ref)[0]];
-  
-          if (currentTheme.semanticColors[key]) {
-            const index = { dark: 0, light: 1, amoled: 2 }[theme.toLowerCase()] || 0;
-            const colorOrNone = currentTheme.semanticColors[key][index];
-            if (colorOrNone) return colorOrNone;
-          }
-  
-          return originalResolveSemanticColor(theme, ref);
-        };
-      }
-      
-      break;
-    } catch(e) {
-      const err = new Error(`[Enmity] ${e}`);
-      console.error(err.stack);
+      };
     }
+  
+    if (currentTheme.rawColors) {
+      if (!currentTheme.rawColors?.PRIMARY_660) currentTheme.rawColors.PRIMARY_660 = currentTheme?.semanticColors?.BACKGROUND_PRIMARY[0]
+      Object.entries(currentTheme.rawColors).forEach(([key, value]) => {
+        mdl["RawColor"][key] = value;
+        mdl["default"]["unsafe_rawColors"][key] = value;
+      })
+    }
+  
+    if (currentTheme.semanticColors) {
+      const originalResolveSemanticColor = mdl["default"]["meta"]["resolveSemanticColor"];
+      mdl["default"]["meta"]["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
+        const key = ref[Object.getOwnPropertySymbols(ref)[0]];
+  
+        if (currentTheme.semanticColors[key]) {
+          const index = { dark: 0, light: 1, amoled: 2 }[theme.toLowerCase()] || 0;
+          const colorOrNone = currentTheme.semanticColors[key][index];
+          if (colorOrNone) return colorOrNone;
+        }
+  
+        return originalResolveSemanticColor(theme, ref);
+      };
+    }
+  } catch(e) {
+    const err = new Error(`[Enmity] ${e}`);
+    console.error(err.stack);
   }
-}
+})()
 
 // Export common modules
 const getters = [];
