@@ -1,6 +1,6 @@
 import { FormArrow, FormDivider, FormRow, FormSection } from '@components';
-import { connectComponent } from '@api/settings';
 import { Locale, NavigationNative, Scenes } from '@metro/common';
+import { connectComponent } from '@api/settings';
 import { findInReactTree } from '@utilities';
 import * as Screens from '@screens/index';
 import { getByName } from '@metro';

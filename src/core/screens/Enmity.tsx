@@ -6,6 +6,7 @@ import { listThemes } from '@managers/themes';
 import ThemeIcon from './partials/PluginIcon';
 import PluginIcon from './partials/ThemeIcon';
 import { reload, version } from '@api/native';
+import { Invite } from '@data/constants';
 import * as Assets from '@api/assets';
 import { getByProps } from '@metro';
 import React from 'react';
@@ -53,7 +54,7 @@ export function Page({ settings }) {
           leading={<FormRow.Icon source={Icons.Discord} />}
           trailing={FormRow.Arrow}
           onPress={() => Invites.acceptInviteAndTransitionToInviteChannel({
-            inviteKey: 'enmityapp',
+            inviteKey: Invite,
             context: {location: 'Invite Button Embed'},
             callback: () => {}
           })}
