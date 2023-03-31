@@ -40,8 +40,8 @@ const styles = createThemedStyleSheet({
 
 const Search = getModule(m => m.name === 'StaticSearchBarContainer');
 
-export default function ({ data }: { data: "plugin" | "theme" }) {
-  const isPlugin = data === "plugin"
+export default function ({ type }: { type: "plugin" | "theme" }) {
+  const isPlugin = type === "plugin"
 
   const forceUpdate = React.useState(null)[1];
   const [entries, setEntries] = React.useState(
@@ -118,7 +118,7 @@ export default function ({ data }: { data: "plugin" | "theme" }) {
             <View style={styles.notFound}>
               <Image source={getIDByName('img_connection_empty_dark')} />
               <Text style={styles.notFoundText}>
-                You don't have any {data}s installed.
+                You don't have any {type}s installed.
               </Text>
               <Text style={{ ...styles.notFoundText, marginTop: 0 }}>
                 Install some by clicking the + icon!
@@ -126,7 +126,7 @@ export default function ({ data }: { data: "plugin" | "theme" }) {
             </View>
         : <FlatList
             data={entities}
-            renderItem={({ item }) => <Card data={item} />}
+            renderItem={({ item }) => <Card data={item} type={type} />}
             keyExtractor={(item: any) => item.name + item?.version + item.authors?.reduce((acc: string, cur: { name: string }) => acc + cur.name, "")}
           />
         }

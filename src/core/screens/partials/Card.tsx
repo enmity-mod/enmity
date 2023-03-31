@@ -66,12 +66,12 @@ const styles = StyleSheet.createThemedStyleSheet({
     }
 });
 
-export function Card({ data }: { data: Plugin | Theme }) {
-    const [enabled, setEnabled] = React.useState(data["getSettingsPanel"] 
+export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "theme" }) {
+    const [enabled, setEnabled] = React.useState(type === "plugin"
         ? Plugins?.getEnabledPlugins()?.includes(data.name)
         : Themes?.getTheme() === data.name)
     const navigation = NavigationNative?.useNavigation();
-    const Settings = data["getSettingsPanel"] 
+    const Settings = type === "plugin"
         ? data["getSettingsPanel"] as unknown as React.ComponentType 
         : undefined;
 
@@ -101,10 +101,10 @@ export function Card({ data }: { data: Plugin | Theme }) {
                         {Settings && <TouchableOpacity
                             style={styles.delete}
                             onPress={(): void => {
-                            navigation?.push('EnmityCustomPage', {
-                                pageName: data.name,
-                                pagePanel: connectComponent?.(Settings, data.name)
-                            });
+                                navigation?.push('EnmityCustomPage', {
+                                    pageName: data.name,
+                                    pagePanel: connectComponent?.(Settings, data.name)
+                                });
                             }}
                         >
                             <Image style={styles.settingsIcon} source={getIDByName('settings')} />
@@ -116,11 +116,9 @@ export function Card({ data }: { data: Plugin | Theme }) {
                                 body: `Are you sure you want to uninstall ${data.name}?`,
                                 confirmText: "Confirm",
                                 cancelText: "Cancel",
-                                onConfirm: () => {
-                                    data["getSettingsPanel"] 
-                                        ? Plugins?.uninstallPlugin(data.name) 
-                                        : Themes?.uninstallTheme(data.name)
-                                }
+                                onConfirm: () => type === "plugin"
+                                    ? Plugins?.uninstallPlugin(data.name) 
+                                    : Themes?.uninstallTheme(data.name)
                             }))}
                         >
                             <Image style={styles.trashIcon} source={getIDByName('ic_trash_filled_16px')} />
@@ -129,36 +127,33 @@ export function Card({ data }: { data: Plugin | Theme }) {
                             value={enabled}
                             onValueChange={(value: boolean): void => {
                                 setEnabled(value);
-                
-                                const showThemeDialog = () => Dialog?.show({
-                                    title: `Theme ${value ? "Enabled" : "Disabled"}`,
-                                    body: `${value ? "Enabling" : "Disabling"} a theme requires a restart, would you like to restart Discord to ${value ? "apply" : "remove"} the theme?`,
-                                    confirmText: 'Yes',
-                                    cancelText: 'No',
-                                    onConfirm: reload,
-                                    onCancel: setEnabled((previous: boolean) => !previous)
-                                });
-
                                 Toasts.open({
                                     content: `${data.name} has been ${value ? 'enabled' : 'disabled'}.`,
                                 });
                 
                                 if (value) {
-                                    data["getSettingsPanel"] 
+                                    type === "plugin"
                                         ? Plugins.enablePlugin(data.name) 
                                         : Themes.applyTheme(data.name);
                                 } else {
-                                    data["getSettingsPanel"] 
+                                    type === "plugin"
                                         ? Plugins.disablePlugin(data.name) 
                                         : Themes.removeTheme();
                                 }
 
-                                !data["getSettingsPanel"] && showThemeDialog()
+                                type === "theme" && Dialog?.show({
+                                    title: `Theme ${value ? "Enabled" : "Disabled"}`,
+                                    body: `${value ? "Enabling" : "Disabling"} a theme requires a restart, would you like to restart Discord to ${value ? "apply" : "remove"} the theme?`,
+                                    confirmText: 'Restart',
+                                    cancelText: 'Later',
+                                    onConfirm: reload,
+                                    onCancel: () => setEnabled((previous: boolean) => !previous)
+                                });
                             }}
                         />
                     </View>
                 } catch (e) {
-                    console.log("A " + e + " has occured")
+                    console.log("An exception has been raised: " + e);
                 }
             }}
           />

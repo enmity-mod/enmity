@@ -33,14 +33,14 @@ function patchScreens() {
       EnmityPlugins: {
         key: 'EnmityPlugins',
         title: 'Plugins',
-        render: () => <Page data={"plugin"} />,
-        headerRight: () => <HeaderRight data={"plugin"} />
+        render: () => <Page type={"plugin"} />,
+        headerRight: () => <HeaderRight type={"plugin"} />
       },
       EnmityThemes: {
         key: 'EnmityThemes',
         title: 'Themes',
-        render: () => <Page data={"theme"} />,
-        headerRight: () => <HeaderRight data={"theme"} />
+        render: () => <Page type={"theme"} />,
+        headerRight: () => <HeaderRight type={"theme"} />
       },
       EnmityCustomPage: {
         key: 'EnmityCustomPage',
