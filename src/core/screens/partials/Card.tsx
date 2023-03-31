@@ -126,6 +126,8 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                         <FormSwitch
                             value={enabled}
                             onValueChange={(value: boolean): void => {
+                                const oldTheme = Themes.getTheme();
+
                                 setEnabled(value);
                                 Toasts.open({
                                     content: `${data.name} has been ${value ? 'enabled' : 'disabled'}.`,
@@ -147,7 +149,10 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                                     confirmText: 'Restart',
                                     cancelText: 'Later',
                                     onConfirm: reload,
-                                    onCancel: () => setEnabled((previous: boolean) => !previous)
+                                    onCancel: () => {
+                                        setEnabled((previous: boolean) => !previous)
+                                        Themes.applyTheme(oldTheme);
+                                    }
                                 });
                             }}
                         />
