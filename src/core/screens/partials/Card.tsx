@@ -98,10 +98,10 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
             trailing={() => {
                 try {
                     return <View style={styles.actions}>
-                        {Settings && <TouchableOpacity
+                        {Settings && enabled && <TouchableOpacity
                             style={styles.delete}
                             onPress={(): void => {
-                                navigation?.push('EnmityCustomPage', {
+                                navigation?.push?.('EnmityCustomPage', {
                                     pageName: data.name,
                                     pagePanel: connectComponent?.(Settings, data.name)
                                 });

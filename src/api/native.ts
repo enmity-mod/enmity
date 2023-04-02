@@ -1,6 +1,7 @@
 import { Native } from '@metro/common';
 
 export const infoDictionary: any = Native.InfoDictionaryManager ?? Native.RTNClientInfoManager
+
 export const bundle: string = infoDictionary.Identifier;
 export const reload: () => void = Native.BundleUpdaterManager.reload;
 export const version: string = Native.InfoDictionaryManager.Version;
