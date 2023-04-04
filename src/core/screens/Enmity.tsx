@@ -156,10 +156,10 @@ export default function Page({ settings }) {
         <FormRow
           label='Tweak'
           leading={<FormRow.Icon source={getIDByName("ic_settings_white_24px")} />}
-          trailing={() => <Text style={styles.debugText}>{window["tweak"]?.version ?? "N/A" /* Anything that hasn't got this patch with version added will be 2.1.5 or lower anyway */}</Text>}
+          trailing={() => <Text style={styles.debugText}>{window["tweak"]?.version ?? "N/A"} ({window["tweak"]?.type ?? "N/A"})</Text>}
           onPress={() => {
             Toasts.open({ content: 'Copied to clipboard', source: Icons.Checkmark });
-            Clipboard.setString(window["tweak"]?.version);
+            Clipboard.setString(JSON.stringify(window["tweak"], null, 2));
           }}
         />
         <FormDivider />

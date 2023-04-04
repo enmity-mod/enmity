@@ -9,6 +9,7 @@ declare global {
   }
   var tweak: {
     version: string | undefined
+    type: "Regular" | "k2genmity" | string | undefined
   }
 }
 
