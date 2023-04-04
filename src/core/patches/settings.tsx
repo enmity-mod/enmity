@@ -1,9 +1,7 @@
 import { FormArrow, FormDivider, FormRow, FormSection } from '@components';
 import { connectComponent } from '@api/settings';
-import { Locale, NavigationNative, Scenes, React, Toasts, Assets, Dialog } from '@metro/common';
+import { Locale, NavigationNative, Scenes, React } from '@metro/common';
 import { findInReactTree } from '@utilities';
-import * as Plugins from "@managers/plugins"
-import * as Themes from "@managers/themes"
 import { getByName } from '@metro';
 import { create } from '@patcher';
 
@@ -68,9 +66,8 @@ function patchSettings() {
   const unpatch = Patcher.after(Settings, 'default', (_, __, ret) => {
     const Overview = findInReactTree(ret, m => m.type?.name === 'UserSettingsOverview');
 
-    Patcher.after(Overview.type.prototype, 'render', ({ props: { navigation } }, __, res) => {
-      const { children } = res.props;
-
+    Patcher.after(Overview.type.prototype, 'render', ({ props: { navigation } }, __, { props: { children: res }}) => {
+      const { children } = findInReactTree(res, r => r.children[1].type === FormSection);
       const searchable = [Locale.Messages.BILLING_SETTINGS, Locale.Messages.PREMIUM_SETTINGS];
       const index = children.findIndex(c => searchable.includes(c.props.title));
 
