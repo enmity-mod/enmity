@@ -27,10 +27,8 @@ export default function () {
   const NewBadges = getByProps("ProfileBadgesOld");
 
   const patchBadges = ({ res, func }) => {
-    const unpatch = Patcher.after(res, func, (_, [{ user, isEnmity, style, ...rest }], res) => {
-      unpatch()
-
-      if (isEnmity) return;
+    Patcher.after(res, func, (_, [{ user, isEnmity, style, ...rest }], res) => {
+      if (isEnmity) return res;
       const [badges, setBadges] = React.useState([]);
 
       React.useEffect(() => {
