@@ -60,11 +60,6 @@ export default function () {
           isEnmity: true,
           ...rest
         });
-
-        res.props.children = [];
-        if (res.props.badges) {
-          res.props.badges = [];
-        }
       } else if (!res) {
         return payload;
       }
@@ -138,8 +133,8 @@ const makeBadge = (badge, style): JSX.Element => {
           : 24
         : 20}
       margin={Array.isArray(style)
-        ? 2
-        : 6}
+        ? 4
+        : 8}
     />
   </View>;
 };
@@ -164,7 +159,8 @@ const Badge = ({ type, size, margin }: { type: string; size: number; margin: num
       width: size,
       height: size,
       resizeMode: 'contain',
-      marginHorizontal: margin
+      marginLeft: margin,
+      marginRight: margin + 1
     }
   };
 
