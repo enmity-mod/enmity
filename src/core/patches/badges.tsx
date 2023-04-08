@@ -1,10 +1,10 @@
 import { View, Image, TouchableOpacity } from '@components';
 import { BadgesDomain, Times } from '@data/constants';
 import { Toasts, Theme, React } from '@metro/common';
-import { wrapInHooks } from '@utilities';
-import { version } from '@api/native';
-import { getByName } from '@metro';
+import { build, version } from '@api/native';
+import { getByName, getByProps } from '@metro';
 import { create } from '@patcher';
+import { wrapInHooks } from '@utilities';
 
 interface Badge {
   name: string;
@@ -23,10 +23,13 @@ const cache = {
 };
 
 export default function () {
-  const Badges = getByName('ProfileBadges', { all: true, default: false });
+  const OldBadges = getByName('ProfileBadges', { all: true, default: false });
+  const NewBadges = getByProps("ProfileBadgesOld");
 
-  for (const ProfileBadges of Badges) {
-    Patcher.after(ProfileBadges, 'default', (_, [{ user, isEnmity, style, ...rest }], res) => {
+  const patchBadges = ({ res, func }) => {
+    const unpatch = Patcher.after(res, func, (_, [{ user, isEnmity, style, ...rest }], res) => {
+      unpatch()
+
       if (isEnmity) return;
       const [badges, setBadges] = React.useState([]);
 
@@ -42,7 +45,7 @@ export default function () {
 
       if (!badges.length) return res;
       if (!res && Number(version) >= 151) {
-        res = wrapInHooks(ProfileBadges.default)({
+        res = wrapInHooks(res.type)({
           user: new Proxy({}, {
             get: (_, prop) => {
               if (prop === 'flags') {
@@ -75,8 +78,20 @@ export default function () {
       }
 
       return res;
+    })
+  };
+
+  if (build >= "42235") {
+    Patcher.after(NewBadges, 'default', (_, __, res) => {
+      patchBadges({ res, func: "type" })
     });
+
+    return Patcher.unpatchAll;
   }
+
+  for (const ProfileBadges of OldBadges) {
+    patchBadges({ res: ProfileBadges, func: "default" })
+  };
 
   return Patcher.unpatchAll;
 };
