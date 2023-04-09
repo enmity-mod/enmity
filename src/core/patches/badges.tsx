@@ -30,6 +30,8 @@ export default function () {
     Patcher.after(NewBadges, 'default', (_, __, res) => {
       const unpatch = Patcher.after(res, "type", (_, [{ user, isEnmity, style, ...rest }], res) => {
         if (isEnmity) return;
+
+        unpatch();
         const [badges, setBadges] = React.useState([]);
 
         React.useEffect(() => {
@@ -75,8 +77,6 @@ export default function () {
         } else {
           res.props.children.push(...payload);
         }
-
-        return res;
       });
     });
 
@@ -131,8 +131,6 @@ export default function () {
       } else {
         res.props.children.push(...payload);
       }
-
-      return res;
     })
   };
 
