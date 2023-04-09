@@ -44,7 +44,7 @@ export default function () {
 
         const payload = badges.map(makeBadge);
 
-        if (!badges.length) return res;
+        if (!badges.length) return;
         if (!res && Number(version) >= 151) {
           res = wrapInHooks(NewBadges.default)({
             user: new Proxy({}, {
@@ -131,6 +131,8 @@ export default function () {
       } else {
         res.props.children.push(...payload);
       }
+
+      return res;
     })
   };
 
