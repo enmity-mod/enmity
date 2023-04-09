@@ -29,8 +29,7 @@ export default function () {
   if (build >= "42235") {
     Patcher.after(NewBadges, 'default', (_, __, res) => {
       const unpatch = Patcher.after(res, "type", (_, [{ user, isEnmity, style, ...rest }], res) => {
-        unpatch();
-        if (isEnmity) return res;
+        if (isEnmity) return;
         const [badges, setBadges] = React.useState([]);
 
         React.useEffect(() => {
@@ -41,11 +40,11 @@ export default function () {
           }
         }, []);
 
-        const payload = badges.map((badge) => makeBadge(badge, style));
+        const payload = badges.map(makeBadge);
 
         if (!badges.length) return res;
         if (!res && Number(version) >= 151) {
-          res = wrapInHooks(res.type)({
+          res = wrapInHooks(NewBadges.default)({
             user: new Proxy({}, {
               get: (_, prop) => {
                 if (prop === 'flags') {
@@ -62,6 +61,11 @@ export default function () {
             isEnmity: true,
             ...rest
           });
+
+          res.props.children = [];
+          if (res.props.badges) {
+            res.props.badges = [];
+          }
         } else if (!res) {
           return payload;
         }
@@ -73,7 +77,7 @@ export default function () {
         }
 
         return res;
-      })
+      });
     });
 
     return Patcher.unpatchAll;
@@ -81,7 +85,7 @@ export default function () {
 
   for (const ProfileBadges of OldBadges) {
     Patcher.after(ProfileBadges, "default", (_, [{ user, isEnmity, style, ...rest }], res) => {
-      if (isEnmity) return res;
+      if (isEnmity) return;
       const [badges, setBadges] = React.useState([]);
 
       React.useEffect(() => {
@@ -92,11 +96,11 @@ export default function () {
         }
       }, []);
 
-      const payload = badges.map((badge) => makeBadge(badge, style));
+      const payload = badges.map(makeBadge);
 
       if (!badges.length) return res;
       if (!res && Number(version) >= 151) {
-        res = wrapInHooks(res.type)({
+        res = wrapInHooks(ProfileBadges.default)({
           user: new Proxy({}, {
             get: (_, prop) => {
               if (prop === 'flags') {
@@ -113,6 +117,11 @@ export default function () {
           isEnmity: true,
           ...rest
         });
+
+        res.props.children = [];
+        if (res.props.badges) {
+          res.props.badges = [];
+        }
       } else if (!res) {
         return payload;
       }
