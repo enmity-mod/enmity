@@ -26,64 +26,67 @@ export default function () {
   const OldBadges = getByName('ProfileBadges', { all: true, default: false });
   const NewBadges = getByProps("ProfileBadgesOld");
 
-  const patchBadges = ({ res, func }) => {
-    Patcher.after(res, func, (_, [{ user, isEnmity, style, ...rest }], res) => {
-      if (isEnmity) return res;
-      const [badges, setBadges] = React.useState([]);
+  const patchBadges = (res, user, isEnmity, style, rest) => {
+    if (isEnmity) return res;
+    const [badges, setBadges] = React.useState([]);
 
-      React.useEffect(() => {
-        try {
-          fetchUserBadges(user.id).then(setBadges);
-        } catch (e) {
-          console.error(`Failed to request/parse badges for ${user.id}`);
-        }
-      }, []);
+    React.useEffect(() => {
+      try {
+        fetchUserBadges(user.id).then(setBadges);
+      } catch (e) {
+        console.error(`Failed to request/parse badges for ${user.id}`);
+      }
+    }, []);
 
-      const payload = badges.map((badge) => makeBadge(badge, style));
+    const payload = badges.map((badge) => makeBadge(badge, style));
 
-      if (!badges.length) return res;
-      if (!res && Number(version) >= 151) {
-        res = wrapInHooks(res.type)({
-          user: new Proxy({}, {
-            get: (_, prop) => {
-              if (prop === 'flags') {
-                return -1;
-              }
-
-              if (prop === 'hasFlag') {
-                return () => true;
-              }
-
-              return user[prop];
+    if (!badges.length) return res;
+    if (!res && Number(version) >= 151) {
+      res = wrapInHooks(res.type)({
+        user: new Proxy({}, {
+          get: (_, prop) => {
+            if (prop === 'flags') {
+              return -1;
             }
-          }),
-          isEnmity: true,
-          ...rest
-        });
-      } else if (!res) {
-        return payload;
-      }
 
-      if (res.props.badges) {
-        res.props.badges.push(...payload);
-      } else {
-        res.props.children.push(...payload);
-      }
+            if (prop === 'hasFlag') {
+              return () => true;
+            }
 
-      return res;
-    })
+            return user[prop];
+          }
+        }),
+        isEnmity: true,
+        ...rest
+      });
+    } else if (!res) {
+      return payload;
+    }
+
+    if (res.props.badges) {
+      res.props.badges.push(...payload);
+    } else {
+      res.props.children.push(...payload);
+    }
+
+    return res;
   };
 
   if (build >= "42235") {
     Patcher.after(NewBadges, 'default', (_, __, res) => {
-      patchBadges({ res, func: "type" })
+      const unpatch = Patcher.after(res, "type", (_, [{ user, isEnmity, style, ...rest }], res) => {
+        unpatch();
+        patchBadges(res, user, isEnmity, style, rest);
+      })
     });
 
     return Patcher.unpatchAll;
   }
 
   for (const ProfileBadges of OldBadges) {
-    patchBadges({ res: ProfileBadges, func: "default" })
+    Patcher.after(ProfileBadges, "default", (_, [{ user, isEnmity, style, ...rest }], res) => {
+      patchBadges(res, user, isEnmity, style, rest)
+    })
   };
 
   return Patcher.unpatchAll;
@@ -121,7 +124,7 @@ const makeBadge = (badge, style): JSX.Element => {
   };
 
   return <View
-    enmity={true}
+    enmity
     key={badge}
     style={styles.wrapper}
   >
