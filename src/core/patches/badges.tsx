@@ -26,57 +26,53 @@ export default function () {
   const OldBadges = getByName('ProfileBadges', { all: true, default: false });
   const NewBadges = getByProps("ProfileBadgesOld");
 
-  const patchBadges = (res, user, isEnmity, style, rest) => {
-    if (isEnmity) return res;
-    const [badges, setBadges] = React.useState([]);
-
-    React.useEffect(() => {
-      try {
-        fetchUserBadges(user.id).then(setBadges);
-      } catch (e) {
-        console.error(`Failed to request/parse badges for ${user.id}`);
-      }
-    }, []);
-
-    const payload = badges.map((badge) => makeBadge(badge, style));
-
-    if (!badges.length) return res;
-    if (!res && Number(version) >= 151) {
-      res = wrapInHooks(res.type)({
-        user: new Proxy({}, {
-          get: (_, prop) => {
-            if (prop === 'flags') {
-              return -1;
-            }
-
-            if (prop === 'hasFlag') {
-              return () => true;
-            }
-
-            return user[prop];
-          }
-        }),
-        isEnmity: true,
-        ...rest
-      });
-    } else if (!res) {
-      return payload;
-    }
-
-    if (res.props.badges) {
-      res.props.badges.push(...payload);
-    } else {
-      res.props.children.push(...payload);
-    }
-
-    return res;
-  };
-
   if (build >= "42235") {
     Patcher.after(NewBadges, 'default', (_, __, res) => {
       const unpatch = Patcher.after(res, "type", (_, [{ user, isEnmity, style, ...rest }], res) => {
         unpatch();
-        patchBadges(res, user, isEnmity, style, rest);
+        if (isEnmity) return res;
+        const [badges, setBadges] = React.useState([]);
+
+        React.useEffect(() => {
+          try {
+            fetchUserBadges(user.id).then(setBadges);
+          } catch (e) {
+            console.error(`Failed to request/parse badges for ${user.id}`);
+          }
+        }, []);
+
+        const payload = badges.map((badge) => makeBadge(badge, style));
+
+        if (!badges.length) return res;
+        if (!res && Number(version) >= 151) {
+          res = wrapInHooks(res.type)({
+            user: new Proxy({}, {
+              get: (_, prop) => {
+                if (prop === 'flags') {
+                  return -1;
+                }
+
+                if (prop === 'hasFlag') {
+                  return () => true;
+                }
+
+                return user[prop];
+              }
+            }),
+            isEnmity: true,
+            ...rest
+          });
+        } else if (!res) {
+          return payload;
+        }
+
+        if (res.props.badges) {
+          res.props.badges.push(...payload);
+        } else {
+          res.props.children.push(...payload);
+        }
+
+        return res;
       })
     });
 
@@ -85,7 +81,49 @@ export default function () {
 
   for (const ProfileBadges of OldBadges) {
     Patcher.after(ProfileBadges, "default", (_, [{ user, isEnmity, style, ...rest }], res) => {
-      patchBadges(res, user, isEnmity, style, rest)
+      if (isEnmity) return res;
+      const [badges, setBadges] = React.useState([]);
+
+      React.useEffect(() => {
+        try {
+          fetchUserBadges(user.id).then(setBadges);
+        } catch (e) {
+          console.error(`Failed to request/parse badges for ${user.id}`);
+        }
+      }, []);
+
+      const payload = badges.map((badge) => makeBadge(badge, style));
+
+      if (!badges.length) return res;
+      if (!res && Number(version) >= 151) {
+        res = wrapInHooks(res.type)({
+          user: new Proxy({}, {
+            get: (_, prop) => {
+              if (prop === 'flags') {
+                return -1;
+              }
+
+              if (prop === 'hasFlag') {
+                return () => true;
+              }
+
+              return user[prop];
+            }
+          }),
+          isEnmity: true,
+          ...rest
+        });
+      } else if (!res) {
+        return payload;
+      }
+
+      if (res.props.badges) {
+        res.props.badges.push(...payload);
+      } else {
+        res.props.children.push(...payload);
+      }
+
+      return res;
     })
   };
 
