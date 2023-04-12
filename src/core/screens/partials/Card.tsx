@@ -111,15 +111,9 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                         </TouchableOpacity>}
                         <TouchableOpacity
                             style={styles.delete}
-                            onPress={(): void => void (Dialog.show({
-                                title: "Are you sure?",
-                                body: `Are you sure you want to uninstall ${data.name}?`,
-                                confirmText: "Confirm",
-                                cancelText: "Cancel",
-                                onConfirm: () => type === "plugin"
-                                    ? Plugins?.uninstallPlugin(data.name) 
-                                    : Themes?.uninstallTheme(data.name)
-                            }))}
+                            onPress={(): Promise<void> => void type === "plugin"
+                              ? Plugins?.uninstallPlugin(data.name) 
+                              : Themes?.uninstallTheme(data.name)}
                         >
                             <Image style={styles.trashIcon} source={getIDByName('ic_trash_filled_16px')} />
                         </TouchableOpacity>
