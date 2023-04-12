@@ -4,8 +4,9 @@
   "version": "2.1.2",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "rollup -c --configPlugin rollup-plugin-swc3",
-    "watch": "rollup -c --configPlugin rollup-plugin-swc3 --watch"
+    "make": "rollup -c --configPlugin rollup-plugin-swc3",
+    "build": "yarn make",
+    "watch": "yarn make --watch"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "enmity": "^1.2.4"
+    "enmity": "^1.2.4",
+    "react": "^18.2.0"
   }
 }

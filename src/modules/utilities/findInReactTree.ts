@@ -11,3 +11,13 @@ import findInTree from '@utilities/findInTree';
 export default function findInReactTree(tree: object, filter: Function = _ => _, options = {}) {
   return findInTree(tree, filter, { walkable: ['props', 'children'], ...options });
 };
+
+const filterInReactTree = ({ tree, condition }: { tree: { [key: string]: any }, condition: (node: any) => boolean }) => {
+  const foundItems: any[] = [];
+
+  findInReactTree(tree, (node) => {
+     if (condition(node)) foundItems.push(node);
+  })
+
+  return foundItems
+}

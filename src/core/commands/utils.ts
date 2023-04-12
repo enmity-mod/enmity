@@ -25,28 +25,30 @@ export default [
       }
     ],
 
-    execute: ([silent = { value: false }], message) => {
+    execute: (args, message) => {
+      const silent = args.find(a => a.name === "silent")?.value;
       const content = [];
 
       const Runtime = HermesInternal.getRuntimeProperties();
 
       content.push('**Debug Info:**\n');
-      content.push(`> **Enmity Version:** ${window.enmity.version}`);
-      content.push(`> **Discord Version:** ${version} (Build ${build})`);
-      content.push(`> **Hermes Version:** ${Runtime['OSS Release Version']}`);
-      content.push(`> **Bytecode Version:** ${Runtime['Bytecode Version']}`);
+      content.push(`> **Enmity:** ${window.enmity.version}`);
+      content.push(`> **Tweak:** ${window["tweak"]?.version ?? "N/A"} (${window["tweak"]?.type ?? "N/A"})`);
+      content.push(`> **Discord:** ${version} (Build ${build})`);
+      content.push(`> **Hermes:** ${Runtime['OSS Release Version']}`);
+      content.push(`> **Bytecode:** ${Runtime['Bytecode Version']}`);
       content.push(`> **Device:** ${device}`);
       content.push(`> **System:** ${os}`);
       
       const payload = content.join('\n');
-      if (silent) {
-        Messages.sendMessage(message.channel.id, {
-          validNonShortcutEmojis: [],
-          content: payload
-        });
-      } else {
-        sendReply(message.channel.id, payload)
-      }
+
+      if (!silent) return Messages.sendMessage(message.channel.id, {
+        validNonShortcutEmojis: [],
+        content: payload 
+      })
+      
+      sendReply(message.channel.id, payload)
+      return {}
     },
   },
   {

@@ -1,4 +1,4 @@
-import { Settings, Theme } from '@metro/common';
+import { Settings } from '@metro/common';
 import WebSocket from '@core/debug/websocket';
 import CorePatches from '@core/patches';
 import Commands from '@core/commands';
@@ -9,6 +9,11 @@ export function initialize(): void {
   API.initialize();
   CorePatches.initialize();
   Commands.initialize();
+
+  if (!Settings.get("shownDeprecationWarning", false) && !window["tweak"]) {
+    Settings.set({ shownDeprecationWarning: true })
+    alert("Your Enmity Tweak/IPA is out of date! Please update soon.")
+  }
 
   // go away
   Settings.set({ theme_mode: null });

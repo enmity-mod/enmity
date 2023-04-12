@@ -1,8 +1,7 @@
-import { StyleSheet, Users, ColorMap, Constants, Profiles, AsyncUsers } from '@metro/common';
+import { StyleSheet, Users, Constants, Profiles, AsyncUsers, React } from '@metro/common';
 import { Text, TouchableOpacity, View } from '@components';
-import React from 'react';
 
-const { ThemeColorMap } = ColorMap;
+const { Fonts, ThemeColorMap } = Constants;
 
 export default function ({ authors }) {
   if (!authors || !Array.isArray(authors) || !authors.length) {
@@ -12,7 +11,7 @@ export default function ({ authors }) {
   const styles = StyleSheet.createThemedStyleSheet({
     linkless: {
       color: ThemeColorMap.HEADER_SECONDARY,
-      fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
+      fontFamily: Fonts.PRIMARY_SEMIBOLD,
       display: 'flex',
       fontSize: 16,
       alignItems: 'center',
@@ -22,7 +21,7 @@ export default function ({ authors }) {
 
     link: {
       color: ThemeColorMap.HEADER_PRIMARY,
-      fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
+      fontFamily: Fonts.PRIMARY_SEMIBOLD,
       display: 'flex',
       alignItems: 'center',
       fontSize: 16,

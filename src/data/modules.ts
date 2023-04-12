@@ -92,11 +92,7 @@ const modules = {
   StyleSheet: {
     props: ['createThemedStyleSheet'],
   },
-
-  ColorMap: {
-    props: ['ThemeColorMap'],
-  },
-
+  
   Components: {
     multiple: true,
     props: {

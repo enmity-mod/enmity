@@ -5,7 +5,7 @@ const Channels = getByProps('getLastSelectedChannelId');
 
 try {
   Avatars.BOT_AVATARS.ENMITY = 'https://github.com/enmity-mod.png';
-} catch { }
+} catch {}
 
 export function sendReply(channelID: string, content: (string | object), username?: string, avatarURL?: string): void {
   const channel = channelID ?? Channels?.getChannelId?.();

@@ -21,7 +21,7 @@ try {
 
     assets[asset.name] = Object.assign(asset, { id });
   }
-} catch { }
+} catch {}
 
 export function find(filter): Asset | null {
   return Object.values(assets).find(filter as any);

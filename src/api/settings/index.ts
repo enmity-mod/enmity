@@ -1,7 +1,6 @@
 import { SettingsStore } from 'enmity/api/settings';
-import { Dispatcher, Flux } from '@metro/common';
+import { Dispatcher, Flux, React } from '@metro/common';
 import Manager from './store';
-import React from 'react';
 
 interface FluxDispatch {
   file: string;

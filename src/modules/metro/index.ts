@@ -1,5 +1,7 @@
 /* eslint-disable */
 import Common from '@data/modules';
+import { Theme } from 'enmity/managers/themes';
+import { create } from '@patcher';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const __r: (moduleId: number) => any;
@@ -60,13 +62,83 @@ export const filters = {
   }
 };
 
+// this is a self invoked function so that i can use return lol
+(() => {
+  try {
+    // this module cannot be found through looping modules anymore, through trial and error apparently this module appears here when found with the filters at this point, which is the same point as where it was done with the loop :shrug:
+    // this works fine on 41968 and higher. loading this module and later than this will make it not fully theme everything, depending on how much later you do it.
+    const mdl = getByProps("SemanticColor", "RawColor");
+
+    if (!mdl) return;
+    
+    const currentThemeName = window['themes']?.theme ?? '';
+    const themes = window['themes']?.list ?? [];
+    const currentTheme = themes?.find(t => t.name === currentThemeName);
+  
+    if (!currentTheme) return;
+    currentTheme.colours ??= currentTheme["colors"];
+  
+    // patch old themes into new format
+    if (currentTheme.spec === 1 || !currentTheme.spec) {
+      if (currentTheme.theme_color_map) {
+        currentTheme.semanticColors = currentTheme.theme_color_map
+
+        currentTheme.semanticColors.CHAT_BACKGROUND = currentTheme?.background?.url
+          ? ["transparent", "transparent"]
+          : currentTheme.theme_color_map.BACKGROUND_PRIMARY
+      };
+  
+      if (currentTheme.colours) {
+        const keys = {
+          "PRIMARY_DARK": "PRIMARY",
+          "PRIMARY_LIGHT": "PRIMARY",
+          "BRAND_NEW": "BRAND",
+          "STATUS_": ""
+        }
+
+        currentTheme.rawColors = currentTheme.colours
+        Object.entries(currentTheme.colours).forEach(([key, value]) => {
+          Object.entries(keys).forEach(([k, v]) => {
+            if (key.startsWith(k)) currentTheme.rawColors[key.replace(k, v)] = value;
+          })
+        })
+      };
+    }
+  
+    if (currentTheme.rawColors) {
+      if (!currentTheme.rawColors?.PRIMARY_660) currentTheme.rawColors.PRIMARY_660 = currentTheme?.semanticColors?.BACKGROUND_PRIMARY[0]
+      Object.entries(currentTheme.rawColors).forEach(([key, value]) => {
+        mdl["RawColor"][key] = value;
+        mdl["default"]["unsafe_rawColors"][key] = value;
+      })
+    }
+  
+    if (currentTheme.semanticColors) {
+      const originalResolveSemanticColor = mdl["default"]["meta"]["resolveSemanticColor"];
+      mdl["default"]["meta"]["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
+        const key = ref[Object.getOwnPropertySymbols(ref)[0]];
+  
+        if (currentTheme.semanticColors[key]) {
+          const index = { dark: 0, light: 1, amoled: 2 }[theme.toLowerCase()] || 0;
+          const colorOrNone = currentTheme.semanticColors[key][index];
+          if (colorOrNone) return colorOrNone;
+        }
+  
+        return originalResolveSemanticColor(theme, ref);
+      };
+    }
+  } catch(e) {
+    const err = new Error(`[Enmity] ${e}`);
+    console.error(err.stack);
+  }
+})()
 
 // Export common modules
 const getters = [];
 
-Object.entries(Common).map(([name, m]) => {
-  if (m.multiple) {
-    Object.entries(m.props).map(([mdl, filter]) => {
+Object.entries(Common).map(([name, module]) => {
+  if (module.multiple) {
+    Object.entries(module.props).map(([mdl, filter]) => {
       getters.push({
         id: mdl,
         filter: (mdl) => {
@@ -77,15 +149,15 @@ Object.entries(Common).map(([name, m]) => {
         submodule: name
       });
     });
-  } else if (m.props) {
-    if ((m.props as string[]).every(props => Array.isArray(props))) {
+  } else if (module.props) {
+    if ((module.props as string[]).every(props => Array.isArray(props))) {
       const found = [];
 
       getters.push({
         id: name,
         filter: (mdl) => {
-          const res = (m.props as string[]).some(props => (props as any).every(p => mdl[p]));
-          if (res && m.ensure && !m.ensure(mdl)) {
+          const res = (module.props as string[]).some(props => (props as any).every(p => mdl[p]));
+          if (res && module.ensure && !module.ensure(mdl)) {
             return false;
           } else if (res) {
             found.push(mdl);
@@ -99,33 +171,33 @@ Object.entries(Common).map(([name, m]) => {
       getters.push({
         id: name,
         filter: (mdl) => {
-          const res = filters.byProps(...(m.props as string[]))(mdl);
-          if (res && m.ensure && m.ensure(mdl) === false) {
+          const res = filters.byProps(...(module.props as string[]))(mdl);
+          if (res && module.ensure && module.ensure(mdl) === false) {
             return false;
           }
 
           return res;
         },
-        map: m.export
+        map: module.export
       });
     }
-  } else if (m.displayName) {
+  } else if (module.displayName) {
     getters.push({
       id: name,
-      filter: filters.byDisplayName(m.displayName, m.default),
-      map: m.export
+      filter: filters.byDisplayName(module.displayName, module.default),
+      map: module.export
     });
-  } else if (m.name) {
+  } else if (module.name) {
     getters.push({
       id: name,
-      filter: filters.byName(m.name, m.default),
-      map: m.export
+      filter: filters.byName(module.name, module.default),
+      map: module.export
     });
-  } else if (m.filter) {
+  } else if (module.filter) {
     getters.push({
       id: name,
-      filter: m.filter,
-      map: m.export
+      filter: module.filter,
+      map: module.export
     });
   }
 });
@@ -200,7 +272,6 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
       blacklist.push(id);
       continue;
     }
-
 
     if (typeof mdl === 'object') {
       if (search(mdl, id)) {

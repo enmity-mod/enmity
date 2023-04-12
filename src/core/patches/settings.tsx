@@ -1,14 +1,16 @@
 import { FormArrow, FormDivider, FormRow, FormSection } from '@components';
-import { Locale, NavigationNative, Scenes } from '@metro/common';
 import { connectComponent } from '@api/settings';
+import { Locale, NavigationNative, Scenes, React } from '@metro/common';
 import { findInReactTree } from '@utilities';
-import * as Screens from '@screens/index';
 import { getByName } from '@metro';
 import { create } from '@patcher';
-import React from 'react';
 
+import Enmity from "@screens/Enmity"
+import Page from "@screens/partials/DataPage"
+import HeaderRight from '@screens/partials/HeaderRight';
 import ThemeIcon from '@screens/partials/ThemeIcon';
 import PluginIcon from '@screens/partials/PluginIcon';
+import { build } from '@api/native';
 
 const Patcher = create('enmity-settings');
 
@@ -18,25 +20,25 @@ export default function (): void {
 }
 
 function patchScreens() {
-  Patcher.after(Scenes, 'default', (_, args, res) => {
+  Patcher.after(Scenes, 'default', (_, __, res) => {
     return {
       ...res,
       Enmity: {
         key: 'Enmity',
         title: 'Enmity',
-        render: connectComponent(Screens.Enmity.Page, 'enmity')
+        render: connectComponent(Enmity, 'enmity')
       },
       EnmityPlugins: {
         key: 'EnmityPlugins',
         title: 'Plugins',
-        render: Screens.Plugins.Page,
-        headerRight: Screens.Plugins.HeaderRight
+        render: () => <Page type={"plugin"} />,
+        headerRight: () => <HeaderRight type={"plugin"} />
       },
       EnmityThemes: {
         key: 'EnmityThemes',
         title: 'Themes',
-        render: Screens.Themes.Page,
-        headerRight: Screens.Themes.HeaderRight
+        render: () => <Page type={"theme"} />,
+        headerRight: () => <HeaderRight type={"theme"} />
       },
       EnmityCustomPage: {
         key: 'EnmityCustomPage',
@@ -65,7 +67,9 @@ function patchSettings() {
     const Overview = findInReactTree(ret, m => m.type?.name === 'UserSettingsOverview');
 
     Patcher.after(Overview.type.prototype, 'render', ({ props: { navigation } }, __, res) => {
-      const { children } = res.props;
+      const { children } = build >= "42188"
+        ? findInReactTree(res, r => r.children[1].type === FormSection)
+        : res.props
 
       const searchable = [Locale.Messages.BILLING_SETTINGS, Locale.Messages.PREMIUM_SETTINGS];
       const index = children.findIndex(c => searchable.includes(c.props.title));

@@ -1,7 +1,6 @@
-import { SVG, StyleSheet, ColorMap } from '@metro/common';
-import React from 'react';
+import { SVG, StyleSheet, React, Constants } from '@metro/common';
 
-const { ThemeColorMap } = ColorMap;
+const { ThemeColorMap } = Constants;
 
 export default function ({ height, width, ...rest }) {
   const styles = StyleSheet.createThemedStyleSheet({
