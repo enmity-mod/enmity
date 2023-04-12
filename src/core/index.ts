@@ -12,7 +12,7 @@ export function initialize(): void {
 
   if (!Settings.get("shownDeprecationWarning", false) && !window["tweak"]) {
     Settings.set({ shownDeprecationWarning: true })
-    alert("Your Enmity Tweak/IPA is out of date! Please update soon.")
+    alert("Your Enmity Tweak/IPA is out of date! Please update soon. You can ignore this warning, we will only show this once.")
   }
 
   // go away
