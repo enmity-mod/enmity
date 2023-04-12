@@ -10,7 +10,7 @@ import Page from "@screens/partials/DataPage"
 import HeaderRight from '@screens/partials/HeaderRight';
 import ThemeIcon from '@screens/partials/ThemeIcon';
 import PluginIcon from '@screens/partials/PluginIcon';
-import { reload } from '@api/native';
+import { build } from '@api/native';
 
 const Patcher = create('enmity-settings');
 
@@ -66,8 +66,11 @@ function patchSettings() {
   const unpatch = Patcher.after(Settings, 'default', (_, __, ret) => {
     const Overview = findInReactTree(ret, m => m.type?.name === 'UserSettingsOverview');
 
-    Patcher.after(Overview.type.prototype, 'render', ({ props: { navigation } }, __, { props: { children: res }}) => {
-      const { children } = findInReactTree(res, r => r.children[1].type === FormSection);
+    Patcher.after(Overview.type.prototype, 'render', ({ props: { navigation } }, __, res) => {
+      const { children } = build >= "42188"
+        ? findInReactTree(res, r => r.children[1].type === FormSection)
+        : res.props
+
       const searchable = [Locale.Messages.BILLING_SETTINGS, Locale.Messages.PREMIUM_SETTINGS];
       const index = children.findIndex(c => searchable.includes(c.props.title));
 

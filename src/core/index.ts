@@ -10,6 +10,11 @@ export function initialize(): void {
   CorePatches.initialize();
   Commands.initialize();
 
+  if (!Settings.get("shownDeprecationWarning", false) && !window["tweak"]) {
+    Settings.set({ shownDeprecationWarning: true })
+    alert("Your Enmity Tweak/IPA is out of date! Please update soon.")
+  }
+
   // go away
   Settings.set({ theme_mode: null });
 }
