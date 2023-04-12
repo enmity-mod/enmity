@@ -9,7 +9,7 @@ import replace from '@rollup/plugin-replace';
 
 const revision = (() => {
   try {
-    return execSync('git rev-parse --short origin/themer-rewrite').toString().trim();
+    return execSync('git rev-parse --short HEAD').toString().trim();
   } catch {
     return 'N/A';
   }

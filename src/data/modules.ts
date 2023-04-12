@@ -93,6 +93,13 @@ const modules = {
     props: ['createThemedStyleSheet'],
   },
   
+  ColorMap: {
+    props: [
+      ['colors', 'meta'], 
+      ['ThemeColorMap']
+    ]
+  },
+  
   Components: {
     multiple: true,
     props: {

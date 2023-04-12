@@ -76,6 +76,7 @@ export const filters = {
     const currentTheme = themes?.find(t => t.name === currentThemeName);
   
     if (!currentTheme) return;
+    
     currentTheme.colours ??= currentTheme["colors"];
   
     // patch old themes into new format
@@ -156,7 +157,7 @@ Object.entries(Common).map(([name, module]) => {
       getters.push({
         id: name,
         filter: (mdl) => {
-          const res = (module.props as string[]).some(props => (props as any).every(p => mdl[p]));
+          const res = (module.props as string[]).some(props => (props as any).every(p => mdl?.[p]));
           if (res && module.ensure && !module.ensure(mdl)) {
             return false;
           } else if (res) {
