@@ -111,9 +111,9 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                         </TouchableOpacity>}
                         <TouchableOpacity
                             style={styles.delete}
-                            onPress={(): Promise<void> => void type === "plugin"
-                              ? Plugins?.uninstallPlugin(data.name) 
-                              : Themes?.uninstallTheme(data.name)}
+                            onPress={() => type === "plugin"
+                              ? Plugins.uninstallPlugin(data.name)
+                              : Themes.uninstallTheme(data.name)}
                         >
                             <Image style={styles.trashIcon} source={getIDByName('ic_trash_filled_16px')} />
                         </TouchableOpacity>
