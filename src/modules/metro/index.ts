@@ -68,6 +68,9 @@ export const filters = {
     // this module cannot be found through looping modules anymore, through trial and error apparently this module appears here when found with the filters at this point, which is the same point as where it was done with the loop :shrug:
     // this works fine on 41968 and higher. loading this module and later than this will make it not fully theme everything, depending on how much later you do it.
     const mdl = getByProps("SemanticColor", "RawColor");
+
+    if (!mdl) return;
+    
     const currentThemeName = window['themes']?.theme ?? '';
     const themes = window['themes']?.list ?? [];
     const currentTheme = themes?.find(t => t.name === currentThemeName);

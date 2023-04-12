@@ -1,4 +1,4 @@
-import { common } from '@metro';
+import { common, getByProps } from '@metro';
 
 const {
   Clipboard,
@@ -19,7 +19,6 @@ const {
   Theme,
   Linking,
   StyleSheet,
-  ColorMap,
   Components,
   Locale,
   Constants,
@@ -35,10 +34,13 @@ const {
   Moment
 } = common;
 
-Constants["ThemeColorMap"] = ColorMap?.["colors"];
-Constants["Colors"] = ColorMap?.["unsafe_rawColors"];
-ColorMap["ThemeColorMap"] = ColorMap?.["colors"];
-StyleSheet["ThemeColorMap"] = ColorMap?.["colors"];
+const ColorMap = getByProps("colors", "meta");
+if (ColorMap && ColorMap["colors"] && ColorMap["unsafe_rawColors"]) {
+  Constants["ThemeColorMap"] = ColorMap?.["colors"];
+  Constants["Colors"] = ColorMap?.["unsafe_rawColors"];
+  ColorMap["ThemeColorMap"] = ColorMap?.["colors"];
+  StyleSheet["ThemeColorMap"] = ColorMap?.["colors"];
+} 
 
 export const React = common.React as typeof import('react');
 

@@ -1,11 +1,11 @@
-import { SVG, StyleSheet, ColorMap, React } from '@metro/common';
+import { SVG, StyleSheet, React, Constants } from '@metro/common';
 
-const { colors } = ColorMap;
+const { ThemeColorMap } = Constants;
 
 export default function ({ height, width, ...rest }) {
   const styles = StyleSheet.createThemedStyleSheet({
     icon: {
-      color: colors.INTERACTIVE_NORMAL,
+      color: ThemeColorMap.INTERACTIVE_NORMAL,
       opacity: 0.75,
       marginLeft: 0.5
     }

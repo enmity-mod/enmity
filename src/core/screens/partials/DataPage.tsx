@@ -1,12 +1,12 @@
 import { RefreshControl, ScrollView, View, Image, Text, FlatList } from "@components";
 import { getModule } from "@metro";
-import { ColorMap, Constants, React, StyleSheet } from "@metro/common";
+import { Constants, React, StyleSheet } from "@metro/common";
 import * as Plugins from "@managers/plugins";
 import * as Themes from "@managers/themes";
 import { Card } from "./Card";
 import { getIDByName } from "@api/assets";
 
-const { colors } = ColorMap;
+const { Fonts, ThemeColorMap } = Constants;
 const { createThemedStyleSheet } = StyleSheet;
 const styles = createThemedStyleSheet({
     container: {
@@ -22,8 +22,8 @@ const styles = createThemedStyleSheet({
     },
     notFoundText: {
       marginTop: 10,
-      color: colors.TEXT_MUTED,
-      fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
+      color: ThemeColorMap.TEXT_MUTED,
+      fontFamily: Fonts.PRIMARY_SEMIBOLD,
       textAlign: 'center'
     },
     search: {

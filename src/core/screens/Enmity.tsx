@@ -1,5 +1,5 @@
 import { FormSection, ScrollView, FormRow, FormSwitch, Text, FormInput, KeyboardAvoidingView, FormDivider } from '@components';
-import { Linking, StyleSheet, ColorMap, Clipboard, Toasts, Dialog, React } from '@metro/common';
+import { Linking, StyleSheet, Clipboard, Toasts, Dialog, React, Constants } from '@metro/common';
 import { socket, connectWebsocket } from '@core/debug/websocket';
 import { getPlugins } from '@managers/plugins';
 import { listThemes } from '@managers/themes';
@@ -12,17 +12,17 @@ import { getByProps } from '@metro';
 import { getIDByName } from '../../api/assets';
 
 try {
-  const { colors } = ColorMap;
-  throw new Error(colors)
+  const { ThemeColorMap } = Constants;
+  throw new Error(ThemeColorMap)
 } catch(e) {
   const err = new Error(e);
   console.error(err);
 }
-const { colors } = ColorMap;
+const { ThemeColorMap } = Constants;
 
 const styles = StyleSheet.createThemedStyleSheet({
   debugText: {
-    color: colors.TEXT_MUTED
+    color: ThemeColorMap.TEXT_MUTED
   },
   container: {
     marginBottom: 50

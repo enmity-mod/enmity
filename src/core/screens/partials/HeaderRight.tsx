@@ -1,16 +1,16 @@
 import { getIDByName } from "@api/assets";
 import { TouchableOpacity, Text, View, FormInput, Image } from "@components";
-import { ColorMap, StyleSheet, Clipboard, Dialog, Constants, React, Toasts } from "@metro/common";
+import { StyleSheet, Clipboard, Dialog, Constants, React, Toasts } from "@metro/common";
 import * as Plugins from "@managers/plugins";
 import * as Themes from "@managers/themes";
 import { reload } from "@api/native";
 
-const { colors } = ColorMap;
+const { Fonts, ThemeColorMap } = Constants;
 const { createThemedStyleSheet } = StyleSheet;
 
 const styles = createThemedStyleSheet?.({
     header: {
-      tintColor: colors.HEADER_PRIMARY,
+      tintColor: ThemeColorMap.HEADER_PRIMARY,
       marginRight: 15,
       width: 18,
       height: 18
@@ -21,8 +21,8 @@ const styles = createThemedStyleSheet?.({
       height: 32
     },
     text: {
-        fontFamily: Constants.Fonts.DISPLAY_BOLD,
-        color: Constants.ThemeColorMap.TEXT_NORMAL,
+        fontFamily: Fonts.DISPLAY_BOLD,
+        color: ThemeColorMap.TEXT_NORMAL,
         opacity: 0.975,
         letterSpacing: 0.25,
         fontSize: 16,

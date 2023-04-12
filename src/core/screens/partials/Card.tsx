@@ -1,6 +1,6 @@
 import { Plugin } from 'enmity/managers/plugins';
 import { Theme } from 'enmity/managers/themes';
-import { NavigationNative, React, StyleSheet, ColorMap, Constants, Toasts, Dialog } from '@metro/common';
+import { NavigationNative, React, StyleSheet, Constants, Toasts, Dialog } from '@metro/common';
 import { FormRow, View, Text, TouchableOpacity, Image, FormSwitch } from '@components';
 import Authors from './Authors';
 import { connectComponent } from '@api/settings';
@@ -9,23 +9,23 @@ import * as Themes from "@managers/themes"
 import { reload } from '@api/native';
 import { getIDByName } from '@api/assets';
 
-const { colors } = ColorMap;
+const { Fonts, ThemeColorMap } = Constants;
 const styles = StyleSheet.createThemedStyleSheet({
     container: {
-      backgroundColor: colors.BACKGROUND_FLOATING,
+      backgroundColor: ThemeColorMap.BACKGROUND_FLOATING,
       borderRadius: 5,
       borderLeftWidth: 5,
       marginBottom: 15,
     },
     name: {
-      color: colors.HEADER_PRIMARY,
-      fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
+      color: ThemeColorMap.HEADER_PRIMARY,
+      fontFamily: Fonts.PRIMARY_SEMIBOLD,
       fontSize: 16,
     },
     version: {
-      color: colors.HEADER_SECONDARY,
+      color: ThemeColorMap.HEADER_SECONDARY,
       fontSize: 16,
-      fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
+      fontFamily: Fonts.PRIMARY_SEMIBOLD,
       marginLeft: 2.5,
       marginRight: 2.5
     },
@@ -41,8 +41,8 @@ const styles = StyleSheet.createThemedStyleSheet({
       alignItems: 'center'
     },
     description: {
-      color: colors.HEADER_SECONDARY,
-      fontFamily: Constants.Fonts.PRIMARY_SEMIBOLD,
+      color: ThemeColorMap.HEADER_SECONDARY,
+      fontFamily: Fonts.PRIMARY_SEMIBOLD,
     },
     info: {
       marginLeft: -6,
@@ -57,12 +57,12 @@ const styles = StyleSheet.createThemedStyleSheet({
     trashIcon: {
       width: 22,
       height: 22,
-      tintColor: colors.INTERACTIVE_NORMAL
+      tintColor: ThemeColorMap.INTERACTIVE_NORMAL
     },
     settingsIcon: {
       width: 22,
       height: 22,
-      tintColor: colors.INTERACTIVE_NORMAL
+      tintColor: ThemeColorMap.INTERACTIVE_NORMAL
     }
 });
 
