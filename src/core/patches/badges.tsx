@@ -26,7 +26,7 @@ export default function () {
   const OldBadges = getByName('ProfileBadges', { all: true, default: false });
   const NewBadges = getByProps("ProfileBadgesOld");
 
-  const patchBadges = ({ data: { user, isEnmity, style, rest, res, kind } }) => {
+  const patchBadges = ({ user, isEnmity, style, rest, res, kind }) => {
     if (isEnmity) return;
     const [badges, setBadges] = React.useState([]);
 
@@ -73,17 +73,11 @@ export default function () {
     } else {
       res.props.children.push(...payload);
     }
-
-    return res;
   }
  
   if (build >= "42235") {
-    Patcher.after(NewBadges, 'default', (_, __, res) => {
-      Patcher.after(res, "type", (_, [{ user, isEnmity, style, ...rest }], res) => {
-        patchBadges({ data: {
-          user, isEnmity, style, rest, res, kind: res.type
-        }})
-      });
+    Patcher.after(NewBadges, 'default', (_, [{ user, isEnmity, style, ...rest }], res) => {
+      patchBadges({ user, isEnmity, style, rest, res, kind: NewBadges.default })
     });
 
     return Patcher.unpatchAll;
@@ -91,9 +85,7 @@ export default function () {
 
   for (const ProfileBadges of OldBadges) {
     Patcher.after(ProfileBadges, "default", (_, [{ user, isEnmity, style, ...rest }], res) => {
-      patchBadges({ data: {
-        user, isEnmity, style, rest, res, kind: ProfileBadges.default
-      }})
+      patchBadges({ user, isEnmity, style, rest, res, kind: ProfileBadges.default })
     })
   };
 
