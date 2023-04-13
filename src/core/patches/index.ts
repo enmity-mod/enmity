@@ -23,11 +23,11 @@ export function initialize(): void {
     console.log('Failed to patch trackers: ', e.message);
   }
 
-  try {
-    patchBadges();
-  } catch (e) {
-    console.log('Failed to patch badges: ', e.message);
-  }
+  // try {
+  //   patchBadges();
+  // } catch (e) {
+  //   console.log('Failed to patch badges: ', e.message);
+  // }
 
   // try {
   //   patchDownloader();
