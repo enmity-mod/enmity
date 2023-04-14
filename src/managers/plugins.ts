@@ -182,17 +182,19 @@ export function installPlugin(url: string, callback?: (result) => void, update?:
 
 export function uninstallPlugin(name: string, callback?: (result) => void): Promise<void> {
   return new Promise(resolve => {
-    disablePlugin(name);
-
     sendCommand('uninstall-plugin', [name], data => {
-      enabled = enabled.filter(p => p !== name);
-      disabled = disabled.filter(p => p !== name);
+      if (data === "uninstalled_plugin") {
+        disablePlugin(name);
+        enabled = enabled.filter(p => p !== name);
+        disabled = disabled.filter(p => p !== name);
 
-      const index = plugins.findIndex(p => p.name === name);
-      if (index > -1) plugins.splice(index, 1);
+        const index = plugins.findIndex(p => p.name === name);
+        if (index > -1) plugins.splice(index, 1);
 
-      Events.emit('uninstalled');
-      if (callback) callback(data);
+        Events.emit('uninstalled');
+        if (callback) callback(data);
+      }
+
       resolve(data);
     });
   });

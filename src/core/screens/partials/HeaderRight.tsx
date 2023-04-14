@@ -76,37 +76,38 @@ const showAlert = ({ type, url }: { type: string, url: string }) => {
             try {
               (type === "plugin"
                 ? Plugins.installPlugin
-                : Themes.installTheme)(url, ({ data, restart } /* <- restart will be undefined when its a plugin which is falsey, so this is fine */) => {
-                const res = { icon: null, text: null, restart: false };
+                : Themes.installTheme)(url, ({ data: res, restart, name }) => {
+                    const outcomes = {
+                        fucky_wucky: {
+                            content: `Failed ${type} installation of ${name}.`,
+                            source: getIDByName('ic_close_16px'),
+                            restart: false
+                        },
+                        [`installed_${type}`]: {
+                            content: `${name} has been installed.`,
+                            source: getIDByName('Check'),
+                            restart
+                        },
+                        [`overridden_${type}`]: {
+                            content: `${name} has been overriden.`,
+                            source: getIDByName('Check'),
+                            restart
+                        }
+                    }
 
-                switch (data) {
-                    case 'fucky_wucky':
-                        res.text = `Failed ${type} installation.`;
-                        res.icon = getIDByName('ic_close_16px');
-                        break;
-                    case `installed_${type}`:
-                        res.text = `${type === "plugin" ? "Plugin" : "Theme"} has been installed.`;
-                        res.icon = getIDByName('Check');
-                        res.restart = restart;
-                        break;
-                    case `overridden_${type}`:
-                        res.text = `${type === "plugin" ? "Plugin" : "Theme"} has been overriden.`;
-                        res.icon = getIDByName('Check');
-                        res.restart = restart;
-                        break;
-                }
-    
-                Toasts.open({ content: res.text, source: res.icon });
-                if (res.restart) {
-                    return Dialog.show({
-                        title: 'Theme Replaced',
-                        body: 'Replacing the theme you previously had applied requires a restart, would you like to restart Discord to reload the theme values?',
-                        confirmText: 'Yes',
-                        cancelText: 'No',
-                        onConfirm: reload,
-                    });
-                }
-              });
+                    const { restart: shouldRestart, ...rest } = outcomes[res];
+                    Toasts.open(rest);
+
+                    if (shouldRestart) {
+                        Dialog.show({
+                            title: 'Theme Replaced',
+                            body: 'Replacing the theme you previously had applied requires a restart, would you like to restart Discord to reload the theme values?',
+                            confirmText: 'Yes',
+                            cancelText: 'No',
+                            onConfirm: reload,
+                        });
+                    }
+                });
             } catch (e) {
                 Toasts.open({ content: e.message });
             }

@@ -113,21 +113,20 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                             style={styles.delete}
                             onPress={() => (type === "plugin"
                               ? Plugins.uninstallPlugin
-                              : Themes.uninstallTheme)(data.name, (data) => {
+                              : Themes.uninstallTheme)(data.name, (res) => {
                                 const outcomes = {
                                   fucky_wucky: {
-                                    text: `Invalid ${type}`,
-                                    icon: getIDByName('ic_close_16px')
+                                    content: `Invalid ${type}`,
+                                    source: getIDByName('ic_close_16px')
                                   },
                                   [`uninstalled_${type}`]: {
-                                    text: `${data.name} has been uninstalled.`,
-                                    icon: getIDByName('Check')
+                                    content: `${data.name} has been uninstalled.`,
+                                    source: getIDByName('Check')
                                   }
                                 }
 
-                                if (!Object.keys(outcomes).includes(data)) return;
-                                const { text, icon } = outcomes[data]
-                                Toasts.open({ content: text, source: icon });
+                                if (!Object.keys(outcomes).includes(res)) return;
+                                Toasts.open(outcomes[res]);
                               })}
                         >
                             <Image style={styles.trashIcon} source={getIDByName('ic_trash_filled_16px')} />

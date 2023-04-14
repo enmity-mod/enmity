@@ -52,7 +52,7 @@ export async function installTheme(url: string, callback?: (data) => void): Prom
         if (index > -1) themes.splice(index, 1);
         themes.push(theme);
 
-        const res = { theme, url, data, restart: getTheme() === theme.name };
+        const res = { theme, name: theme.name, url, data, restart: getTheme() === theme.name };
         if (callback) callback(res);
         Events.emit('installed');
         resolve(res as any);
@@ -97,11 +97,14 @@ export async function uninstallTheme(name: string, callback?: (data) => void): P
 
   return new Promise(resolve => {
     sendCommand('uninstall-theme', [name], data => {
-      const index = themes.findIndex(t => t.name === name);
-      if (index > -1) themes.splice(index, 1);
+      if (data === "uninstalled_theme") {
+        const index = themes.findIndex(t => t.name === name);
+        if (index > -1) themes.splice(index, 1);
 
-      Events.emit('uninstalled');
-      if (callback) callback(data);
+        Events.emit('uninstalled');
+        if (callback) callback(data);
+      }
+
       resolve(data);
     });
   });
