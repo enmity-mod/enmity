@@ -111,9 +111,24 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                         </TouchableOpacity>}
                         <TouchableOpacity
                             style={styles.delete}
-                            onPress={() => type === "plugin"
-                              ? Plugins.uninstallPlugin(data.name)
-                              : Themes.uninstallTheme(data.name)}
+                            onPress={() => (type === "plugin"
+                              ? Plugins.uninstallPlugin
+                              : Themes.uninstallTheme)(data.name, (data) => {
+                                const outcomes = {
+                                  fucky_wucky: {
+                                    text: `Invalid ${type}`,
+                                    icon: getIDByName('ic_close_16px')
+                                  },
+                                  [`uninstalled_${type}`]: {
+                                    text: `${data.name} has been uninstalled.`,
+                                    icon: getIDByName('Check')
+                                  }
+                                }
+
+                                if (!Object.keys(outcomes).includes(data)) return;
+                                const { text, icon } = outcomes[data]
+                                Toasts.open({ content: text, source: icon });
+                              })}
                         >
                             <Image style={styles.trashIcon} source={getIDByName('ic_trash_filled_16px')} />
                         </TouchableOpacity>
