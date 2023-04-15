@@ -1,14 +1,14 @@
 import { getIDByName } from "@api/assets";
 import { TouchableOpacity, Text, View, FormInput, Image } from "@components";
-import { StyleSheet, Clipboard, Dialog, Constants, React, Toasts } from "@metro/common";
+import { StyleSheet, Clipboard, Dialog, Constants, React, Toasts, Navigation } from "@metro/common";
 import * as Plugins from "@managers/plugins";
 import * as Themes from "@managers/themes";
 import { reload } from "@api/native";
+import { getByProps } from "@metro";
 
 const { Fonts, ThemeColorMap } = Constants;
-const { createThemedStyleSheet } = StyleSheet;
-
-const styles = createThemedStyleSheet?.({
+const { Platform: { isPad } } = getByProps("View", "Text");
+const styles = StyleSheet.createThemedStyleSheet?.({
     header: {
       tintColor: ThemeColorMap.HEADER_PRIMARY,
       marginRight: 15,
@@ -72,6 +72,8 @@ const showAlert = ({ type, url }: { type: string, url: string }) => {
                     source: getIDByName('ic_close_16px')
                 });
             }
+
+            isPad && Navigation.pop();
       
             try {
               (type === "plugin"
@@ -120,7 +122,7 @@ export default function ({ type }: { type: "plugin" | "theme" }) {
       <TouchableOpacity styles={styles.wrapper} onPress={async function() {  
         showAlert({ 
             type, 
-            url: await Clipboard?.getString?.(),
+            url: await Clipboard?.getString?.()
         })
       }}>
         <Image
@@ -129,4 +131,4 @@ export default function ({ type }: { type: "plugin" | "theme" }) {
         />
       </TouchableOpacity>
     );
-  }
+};

@@ -1,6 +1,6 @@
 import { Plugin } from 'enmity/managers/plugins';
 import { Theme } from 'enmity/managers/themes';
-import { NavigationNative, React, StyleSheet, Constants, Toasts, Dialog } from '@metro/common';
+import { NavigationNative, React, StyleSheet, Constants, Toasts, Dialog, Navigation } from '@metro/common';
 import { FormRow, View, Text, TouchableOpacity, Image, FormSwitch } from '@components';
 import Authors from './Authors';
 import { connectComponent } from '@api/settings';
@@ -8,8 +8,10 @@ import * as Plugins from "@managers/plugins"
 import * as Themes from "@managers/themes"
 import { reload } from '@api/native';
 import { getIDByName } from '@api/assets';
+import { getByProps } from '@metro';
 
 const { Fonts, ThemeColorMap } = Constants;
+const { Platform: { isPad } } = getByProps("View", "Text");
 const styles = StyleSheet.createThemedStyleSheet({
     container: {
       backgroundColor: ThemeColorMap.BACKGROUND_FLOATING,
@@ -111,23 +113,27 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                         </TouchableOpacity>}
                         <TouchableOpacity
                             style={styles.delete}
-                            onPress={() => (type === "plugin"
-                              ? Plugins.uninstallPlugin
-                              : Themes.uninstallTheme)(data.name, (res) => {
-                                const outcomes = {
-                                  fucky_wucky: {
-                                    content: `Invalid ${type}`,
-                                    source: getIDByName('ic_close_16px')
-                                  },
-                                  [`uninstalled_${type}`]: {
-                                    content: `${data.name} has been uninstalled.`,
-                                    source: getIDByName('Check')
-                                  }
-                                }
+                            onPress={() => {
+                              isPad && Navigation.pop();
 
-                                if (!Object.keys(outcomes).includes(res)) return;
-                                Toasts.open(outcomes[res]);
-                              })}
+                              (type === "plugin"
+                                ? Plugins.uninstallPlugin
+                                : Themes.uninstallTheme)(data.name, (res) => {
+                                  const outcomes = {
+                                    fucky_wucky: {
+                                      content: `Invalid ${type}`,
+                                      source: getIDByName('ic_close_16px')
+                                    },
+                                    [`uninstalled_${type}`]: {
+                                      content: `${data.name} has been uninstalled.`,
+                                      source: getIDByName('Check')
+                                    }
+                                  }
+
+                                  if (!Object.keys(outcomes).includes(res)) return;
+                                  Toasts.open(outcomes[res]);
+                                })
+                            }}
                         >
                             <Image style={styles.trashIcon} source={getIDByName('ic_trash_filled_16px')} />
                         </TouchableOpacity>
