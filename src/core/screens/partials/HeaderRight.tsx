@@ -76,7 +76,7 @@ const showAlert = ({ type, url }: { type: string, url: string }) => {
             isTablet() && Navigation.pop();
       
             try {
-              (type === "plugin"
+              const installData = () => (type === "plugin"
                 ? Plugins.installPlugin
                 : Themes.installTheme)(url, ({ data: res, restart, name }) => {
                     const outcomes = {
@@ -110,6 +110,8 @@ const showAlert = ({ type, url }: { type: string, url: string }) => {
                         });
                     }
                 });
+
+                isTablet() ? setTimeout(installData) : installData();
             } catch (e) {
                 Toasts.open({ content: e.message });
             }

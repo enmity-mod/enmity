@@ -116,7 +116,7 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                             onPress={() => {
                               isTablet() && Navigation.pop();
 
-                              (type === "plugin"
+                              const uninstallData = () => (type === "plugin"
                                 ? Plugins.uninstallPlugin
                                 : Themes.uninstallTheme)(data.name, (res) => {
                                   const outcomes = {
@@ -130,9 +130,11 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                                     }
                                   }
 
-                                  if (!Object.keys(outcomes).includes(res)) return;
+                                  if (!Object.keys(outcomes).includes(res)) return console.log(`Uninstall returned early with outcome: ${res}`);
                                   Toasts.open(outcomes[res]);
                                 })
+
+                                isTablet() ? setTimeout(uninstallData) : uninstallData();
                             }}
                         >
                             <Image style={styles.trashIcon} source={getIDByName('ic_trash_filled_16px')} />
