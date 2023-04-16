@@ -7,7 +7,7 @@ import { reload } from "@api/native";
 import { getByProps } from "@metro";
 
 const { Fonts, ThemeColorMap } = Constants;
-const { Platform: { isPad } } = getByProps("View", "Text");
+const { isTablet } = getByProps("isTablet", "getDevice");
 const styles = StyleSheet.createThemedStyleSheet?.({
     header: {
       tintColor: ThemeColorMap.HEADER_PRIMARY,
@@ -73,7 +73,7 @@ const showAlert = ({ type, url }: { type: string, url: string }) => {
                 });
             }
 
-            isPad && Navigation.pop();
+            isTablet() && Navigation.pop();
       
             try {
               (type === "plugin"

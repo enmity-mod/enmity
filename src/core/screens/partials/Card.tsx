@@ -11,7 +11,7 @@ import { getIDByName } from '@api/assets';
 import { getByProps } from '@metro';
 
 const { Fonts, ThemeColorMap } = Constants;
-const { Platform: { isPad } } = getByProps("View", "Text");
+const { isTablet } = getByProps("isTablet", "getDevice");
 const styles = StyleSheet.createThemedStyleSheet({
     container: {
       backgroundColor: ThemeColorMap.BACKGROUND_FLOATING,
@@ -114,7 +114,7 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                         <TouchableOpacity
                             style={styles.delete}
                             onPress={() => {
-                              isPad && Navigation.pop();
+                              isTablet() && Navigation.pop();
 
                               (type === "plugin"
                                 ? Plugins.uninstallPlugin

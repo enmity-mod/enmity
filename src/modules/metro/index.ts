@@ -76,17 +76,14 @@ export const filters = {
     const currentTheme = themes?.find(t => t.name === currentThemeName);
   
     if (!currentTheme) return;
-    
+
     currentTheme.colours ??= currentTheme["colors"];
   
     // patch old themes into new format
     if (currentTheme.spec === 1 || !currentTheme.spec) {
       if (currentTheme.theme_color_map) {
         currentTheme.semanticColors = currentTheme.theme_color_map
-
-        currentTheme.semanticColors.CHAT_BACKGROUND = currentTheme?.background?.url
-          ? ["transparent", "transparent"]
-          : currentTheme.theme_color_map.BACKGROUND_PRIMARY
+        currentTheme.semanticColors.CHAT_BACKGROUND ??= currentTheme.theme_color_map.BACKGROUND_PRIMARY
       };
   
       if (currentTheme.colours) {
@@ -108,9 +105,9 @@ export const filters = {
   
     if (currentTheme.rawColors) {
       if (!currentTheme.rawColors?.PRIMARY_660) currentTheme.rawColors.PRIMARY_660 = currentTheme?.semanticColors?.BACKGROUND_PRIMARY[0]
-      Object.entries(currentTheme.rawColors).forEach(([key, value]) => {
-        mdl["RawColor"][key] = value;
-        mdl["default"]["unsafe_rawColors"][key] = value;
+      Object.entries(currentTheme.rawColors).forEach(([key, value]: [string, string]) => {
+        mdl["RawColor"][key] = value.replace('transparent', "rgba(0,0,0,0)");
+        mdl["default"]["unsafe_rawColors"][key] = value.replace('transparent', "rgba(0,0,0,0)");
       })
     }
   
