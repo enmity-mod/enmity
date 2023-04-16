@@ -62,11 +62,11 @@ export const filters = {
   }
 };
 
-// this is a self invoked function so that i can use return lol
+// This is a self invoked function so that `return` can be used
 (() => {
   try {
-    // this module cannot be found through looping modules anymore, through trial and error apparently this module appears here when found with the filters at this point, which is the same point as where it was done with the loop :shrug:
-    // this works fine on 41968 and higher. loading this module and later than this will make it not fully theme everything, depending on how much later you do it.
+    // This module cannot be found through early-looping modules anymore, but through trial and error apparently this module appears here when found with the filters at this point, which is the same point as where it was done with the loop.
+    // This works fine on 41968 and higher. Loading this module and later than this will make it not fully theme everything, depending on how much later you do it.
     const mdl = getByProps("SemanticColor", "RawColor");
 
     if (!mdl) return;

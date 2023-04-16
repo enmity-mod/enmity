@@ -3,13 +3,13 @@ import { sendCommand } from '@modules/native';
 import { Theme, REST } from '@metro/common';
 import { getByProps } from '@metro';
 
+const { EventEmitter } = getByProps('EventEmitter');
+const Events = new EventEmitter();
+
 type Theme = ThemeType;
 
 let theme = window['themes']?.theme ?? '';
 let themes: Theme[] = window['themes']?.list ?? [];
-
-const EventEmitter = getByProps('EventEmitter').EventEmitter;
-const Events = new EventEmitter();
 
 export const on = Events.on.bind(Events);
 export const once = Events.once.bind(Events);

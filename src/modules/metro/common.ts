@@ -34,14 +34,9 @@ const {
   NavigationStack,
   Moment
 } = common;
-
-if (ColorMap && ColorMap?.["colors"] && ColorMap?.["unsafe_rawColors"]) {
-  Constants["ThemeColorMap"] = ColorMap["colors"];
-  Constants["Colors"] = ColorMap["unsafe_rawColors"];
-} 
-
-ColorMap["ThemeColorMap"] = ColorMap["colors"]
-StyleSheet["ThemeColorMap"] = ColorMap["colors"];
+ 
+ColorMap["ThemeColorMap"] = StyleSheet["ThemeColorMap"] = Constants["ThemeColorMap"] = ColorMap["colors"];
+Constants["Colors"] = ColorMap["unsafe_rawColors"];
 
 export const React = common.React as typeof import('react');
 

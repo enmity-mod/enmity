@@ -14,9 +14,6 @@ export function initialize(): void {
     Settings.set({ shownDeprecationWarning: true })
     alert("Your Enmity Tweak/IPA is out of date! Please update soon. You can ignore this warning, we will only show this once.")
   }
-
-  // go away
-  Settings.set({ theme_mode: null });
 }
 
 export default { initialize };

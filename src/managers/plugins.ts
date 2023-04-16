@@ -4,7 +4,7 @@ import { sendCommand } from '@modules/native';
 import { getByProps } from '@metro';
 import { REST } from '@metro/common';
 
-const EventEmitter = getByProps('EventEmitter').EventEmitter;
+const { EventEmitter } = getByProps('EventEmitter');
 
 let plugins: EnmityPlugin[] = [];
 let enabled: string[] = window['plugins']?.enabled ?? [];
@@ -66,22 +66,37 @@ export const on = Events.on.bind(Events);
 export const once = Events.once.bind(Events);
 export const off = Events.off.bind(Events);
 
+/**
+ * Get a plugin
+ */
 export function getPlugin(name): EnmityPlugin {
   return plugins.find(p => p.name === name);
 }
 
+/**
+ * Get all plugins
+ */
 export function getPlugins(): EnmityPlugin[] {
   return plugins;
 }
 
+/**
+ * Get all enabled plugins
+ */
 export function getEnabledPlugins(): string[] {
   return enabled;
 }
 
+/**
+ * Get all disabled plugins
+ */
 export function getDisabledPlugins(): string[] {
   return disabled;
 }
 
+/**
+ * Disable a plugin
+ */
 export function disablePlugin(name: string, onlyUnload = false, callback?: (result) => void): Promise<void> {
   if (enabled.includes(name)) {
     const idx = enabled.indexOf(name);
@@ -104,6 +119,9 @@ export function disablePlugin(name: string, onlyUnload = false, callback?: (resu
   });
 }
 
+/**
+ * Enable a plugin
+ */
 export function enablePlugin(name: string, callback?: (result) => void): Promise<void> {
   if (disabled.includes(name)) {
     const idx = disabled.indexOf(name);
@@ -156,6 +174,9 @@ export async function evalPlugin(url: string, enable: boolean = false, update?: 
   }
 }
 
+/**
+ * Install a plugin
+ */
 export function installPlugin(url: string, callback?: (result) => void, update?: () => void): Promise<void> {
   const name = url.split('/').pop().split('.')[0];
 
@@ -180,6 +201,9 @@ export function installPlugin(url: string, callback?: (result) => void, update?:
   });
 }
 
+/**
+ * Uninstall a plugin
+ */
 export function uninstallPlugin(name: string, callback?: (result) => void): Promise<void> {
   return new Promise(resolve => {
     sendCommand('uninstall-plugin', [name], data => {

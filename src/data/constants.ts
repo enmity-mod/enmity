@@ -4,7 +4,6 @@ export const AddonChannels = {
 };
 
 export const BadgesDomain = 'https://raw.githubusercontent.com/enmity-mod/badges/main/';
-
 export const Invite = 'rMdzhWUaGT'
 
 export enum Times {
