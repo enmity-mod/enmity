@@ -24,7 +24,7 @@ const cache = {
 
 export default function () {
   const OldBadges = getByName('ProfileBadges', { all: true, default: false });
-  const NewBadges = getByProps("ProfileBadgesOld");
+  const NewBadges = getByName("ProfileBadges", { default: false });
 
   const patchBadges = ({ user, isEnmity, style, rest, res, kind }) => {
     if (isEnmity) return;
@@ -77,7 +77,28 @@ export default function () {
  
   if (build >= "42235") {
     Patcher.after(NewBadges, 'default', (_, [{ user, isEnmity, style, ...rest }], res) => {
-      patchBadges({ user, isEnmity, style, rest, res, kind: NewBadges.default })
+      const oldRes = res;
+        if (!res) {
+          res = <View 
+            style={[style, { 
+              flexDirection: "row", 
+              flexWrap: 'wrap', 
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              paddingVertical: 2
+            }]} 
+            accessibilityRole={"list"}
+            accessibilityLabel={"User Badges"}
+          />;
+
+          res.props.children = [];
+        }
+
+        patchBadges({ user, isEnmity, style, rest, res, kind: NewBadges.default });
+
+        if (!oldRes) {
+          return res;
+        }
     });
 
     return Patcher.unpatchAll;
