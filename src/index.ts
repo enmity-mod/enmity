@@ -12,7 +12,7 @@ try {
     confirmText: "Okay"
   });
 
-  console.error(error);
+  console.error(`Error: \n${error}`);
 }
 
 export {};

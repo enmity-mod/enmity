@@ -1,6 +1,6 @@
 const modules = {
   Constants: {
-    props: ['Endpoints', 'API_HOST']
+    props: ['Endpoints', 'Fonts']
   },
 
   Clipboard: {
