@@ -2,6 +2,7 @@ import type { Theme as ThemeType } from 'enmity/managers/themes';
 import { sendCommand } from '@modules/native';
 import { Theme, REST } from '@metro/common';
 import { getByProps } from '@metro';
+import writeFile from '@utilities/writeFile';
 
 const { EventEmitter } = getByProps('EventEmitter');
 const Events = new EventEmitter();
@@ -40,14 +41,7 @@ export function listThemes(): Theme[] {
  * Install a theme
  */
 export async function installTheme(url: string, callback?: (data) => void): Promise<void> {
-  return new Promise(resolve => {
-    sendCommand('install-theme', [url], data => {
-      REST.get(url).then(response => {
-        const theme = JSON.parse(response.text);
-        if (!theme) {
-          throw new Error('Invalid theme structure');
-        }
-
+    const resolver = ({ theme, callback, data, resolve }) => {
         const index = themes.findIndex(t => t.name === theme.name);
         if (index > -1) themes.splice(index, 1);
         themes.push(theme);
@@ -56,9 +50,34 @@ export async function installTheme(url: string, callback?: (data) => void): Prom
         if (callback) callback(res);
         Events.emit('installed');
         resolve(res as any);
-      });
+    }
+
+    return new Promise(resolve => {
+        sendCommand('install-theme', [url], data => {
+            REST.get(url).then(response => {
+                const theme = JSON.parse(response.text);
+                if (!theme) {
+                    throw new Error('Invalid theme structure');
+                }
+
+                try {
+                    const themeName = url.substring(url.lastIndexOf('/') + 1).replace(".json", "");
+                    
+                    const formattedTheme = {
+                        ...theme,
+                        displayName: theme.displayName ?? theme.name,
+                        name: themeName
+                    }
+            
+                    if (theme.name === themeName) return resolver({ theme, callback, data, resolve });
+                    if (data !== "fucky_wucky") writeFile(`Themes/${themeName}.json`, JSON.stringify(formattedTheme, null, 2))
+                        .then(() => resolver({ theme: formattedTheme, callback, data, resolve }));
+                } catch(e) {
+                    console.error(e);
+                }
+            });
+        });
     });
-  });
 }
 
 /**

@@ -12,6 +12,7 @@ import { getByProps } from '@metro';
 
 const { Fonts, ThemeColorMap } = Constants;
 const { isTablet } = getByProps("isTablet", "getDevice");
+const getThemeName = (theme: Theme) => theme.displayName ?? theme.name
 const styles = StyleSheet.createThemedStyleSheet({
     container: {
       backgroundColor: ThemeColorMap.BACKGROUND_FLOATING,
@@ -73,6 +74,7 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
         ? Plugins?.getEnabledPlugins()?.includes(data.name)
         : Themes?.getTheme() === data.name)
     const navigation = NavigationNative?.useNavigation();
+    const dataName = type === "theme" ? getThemeName(data as Theme) : data.name
     const Settings = type === "plugin"
         ? data["getSettingsPanel"] as unknown as React.ComponentType 
         : undefined;
@@ -86,7 +88,9 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                 adjustsFontSizeToFit
                 style={styles.name}
               >
-                {data.name}
+                {/* If the data type is a theme and the theme has a "displayName", then display that. */}
+                {/* In all other circumstances, display the "name" property instead. */}
+                {dataName}
               </Text>
               {data.version && <Text
                 adjustsFontSizeToFit
@@ -125,7 +129,7 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                                       source: getIDByName('ic_close_16px')
                                     },
                                     [`uninstalled_${type}`]: {
-                                      content: `${data.name} has been uninstalled.`,
+                                      content: `${dataName} has been uninstalled.`,
                                       source: getIDByName('Check')
                                     }
                                   }
@@ -146,7 +150,7 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
 
                                 setEnabled(value);
                                 Toasts.open({
-                                    content: `${data.name} has been ${value ? 'enabled' : 'disabled'}.`,
+                                    content: `${dataName} has been ${value ? 'enabled' : 'disabled'}.`,
                                 });
                 
                                 if (value) {

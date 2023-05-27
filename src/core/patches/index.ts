@@ -1,39 +1,27 @@
-// import patchDownloader from './downloader';
-import patchSettings from './settings';
-import patchTracking from './no-track';
-import patchConsole from './console';
-import patchBadges from './badges';
+import settings from './settings';
+import tracking from './no-track';
+import inspect from './inspect';
+import badges from './badges';
+import theme from './theme';
+
+const handlePatch = (patchType: string, patch: () => any | void) => {
+    try {
+        patch();
+    } catch (e) {
+        console.warn(`Failed to patch ${patchType}: ${e.message ?? e}`)
+    }
+}
 
 export function initialize(): void {
-  try {
-    patchConsole();
-  } catch (e) {
-    console.log('Failed to patch console: ', e.message);
-  }
+    const patches = {
+        inspect,
+        settings,
+        tracking,
+        badges,
+        theme
+    }
 
-  try {
-    patchSettings();
-  } catch (e) {
-    console.log('Failed to patch settings: ', e.message);
-  }
-
-  try {
-    patchTracking();
-  } catch (e) {
-    console.log('Failed to patch trackers: ', e.message);
-  }
-
-  try {
-    patchBadges();
-  } catch (e) {
-    console.log('Failed to patch badges: ', e.message);
-  }
-
-  // try {
-  //   patchDownloader();
-  // } catch (e) {
-  //   console.log('Failed to patch addon downloader: ', e.message);
-  // }
+    Object.entries(patches).forEach(entry => handlePatch(...entry));
 }
 
 export default { initialize };
