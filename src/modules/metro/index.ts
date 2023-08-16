@@ -1,7 +1,5 @@
 /* eslint-disable */
 import Common from '@data/modules';
-import { Theme } from 'enmity/managers/themes';
-import { create } from '@patcher';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const __r: (moduleId: number) => any;
@@ -83,22 +81,55 @@ export const filters = {
     if (currentTheme.spec === 1 || !currentTheme.spec) {
       if (currentTheme.theme_color_map) {
         currentTheme.semanticColors = currentTheme.theme_color_map
-        currentTheme.semanticColors.CHAT_BACKGROUND ??= currentTheme.theme_color_map.BACKGROUND_PRIMARY
+
+        const assignees = {
+            "BACKGROUND_FLOATING": [
+                "BG_BACKDROP",
+                "BG_SURFACE_OVERLAY",
+                "BG_SURFACE_OVERLAY_TMP"
+            ],
+            "BACKGROUND_PRIMARY": [
+                "BG_BASE_PRIMARY",
+                "CHAT_BACKGROUND"
+            ],
+            "BACKGROUND_SECONDARY": [
+                "BG_BASE_SECONDARY"
+            ],
+            "BACKGROUND_SECONDARY_ALT": [
+                "BG_BASE_TERTIARY"
+            ],
+            "BACKGROUND_MODIFIER_ACCENT": [
+                "BG_MOD_FAINT",
+                "BG_MOD_STRONG",
+                "BG_MOD_SUBTLE"
+            ],
+            "BACKGROUND_MOBILE_PRIMARY": [
+                "BG_SURFACE_RAISED"
+            ]
+        }
+
+        Object.entries(currentTheme.semanticColors).forEach(([key, value]) => {
+            Object.entries(assignees).forEach(([assignKey, assignValue]) => {
+                if (key === assignKey) {
+                    assignValue.forEach(k => currentTheme.semanticColors[k] ??= value)
+                }
+            })
+        })
       };
   
       if (currentTheme.colours) {
-        const keys = {
-          "PRIMARY_DARK": "PRIMARY",
-          "PRIMARY_LIGHT": "PRIMARY",
-          "BRAND_NEW": "BRAND",
-          "STATUS_": ""
+        const replacers = {
+            "PRIMARY_DARK": "PRIMARY",
+            "PRIMARY_LIGHT": "PRIMARY",
+            "BRAND_NEW": "BRAND",
+            "STATUS_": "",
         }
 
         currentTheme.rawColors = currentTheme.colours
         Object.entries(currentTheme.colours).forEach(([key, value]) => {
-          Object.entries(keys).forEach(([k, v]) => {
-            if (key.startsWith(k)) currentTheme.rawColors[key.replace(k, v)] = value;
-          })
+            Object.entries(replacers).forEach(([k, v]) => {
+                if (key.startsWith(k)) currentTheme.rawColors[key.replace(k, v)] = value;
+            })
         })
       };
     }
