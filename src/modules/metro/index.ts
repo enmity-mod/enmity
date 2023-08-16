@@ -81,7 +81,34 @@ export const filters = {
     if (currentTheme.spec === 1 || !currentTheme.spec) {
       if (currentTheme.theme_color_map) {
         currentTheme.semanticColors = currentTheme.theme_color_map
+      };
+  
+      if (currentTheme.colours) {
+        const replacers = {
+            "PRIMARY_DARK": "PRIMARY",
+            "PRIMARY_LIGHT": "PRIMARY",
+            "BRAND_NEW": "BRAND",
+            "STATUS_": "",
+        }
 
+        currentTheme.rawColors = currentTheme.colours
+        Object.entries(currentTheme.colours).forEach(([key, value]) => {
+            Object.entries(replacers).forEach(([k, v]) => {
+                if (key.startsWith(k)) currentTheme.rawColors[key.replace(k, v)] = value;
+            })
+        })
+      };
+    }
+  
+    if (currentTheme.rawColors) {
+      if (!currentTheme.rawColors?.PRIMARY_660) currentTheme.rawColors.PRIMARY_660 = currentTheme?.semanticColors?.BACKGROUND_PRIMARY[0]
+      Object.entries(currentTheme.rawColors).forEach(([key, value]: [string, string]) => {
+        mdl["RawColor"][key] = value.replace('transparent', "rgba(0,0,0,0)");
+        mdl["default"]["unsafe_rawColors"][key] = value.replace('transparent', "rgba(0,0,0,0)");
+      })
+    }
+  
+    if (currentTheme.semanticColors) {
         const assignees = {
             "BACKGROUND_FLOATING": [
                 "BG_BACKDROP",
@@ -115,46 +142,19 @@ export const filters = {
                 }
             })
         })
-      };
-  
-      if (currentTheme.colours) {
-        const replacers = {
-            "PRIMARY_DARK": "PRIMARY",
-            "PRIMARY_LIGHT": "PRIMARY",
-            "BRAND_NEW": "BRAND",
-            "STATUS_": "",
-        }
 
-        currentTheme.rawColors = currentTheme.colours
-        Object.entries(currentTheme.colours).forEach(([key, value]) => {
-            Object.entries(replacers).forEach(([k, v]) => {
-                if (key.startsWith(k)) currentTheme.rawColors[key.replace(k, v)] = value;
-            })
-        })
-      };
-    }
-  
-    if (currentTheme.rawColors) {
-      if (!currentTheme.rawColors?.PRIMARY_660) currentTheme.rawColors.PRIMARY_660 = currentTheme?.semanticColors?.BACKGROUND_PRIMARY[0]
-      Object.entries(currentTheme.rawColors).forEach(([key, value]: [string, string]) => {
-        mdl["RawColor"][key] = value.replace('transparent', "rgba(0,0,0,0)");
-        mdl["default"]["unsafe_rawColors"][key] = value.replace('transparent', "rgba(0,0,0,0)");
-      })
-    }
-  
-    if (currentTheme.semanticColors) {
-      const originalResolveSemanticColor = mdl["default"]["meta"]["resolveSemanticColor"];
-      mdl["default"]["meta"]["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
-        const key = ref[Object.getOwnPropertySymbols(ref)[0]];
-  
-        if (currentTheme.semanticColors[key]) {
-          const index = { dark: 0, light: 1, amoled: 2 }[theme.toLowerCase()] || 0;
-          const colorOrNone = currentTheme.semanticColors[key][index];
-          if (colorOrNone) return colorOrNone;
-        }
-  
-        return originalResolveSemanticColor(theme, ref);
-      };
+        const originalResolveSemanticColor = mdl["default"]["meta"]["resolveSemanticColor"];
+        mdl["default"]["meta"]["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
+            const key = ref[Object.getOwnPropertySymbols(ref)[0]];
+    
+            if (currentTheme.semanticColors[key]) {
+            const index = { dark: 0, light: 1, amoled: 2 }[theme.toLowerCase()] || 0;
+            const colorOrNone = currentTheme.semanticColors[key][index];
+            if (colorOrNone) return colorOrNone;
+            }
+    
+            return originalResolveSemanticColor(theme, ref);
+        };
     }
   } catch(e) {
     const err = new Error(`[Enmity] ${e}`);
