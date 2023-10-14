@@ -1,7 +1,5 @@
 import { getByProps } from '@metro';
 
-const Util = getByProps('inspect');
-
 const levels = {
   debug: 0,
   info: 1,
@@ -12,6 +10,8 @@ const levels = {
 const methods = ['error', 'info', 'log', 'warn', 'trace', 'debug'];
 
 export default () => {
+  const Util = getByProps('inspect');
+
   for (const method of methods) {
     console[method].__ORIGINAL__ = console[method];
 
