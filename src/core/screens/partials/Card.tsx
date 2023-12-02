@@ -13,7 +13,7 @@ import { getByProps } from '@metro';
 const { Fonts, ThemeColorMap } = Constants;
 const { isTablet } = getByProps("isTablet", "getDevice");
 const getThemeName = (theme: Theme) => theme.displayName ?? theme.name
-const styles = StyleSheet.createThemedStyleSheet({
+const useStyles = StyleSheet.createStyles({
     container: {
       backgroundColor: ThemeColorMap.BACKGROUND_FLOATING,
       borderRadius: 5,
@@ -70,6 +70,7 @@ const styles = StyleSheet.createThemedStyleSheet({
 });
 
 export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "theme" }) {
+    const styles = useStyles();
     const [enabled, setEnabled] = React.useState(type === "plugin"
         ? Plugins?.getEnabledPlugins()?.includes(data.name)
         : Themes?.getTheme() === data.name)

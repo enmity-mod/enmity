@@ -3,12 +3,7 @@ import { Text, TouchableOpacity, View } from '@components';
 
 const { Fonts, ThemeColorMap } = Constants;
 
-export default function ({ authors }) {
-  if (!authors || !Array.isArray(authors) || !authors.length) {
-    return null;
-  }
-
-  const styles = StyleSheet.createThemedStyleSheet({
+const useStyles = StyleSheet.createStyles({
     linkless: {
       color: ThemeColorMap.HEADER_SECONDARY,
       fontFamily: Fonts.PRIMARY_SEMIBOLD,
@@ -28,7 +23,14 @@ export default function ({ authors }) {
       alignSelf: 'center',
       justifyContent: 'center'
     }
-  });
+});
+
+export default function ({ authors }) {
+  const styles = useStyles();
+
+  if (!authors || !Array.isArray(authors) || !authors.length) {
+    return null;
+  }
 
   return <View style={styles.container}>
     {authors.map((author, index) => {

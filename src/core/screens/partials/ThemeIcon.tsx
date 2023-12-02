@@ -2,14 +2,16 @@ import { SVG, StyleSheet, React, Constants } from '@metro/common';
 
 const { ThemeColorMap } = Constants;
 
-export default function ({ height, width, ...rest }) {
-  const styles = StyleSheet.createThemedStyleSheet({
+const useStyles = StyleSheet.createStyles({
     icon: {
       color: ThemeColorMap.INTERACTIVE_NORMAL,
       opacity: 0.75,
       marginLeft: 0.5
     }
   });
+
+export default function ({ height, width, ...rest }) {
+  const styles = useStyles();
 
   return <SVG.Svg viewBox='0 0 24 24' style={{ height, width, ...styles.icon }} fill='currentColor' {...rest}>
     <SVG.Path d='M0 0h24v24H0z' fill='none' />
