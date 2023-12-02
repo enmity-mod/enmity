@@ -8,7 +8,7 @@ import { getByProps } from "@metro";
 
 const { Fonts, ThemeColorMap } = Constants;
 const { isTablet } = getByProps("isTablet", "getDevice");
-const useStyles = StyleSheet.createStyles({
+const styles = StyleSheet.createThemedStyleSheet({
     header: {
       tintColor: ThemeColorMap.HEADER_PRIMARY,
       marginRight: 15,
@@ -32,8 +32,6 @@ const useStyles = StyleSheet.createStyles({
 });
 
 const InstallText = ({ type }) => {
-    const styles = useStyles();
-
     return <Text style={styles.text}>
         Paste {type} URL here:
     </Text>
@@ -126,8 +124,6 @@ const showAlert = ({ type, url }: { type: string, url: string }) => {
 }
 
 export default function ({ type }: { type: "plugin" | "theme" }) {
-    const styles = useStyles();
-
     return (
       <TouchableOpacity styles={styles.wrapper} onPress={async function() {  
         showAlert({ 

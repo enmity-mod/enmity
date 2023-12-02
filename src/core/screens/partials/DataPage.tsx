@@ -7,7 +7,7 @@ import { Card } from "./Card";
 import { getIDByName } from "@api/assets";
 
 const { Fonts, ThemeColorMap } = Constants;
-const useStyles = StyleSheet.createStyles({
+const styles = StyleSheet.createThemedStyleSheet({
     container: {
       flex: 1,
       padding: 5
@@ -41,8 +41,6 @@ const Search = getModule(m => m.name === 'StaticSearchBarContainer');
 
 export default function ({ type }: { type: "plugin" | "theme" }) {
   const isPlugin = type === "plugin"
-
-  const styles = useStyles();
   const forceUpdate = React.useState(null)[1];
   const [entries, setEntries] = React.useState(
     (isPlugin

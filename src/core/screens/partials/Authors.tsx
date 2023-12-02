@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from '@components';
 
 const { Fonts, ThemeColorMap } = Constants;
 
-const useStyles = StyleSheet.createStyles({
+const styles = StyleSheet.createThemedStyleSheet({
     linkless: {
       color: ThemeColorMap.HEADER_SECONDARY,
       fontFamily: Fonts.PRIMARY_SEMIBOLD,
@@ -26,8 +26,6 @@ const useStyles = StyleSheet.createStyles({
 });
 
 export default function ({ authors }) {
-  const styles = useStyles();
-
   if (!authors || !Array.isArray(authors) || !authors.length) {
     return null;
   }

@@ -20,7 +20,7 @@ try {
 }
 const { ThemeColorMap } = Constants;
 
-const useStyles = StyleSheet.createStyles({
+const styles = StyleSheet.createThemedStyleSheet({
   debugText: {
     color: ThemeColorMap.TEXT_MUTED
   },
@@ -32,8 +32,6 @@ const useStyles = StyleSheet.createStyles({
 const Invites = getByProps('acceptInviteAndTransitionToInviteChannel');
 
 export default function Page({ settings }) {
-  const styles = useStyles();
-
   const Icons = {
     Twitter: Assets.getIDByName('img_account_sync_twitter_white'),
     GitHub: Assets.getIDByName('img_account_sync_github_white'),
