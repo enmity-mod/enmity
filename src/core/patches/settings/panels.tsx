@@ -12,7 +12,7 @@ import ThemeIcon from '@screens/partials/ThemeIcon';
 import PluginIcon from '@screens/partials/PluginIcon';
 import { build } from '@api/native';
 
-const Patcher = create('enmity-settings');
+const Patcher = create('enmity-settings-panels');
 
 export default function (): void {
   patchScreens();

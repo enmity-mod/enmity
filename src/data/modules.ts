@@ -42,7 +42,7 @@ const modules = {
 
     Toasts: {
         props: ['open', 'close'],
-        ensure: m => Object.keys(m).length === 2
+        ensure: m => m.open && m.close && !m.startDrag && !m.init && !m.openReplay && !m.setAlwaysOnTop && !m.updateGuildNotificationSettings
     },
 
     Dialog: {

@@ -3,6 +3,7 @@ import tracking from './no-track';
 import inspect from './inspect';
 import badges from './badges';
 import theme from './theme';
+import toasts from './toasts';
 
 const handlePatch = (patchType: string, patch: () => any | void) => {
     try {
@@ -18,7 +19,8 @@ export function initialize(): void {
         settings,
         tracking,
         badges,
-        theme
+        theme,
+        toasts
     }
 
     Object.entries(patches).forEach(entry => handlePatch(...entry));
