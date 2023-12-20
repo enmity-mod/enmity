@@ -125,7 +125,7 @@ const showAlert = ({ type, url }: { type: string, url: string }) => {
 
 export default function ({ type }: { type: "plugin" | "theme" }) {
     return (
-      <TouchableOpacity styles={styles.wrapper} onPress={async function() {  
+      <TouchableOpacity style={styles.wrapper} onPress={async function() {  
         showAlert({ 
             type, 
             url: await Clipboard?.getString?.()

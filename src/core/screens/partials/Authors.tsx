@@ -3,25 +3,24 @@ import { Text, TouchableOpacity, View } from '@components';
 
 const { Fonts, ThemeColorMap } = Constants;
 
+const commonAuthorStyle = {
+  fontFamily: Fonts.PRIMARY_SEMIBOLD,
+  display: 'flex',
+  fontSize: 16,
+  alignItems: 'center',
+  alignSelf: 'center',
+  justifyContent: 'center'
+};
+
 const styles = StyleSheet.createThemedStyleSheet({
     linkless: {
-      color: ThemeColorMap.HEADER_SECONDARY,
-      fontFamily: Fonts.PRIMARY_SEMIBOLD,
-      display: 'flex',
-      fontSize: 16,
-      alignItems: 'center',
-      alignSelf: 'center',
-      justifyContent: 'center'
+      ...commonAuthorStyle,
+      color: ThemeColorMap.HEADER_SECONDARY
     },
 
     link: {
-      color: ThemeColorMap.HEADER_PRIMARY,
-      fontFamily: Fonts.PRIMARY_SEMIBOLD,
-      display: 'flex',
-      alignItems: 'center',
-      fontSize: 16,
-      alignSelf: 'center',
-      justifyContent: 'center'
+      ...commonAuthorStyle,
+      color: ThemeColorMap.HEADER_PRIMARY
     }
 });
 
@@ -30,7 +29,7 @@ export default function ({ authors }) {
     return null;
   }
 
-  return <View style={styles.container}>
+  return <View>
     {authors.map((author, index) => {
       const isFirst = index !== authors.length - 1;
 
