@@ -188,7 +188,7 @@ const Badge = ({ type, size, margin }: { type: string; size: number; margin: num
     }
   };
 
-  const uri = badge.url[Theme.theme];
+  const uri = badge.url[Theme.theme === "light" ? "light" : "dark"];
 
   return <TouchableOpacity
     onPress={() => Toasts.open({
