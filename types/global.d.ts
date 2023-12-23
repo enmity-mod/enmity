@@ -1,12 +1,17 @@
+import type { Theme as ThemeType } from 'enmity/managers/themes';
+
 declare global {
   var nativeLoggingHook: (message: string, level: number) => void;
   var enmity: typeof import('@api').API;
   var modules: Record<string | number | symbol, any>;
   var HermesInternal: any;
-  var plugins: any;
+  var plugins: {
+    enabled: string[];
+    disabled: string[];
+  };
   var themes: {
     theme: string;
-    list: any[];
+    list: ThemeType[];
   }
   var tweak: {
     version: string | undefined

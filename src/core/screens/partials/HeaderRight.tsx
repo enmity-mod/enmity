@@ -4,10 +4,9 @@ import { StyleSheet, Clipboard, Dialog, Constants, React, Toasts, Navigation } f
 import * as Plugins from "@managers/plugins";
 import * as Themes from "@managers/themes";
 import { reload } from "@api/native";
-import { getByProps } from "@metro";
+import { isTablet } from "./modules";
 
 const { Fonts, ThemeColorMap } = Constants;
-const { isTablet } = getByProps("isTablet", "getDevice");
 const styles = StyleSheet.createThemedStyleSheet({
     header: {
       tintColor: ThemeColorMap.HEADER_PRIMARY,

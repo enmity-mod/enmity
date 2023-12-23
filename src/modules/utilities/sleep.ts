@@ -4,6 +4,6 @@
  * @return {Promise<void>} Returns Promise<void>
  */
 
-export default function sleep(time) {
+export default function sleep(time: number): Promise<void> {
   return new Promise(f => setTimeout(f, time));
 }

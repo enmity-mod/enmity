@@ -3,12 +3,12 @@ import { SVG, StyleSheet, React, Constants } from '@metro/common';
 const { ThemeColorMap } = Constants;
 
 const styles = StyleSheet.createThemedStyleSheet({
-    icon: {
-      color: ThemeColorMap.INTERACTIVE_NORMAL,
-      opacity: 0.75,
-      marginLeft: 0.5
-    }
-  });
+  icon: {
+    color: ThemeColorMap.INTERACTIVE_NORMAL,
+    opacity: 0.75,
+    marginLeft: 0.5
+  }
+});
 
 export default function ({ height, width, ...rest }) {
   return <SVG.Svg viewBox='0 0 24 24' style={{ height, width, ...styles.icon }} fill='currentColor' {...rest}>

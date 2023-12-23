@@ -2,9 +2,16 @@ import { Theme, Dispatcher } from '@metro/common';
 import { getByProps } from '@metro';
 
 export default () => {
-    const { overrideTheme } = getByProps("updateTheme", "overrideTheme");
-    const { setAMOLEDThemeEnabled } = getByProps("setAMOLEDThemeEnabled");
-    const { useAMOLEDTheme } = getByProps("useAMOLEDTheme");
+    const [
+        { overrideTheme },
+        { setAMOLEDThemeEnabled },
+        { useAMOLEDTheme }
+    ] = getByProps(
+        ["updateTheme", "overrideTheme"],
+        ["setAMOLEDThemeEnabled"],
+        ["useAMOLEDTheme"],
+        { bulk: true }
+    );
 
     const event = function() {
         overrideTheme(Theme?.theme ?? "dark");

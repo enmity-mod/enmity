@@ -8,10 +8,10 @@ import * as Plugins from "@managers/plugins"
 import * as Themes from "@managers/themes"
 import { reload } from '@api/native';
 import { getIDByName } from '@api/assets';
-import { getByProps } from '@metro';
+import { isTablet } from "./modules";
 
 const { Fonts, ThemeColorMap } = Constants;
-const { isTablet } = getByProps("isTablet", "getDevice");
+// @ts-expect-error displayName property no longer exists on Theme
 const getThemeName = (theme: Theme) => theme.displayName ?? theme.name
 const styles = StyleSheet.createThemedStyleSheet({
     container: {

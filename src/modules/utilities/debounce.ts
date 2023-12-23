@@ -5,8 +5,8 @@
  * @return {function} Returns an instance of the function wrapped in a debounce
  */
 
-export default function debounce(func, ms) {
-  let timer;
+export default function debounce(func: Function, ms: number): Function {
+  let timer: ReturnType<typeof setTimeout>;
 
   return function (...args) {
     clearTimeout(timer);
