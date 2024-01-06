@@ -143,8 +143,8 @@ export const filters = {
                 })
             })
 
-            const originalResolveSemanticColor = mdl["default"]["meta"]["resolveSemanticColor"];
-            mdl["default"]["meta"]["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
+            const originalResolveSemanticColor = (mdl["default"]["meta"] ?? mdl["default"]["internal"])["resolveSemanticColor"];
+            (mdl["default"]["meta"] ?? mdl["default"]["internal"])["resolveSemanticColor"] = (theme: string, ref: { [key: symbol]: string; }) => {
                 const key = ref[Object.getOwnPropertySymbols(ref)[0]];
 
                 if (currentTheme.semanticColors[key]) {

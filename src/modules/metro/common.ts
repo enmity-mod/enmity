@@ -45,8 +45,8 @@ if (!StyleSheet.createThemedStyleSheet) {
                 get(target, prop, receiver) {
                     const res = Reflect.get(target, prop, receiver);
 
-                    if (ColorMap.meta.isSemanticColor(res)) {
-                        return ColorMap.meta.resolveSemanticColor(Theme.theme, res)
+                    if ((ColorMap.meta ?? ColorMap.internal).isSemanticColor(res)) {
+                        return (ColorMap.meta ?? ColorMap.internal).resolveSemanticColor(Theme.theme, res)
                     }
 
                     return res;
@@ -64,6 +64,10 @@ if (ColorMap?.["colors"]) {
 
 if (ColorMap?.["unsafe_rawColors"]) {
     Constants["Colors"] = ColorMap["unsafe_rawColors"];
+}
+
+if (ColorMap?.["internal"]) {
+    ColorMap["meta"] = ColorMap["internal"];
 }
 
 export const React = common.React as typeof import('react');

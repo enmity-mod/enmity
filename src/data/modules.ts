@@ -99,9 +99,10 @@ const modules = {
 
     ColorMap: {
         props: [
-            ['colors', 'meta'],
+            ['colors'],
             ['ThemeColorMap']
-        ]
+        ],
+        ensure: m => m?.meta || m?.internal
     },
 
     Components: {
