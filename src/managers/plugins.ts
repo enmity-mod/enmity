@@ -1,225 +1,200 @@
-import { registerCommands, unregisterCommands } from '@api/commands';
+import { registerCommands, unregisterCommands } from 'enmity/api/commands';
 import { Plugin as EnmityPlugin } from 'enmity/managers/plugins';
-import { sendCommand } from '@modules/native';
+import { makeStore } from '@api/settings';
 import { getByProps } from '@metro';
-import { REST } from '@metro/common';
 
+const Files = nativeModuleProxy['DCDFileManager'] ?? nativeModuleProxy['RTNFileManager'];
 const { EventEmitter } = getByProps('EventEmitter');
+const Settings = makeStore('enmity');
 
-let plugins: EnmityPlugin[] = [];
-let enabled: string[] = window['plugins']?.enabled ?? [];
-let disabled: string[] = window['plugins']?.disabled ?? [];
-
-const Events = new EventEmitter();
-
-export function registerPlugin(plugin: EnmityPlugin): void {
-  if (!plugin || typeof plugin !== 'object') {
-    return;
-  }
-
-  plugin.onEnable = (): void => {
-    try {
-      plugin.onStart();
-      if (plugin.commands) {
-        registerCommands(plugin.name, plugin.commands);
-      }
-
-      console.log(`${plugin.name} has been enabled`);
-    } catch (e) {
-      console.log(`${plugin.name} failed to load`, e.message);
-    }
-  };
-
-  plugin.onDisable = (): void => {
-    try {
-      if (plugin.patches) {
-        for (const patch of plugin.patches) {
-          patch.unpatchAll();
-        }
-      }
-
-      if (plugin.commands) {
-        unregisterCommands(plugin.name);
-      }
-
-      plugin.onStop();
-      console.log(`${plugin.name} has been disabled`);
-    } catch (e) {
-      console.log(`${plugin.name} failed to disable`, e.message);
-    }
-  };
-
-  if (enabled.includes(plugin.name)) {
-    plugin.onEnable();
-  }
-
-  if (disabled.includes(plugin.name)) {
-    plugin.onDisable();
-  }
-
-  if (!getPlugin(plugin.name)) {
-    plugins.push(plugin);
-  }
+export interface InternalPlugin {
+	instance?: EnmityPlugin;
+	started?: boolean;
+	filename: string;
+	bundle: string;
+	path: string;
 }
+
+const plugins: InternalPlugin[] = window.ENMITY_PLUGINS ?? [];
+const Events = new EventEmitter();
 
 export const on = Events.on.bind(Events);
 export const once = Events.once.bind(Events);
 export const off = Events.off.bind(Events);
 
-/**
- * Get a plugin
- */
-export function getPlugin(name): EnmityPlugin {
-  return plugins.find(p => p.name === name);
+export function initialize() {
+	for (const plugin of plugins) {
+		loadPlugin(plugin);
+	}
 }
 
-/**
- * Get all plugins
- */
+export function getPlugin(name): InternalPlugin {
+	return plugins.find(p => p.instance?.name === name);
+}
+
 export function getPlugins(): EnmityPlugin[] {
-  return plugins;
+	return plugins.map(p => p.instance).filter(Boolean);
 }
 
-/**
- * Get all enabled plugins
- */
 export function getEnabledPlugins(): string[] {
-  return enabled;
+	return Settings.get('enabledPlugins', []) as string[];
 }
 
-/**
- * Get all disabled plugins
- */
+export function isEnabled(name: string): boolean {
+	const enabled = getEnabledPlugins();
+
+	return enabled.includes(name);
+}
+
 export function getDisabledPlugins(): string[] {
-  return disabled;
+	const enabled = getEnabledPlugins();
+	const disabled = plugins.filter(p => p.instance && !enabled.includes(p.instance.name));
+
+	return disabled.filter(Boolean).map(p => p.instance.name);
 }
 
-/**
- * Disable a plugin
- */
-export function disablePlugin(name: string, onlyUnload = false, callback?: (result) => void): Promise<void> {
-  if (enabled.includes(name)) {
-    const idx = enabled.indexOf(name);
-    if (~idx) enabled.splice(idx, 1);
-  }
+export function loadPlugin(plugin: InternalPlugin) {
+	try {
+		if (!plugin.instance) {
+			const script = plugin.bundle.replace(/window\.enmity\.plugins\.registerPlugin\((.+?)\)/gmi, 'return $1');
+			const res = eval(script);
 
-  if (onlyUnload && disabled.includes(name)) {
-    const idx = disabled.indexOf(name);
-    if (~idx) disabled.splice(idx, 1);
-  }
+			plugin.instance = res.default ?? res;
 
-  if (!onlyUnload) disabled.push(name);
-  getPlugin(name).onDisable();
+			if (!plugin.instance) throw new Error('Plugin has no instance');
+		}
 
-  return new Promise(resolve => {
-    sendCommand('disable-plugin', [name], (...data) => {
-      if (callback) callback(...data);
-      resolve(...data);
-    });
-  });
+		console.log(`${plugin.filename} loaded.`);
+
+		if (isEnabled(plugin.instance.name)) {
+			startPlugin(plugin);
+		}
+
+		Events.emit('loaded');
+	} catch (e) {
+		console.error(`${plugin.filename} failed to load:`, e.message);
+	}
 }
 
-/**
- * Enable a plugin
- */
-export function enablePlugin(name: string, callback?: (result) => void): Promise<void> {
-  if (disabled.includes(name)) {
-    const idx = disabled.indexOf(name);
-    if (~idx) disabled.splice(idx, 1);
-  }
+export function startPlugin(plugin: InternalPlugin) {
+	try {
+		plugin.instance.onStart();
 
-  enabled.push(name);
-  getPlugin(name).onEnable();
+		if (plugin.instance.commands) {
+			registerCommands(plugin.instance.name, plugin.instance.commands);
+		}
 
-  return new Promise(resolve => {
-    sendCommand('enable-plugin', [name], (...data) => {
-      if (callback) callback(...data);
-      resolve(...data);
-    });
-  });
+		plugin.started = true;
+
+		console.log(`${plugin.filename} started.`);
+		return true;
+	} catch (e) {
+		console.error(`${plugin.filename} failed to start:`, e.message);
+		return false;
+	}
 }
 
-export async function evalPlugin(url: string, enable: boolean = false, update?: () => void): Promise<string> {
-  try {
-    const response = await REST.get(url);
+export function stopPlugin(plugin: InternalPlugin) {
+	try {
+		if (!plugin.instance) return true;
 
-    const code = response.text;
-    const name = url.split('/').pop().split('.')[0];
-    const id = Number(Object.keys(window['modules']).pop()) + 1;
-    const wrapper = `__d(function(...args) {
-        try {
-          ${code}
-        } catch(err) {
-          console.log(err);
-        }
-      }, ${id}, []);
-      __r(${id})`;
+		plugin.instance.onStop();
 
-    // Try catch this so the plugin doesn't get pushed to enabled when it fails evaluation
-    try {
-      eval(wrapper);
+		if (plugin.instance.patches) {
+			for (const patch of plugin.instance.patches) {
+				patch.unpatchAll();
+			}
+		}
 
-      if (enable && !enabled.includes(name)) {
-        await enablePlugin(name);
-      }
-    } catch (e) {
-      console.log('Failed to eval plugin instance', e.message);
-    }
+		if (plugin.instance.commands) {
+			unregisterCommands(plugin.instance.name);
+		}
 
-    if (update) update();
+		plugin.started = false;
 
-    return name;
-  } catch (e) {
-    console.log('Failed to eval plugin instance', e.message);
-  }
+		console.log(`${plugin.filename} stopped.`);
+		return true;
+	} catch (e) {
+		console.error(`${plugin.filename} failed to stop:`, e.message);
+		return false;
+	}
 }
 
-/**
- * Install a plugin
- */
-export function installPlugin(url: string, callback?: (result) => void, update?: () => void): Promise<void> {
-  const name = url.split('/').pop().split('.')[0];
+export function disablePlugin(name: string) {
+	const enabled = getEnabledPlugins();
+	const plugin = getPlugin(name);
+	if (!plugin) return;
 
-  return new Promise(resolve => {
-    sendCommand('install-plugin', [url], data => {
-      function handleResponse() {
-        evalPlugin(url, true).then(name => {
-          const res = { name, data, url };
-          Events.emit('installed');
-          if (callback) callback(res);
-          update();
-          resolve(res as any);
-        });
-      }
+	if (plugin.started) {
+		stopPlugin(plugin);
+	}
 
-      if (data === 'overridden_plugin') {
-        return disablePlugin(name, true).then(handleResponse);
-      }
+	const idx = enabled.indexOf(name);
+	if (idx > -1) enabled.splice(idx, 1);
 
-      return handleResponse();
-    });
-  });
+	Settings.set('enabledPlugins', enabled);
 }
 
-/**
- * Uninstall a plugin
- */
-export function uninstallPlugin(name: string, callback?: (result) => void): Promise<void> {
-  return new Promise(resolve => {
-    sendCommand('uninstall-plugin', [name], data => {
-      if (data === "uninstalled_plugin") {
-        disablePlugin(name);
-        enabled = enabled.filter(p => p !== name);
-        disabled = disabled.filter(p => p !== name);
+export function enablePlugin(name: string) {
+	const enabled = getEnabledPlugins();
+	const plugin = getPlugin(name);
+	if (!plugin) return;
 
-        const index = plugins.findIndex(p => p.name === name);
-        if (index > -1) plugins.splice(index, 1);
+	if (!plugin.started) {
+		startPlugin(plugin);
+	}
 
-        Events.emit('uninstalled');
-        if (callback) callback(data);
-      }
+	Settings.set('enabledPlugins', [...enabled, name]);
+}
 
-      resolve(data);
-    });
-  });
+export async function installPlugin(url: string) {
+	try {
+		const name = url.split('/').pop();
+
+		const res = await fetch(url, { cache: 'no-cache' });
+		const bundle = await res.text();
+
+		if (res.status !== 200) {
+			console.error('Failed to install plugin:', res.status, bundle);
+			return false;
+		} else {
+			await Files.writeFile('documents', `Plugins/${name}`, bundle, 'utf8');
+
+			const plugin = { filename: name, path: 'oops', bundle };
+
+			plugins.push(plugin);
+			loadPlugin(plugin);
+			Events.emit('installed');
+			return true;
+		}
+	} catch (e) {
+		console.error('Failed to install plugin:', e);
+		return false;
+	}
+}
+
+export async function uninstallPlugin(name: string) {
+	const plugin = getPlugin(name);
+
+	try {
+		await Files.removeFile('documents', `Plugins/${plugin.filename}`);
+
+		if (plugin.started) {
+			plugin.instance.onDisable();
+		}
+
+		const idx = plugins.indexOf(plugin);
+		if (idx > -1) plugins.splice(idx, 1);
+
+		Events.emit('uninstalled');
+		return true;
+	} catch (e) {
+		console.error('Failed to uninstall plugin:', e);
+		return false;
+	}
+}
+
+/* DEPRECATED */
+export function registerPlugin(plugin: EnmityPlugin): void {
+	return alert(plugin.name + ' tried to load through deprecated method.');
 }

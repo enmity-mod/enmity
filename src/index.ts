@@ -1,18 +1,14 @@
-import '@api/assets';
-import Core from '@core';
-import { Dialog } from '@metro/common';
+// Setup asset handler early to capture most assets then initialize enmity
 
-try {
-  // Setup asset handler early to capture most assets then initialize enmity
-  Core.initialize();
-} catch (error) {
-  Dialog.show({
-    title: "Error",
-    body: `Enmity failed to initialize: ${typeof error === "string" ? error : error.message}`,
-    confirmText: "Okay"
-  });
+async function init() {
+	await import('@api/assets');
 
-  console.error(`Error: \n${error}`);
+	const Core = await import('@core');
+	Core.initialize();
 }
 
-export {};
+try {
+	init();
+} catch (error) {
+	alert(`Failed to initialize Enmity: ${error.message}`);
+}
