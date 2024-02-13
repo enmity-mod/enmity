@@ -150,7 +150,7 @@ export default function Page({ settings }) {
           label='Enmity'
           leading={<FormRow.Icon source={{ uri: 'https://files.enmity.app/icon-64.png' }} />}
           trailing={() => <Text style={styles.debugText}>{window.enmity.version}</Text>}
-          onPress={() => Linking.openURL(`https://github.com/acquitelol/enmity/commit/${window.enmity.version}`)}
+          onPress={() => Linking.openURL(`https://github.com/enmity-mod/enmity/commit/${window.enmity.version}`)}
         />
         <FormDivider />
         <FormRow
