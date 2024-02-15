@@ -1,5 +1,5 @@
 import { getIDByName } from "@api/assets";
-import { TouchableOpacity, Text, FormInput, Image, View } from "@components";
+import { TouchableOpacity, Text, FormInput, Image } from "@components";
 import { StyleSheet, Clipboard, Dialog, Constants, React, Toasts, Navigation } from "@metro/common";
 import * as Plugins from "@managers/plugins";
 import * as Themes from "@managers/themes";
@@ -112,18 +112,16 @@ function DialogBody({ type }) {
 			borderColor: "rgba(120, 120, 120, 0.3)",
 		}}> */}
 		{/* <View style={{ marginBottom: -25 }} /> */}
-		<View style={{ paddingVertical: 10 }}>
-			<FormInput
-				placeholder={type === "plugin"
-					? "https://github.com/discord-modifications/enmity-addons/blob/main/Plugins/ShowHiddenChannels/dist/ShowHiddenChannels.js"
-					: "https://raw.githubusercontent.com/discord-modifications/enmity-addons/main/Themes/AMOLED.json"}
-				value={url}
-				onChangeText={setURL}
-				autoFocus={true}
-				showBorder={true}
-				inputMode={"url"}
-			/>
-		</View>
+		<FormInput
+			placeholder={type === "plugin"
+				? "https://github.com/discord-modifications/enmity-addons/blob/main/Plugins/ShowHiddenChannels/dist/ShowHiddenChannels.js"
+				: "https://raw.githubusercontent.com/discord-modifications/enmity-addons/main/Themes/AMOLED.json"}
+			value={url}
+			onChange={setURL}
+			autoFocus={true}
+			showBorder={true}
+			inputMode={"url"}
+		/>
 		{/* </View> */}
 	</>;
 }
