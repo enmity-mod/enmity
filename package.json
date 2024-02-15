@@ -1,34 +1,34 @@
 {
-  "name": "enmity",
-  "description": "The power of addons, all in your hand.",
-  "version": "2.1.2",
-  "license": "GPL-3.0",
-  "scripts": {
-    "make": "rollup -c --configPlugin rollup-plugin-swc3",
-    "build": "yarn make",
-    "watch": "yarn make --watch"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/enmity-mod/enmity.git"
-  },
-  "bugs": {
-    "url": "https://github.com/enmity-mod/enmity/issues"
-  },
-  "homepage": "https://enmity.app",
-  "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.0.1",
-    "@rollup/plugin-replace": "^5.0.2",
-    "@swc/core": "^1.3.35",
-    "@types/node": "^18.13.0",
-    "@types/react": "^18.0.28",
-    "rollup": "^3.15.0",
-    "rollup-plugin-swc3": "^0.8.0",
-    "rollup-plugin-typescript-paths": "^1.4.0",
-    "typescript": "^4.9.5"
-  },
-  "dependencies": {
-    "enmity": "^1.2.4",
-    "react": "^18.2.0"
-  }
+	"name": "enmity",
+	"description": "The power of addons, all in your hand.",
+	"version": "2.1.2",
+	"license": "GPL-3.0",
+	"scripts": {
+		"make": "rollup -c",
+		"build": "yarn make",
+		"watch": "yarn make --watch"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/enmity-mod/enmity.git"
+	},
+	"bugs": {
+		"url": "https://github.com/enmity-mod/enmity/issues"
+	},
+	"homepage": "https://enmity.app",
+	"devDependencies": {
+		"@rollup/plugin-node-resolve": "^15.2.3",
+		"@rollup/plugin-replace": "^5.0.5",
+		"@swc/core": "^1.4.1",
+		"@types/node": "^20.11.17",
+		"@types/react": "^18.2.55",
+		"rollup": "^4.11.0",
+		"rollup-plugin-swc3": "^0.11.0",
+		"rollup-plugin-typescript-paths": "^1.5.0",
+		"typescript": "^5.3.3"
+	},
+	"dependencies": {
+		"enmity": "^1.2.4",
+		"react": "^18.2.0"
+	}
 }

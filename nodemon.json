@@ -1,7 +1,7 @@
 {
-  "ignore": [
-    "dist"
-  ],
-  "exec": "rollup -c",
-  "ext": "*.*"
+	"ignore": [
+		"dist"
+	],
+	"exec": "rollup -c",
+	"ext": "*.*"
 }
