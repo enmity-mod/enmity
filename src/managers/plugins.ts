@@ -84,7 +84,7 @@ export function getPlugins(): EnmityPlugin[] {
  * Get all enabled plugins
  */
 export function getEnabledPlugins(): string[] {
-  return enabled;
+  return enabled.sort();
 }
 
 /**
