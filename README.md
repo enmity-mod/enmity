@@ -1,5 +1,5 @@
 <div align='center'>
-   <img src='https://repo.enmity.app/banner.png' />
+   <img src='https://files.catbox.moe/tl5gqh.png' />
 </div>
 
 ---
