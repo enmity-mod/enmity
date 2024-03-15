@@ -91,7 +91,7 @@ export function getEnabledPlugins(): string[] {
  * Get all disabled plugins
  */
 export function getDisabledPlugins(): string[] {
-  return disabled;
+  return disabled.sort();
 }
 
 /**
