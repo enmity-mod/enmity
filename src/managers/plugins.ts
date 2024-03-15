@@ -77,7 +77,7 @@ export function getPlugin(name): EnmityPlugin {
  * Get all plugins
  */
 export function getPlugins(): EnmityPlugin[] {
-  return plugins;
+  return plugins.sort();
 }
 
 /**
