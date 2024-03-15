@@ -8,4 +8,4 @@ For debugging, you can use `Console.app` on macOS connected to your device, sear
 
 A proper cross-platform debugger will be available in a little bit, it'll allow for proper code testing, auto-completion for the Enmity api and much more.
 
-Documentation for the API is available on [docs.enmity.app](https://docs.enmity.app).
+<!-- Documentation for the API is available on [docs.enmity.app](https://docs.enmity.app). -->

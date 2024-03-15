@@ -11,24 +11,24 @@ import * as Patcher from '@patcher';
 import * as Modules from '@metro';
 
 export const API = {
-  modules: Modules,
-  themer: Themes,
-  patcher: Patcher,
-  version: '__VERSION__',
-  plugins: Plugins,
-  clyde: Clyde,
-  commands: Commands,
-  utilities: Utilities,
-  settings: Settings,
-  components: Components,
-  native: Native,
-  assets: Assets
+	modules: Modules,
+	themer: Themes,
+	patcher: Patcher,
+	version: '__VERSION__',
+	plugins: Plugins,
+	clyde: Clyde,
+	commands: Commands,
+	utilities: Utilities,
+	settings: Settings,
+	components: Components,
+	native: Native,
+	assets: Assets
 };
 
 export function initialize(): void {
-  window.enmity = API;
+	window.enmity = API;
 
-  Components.Image.prefetch('https://files.enmity.app/icon.png');
+	Components.Image.prefetch('https://enmity-mod.github.io/assets/icon.png');
 }
 
 export default { API, initialize };

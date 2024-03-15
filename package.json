@@ -15,7 +15,7 @@
 	"bugs": {
 		"url": "https://github.com/enmity-mod/enmity/issues"
 	},
-	"homepage": "https://enmity.app",
+	"homepage": "https://enmity.unbound.rip",
 	"devDependencies": {
 		"@rollup/plugin-node-resolve": "^15.2.3",
 		"@rollup/plugin-replace": "^5.0.5",
