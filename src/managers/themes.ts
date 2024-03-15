@@ -34,7 +34,7 @@ export function getThemeByName(name: string): ThemeType {
  * List registered themes
  */
 export function listThemes(): Theme[] {
-  return themes;
+  return themes.sort();
 }
 
 /**
