@@ -45,7 +45,7 @@ export default function Page({ settings }) {
 
   // @ts-ignore
   const Runtime = HermesInternal.getRuntimeProperties();
-  const Plugins = getPlugins().map(p => p.name);
+  const Plugins = getPlugins().map(p => p.name).sort();
   const Themes = listThemes().map(t => t.name);
 
   return <ScrollView>

@@ -8,14 +8,14 @@ export default [
     description: 'List available themes',
 
     execute: (_, message) => {
-      const themes = Themes.listThemes();
+      const themes = Themes.listThemes().sort();
 
       if (themes.length === 0) {
         sendReply(message.channel.id, 'No themes installed.');
         return;
       }
 
-      sendReply(message.channel.id, `**Installed themes (${themes.length})**: ${themes.map(t => t.name).join(', ')}.sort()`);
+      sendReply(message.channel.id, `**Installed themes (${themes.length})**: ${themes.map(t => t.name).join(', ')}`);
     },
   },
   {
