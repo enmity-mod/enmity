@@ -258,6 +258,7 @@ getters.map(({ id, map, submodule }, index) => {
     }
 });
 
+const origToString = Function.prototype.toString;
 export function getModule(filter, { all = false, traverse = false, defaultExport = true } = {}) {
     if (typeof filter !== 'function') return null;
 
@@ -279,20 +280,9 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
         const previous = common.Moment?.locale();
 
         if (!modules[id].isInitialized) try {
-            const orig = Function.prototype.toString;
-            Object.defineProperty(Function.prototype, 'toString', {
-                value: orig,
-                configurable: true,
-                writable: false
-            });
-
             __r(id as any as number);
 
-            Object.defineProperty(Function.prototype, 'toString', {
-                value: orig,
-                configurable: true,
-                writable: true
-            });
+            Function.prototype.toString = origToString;
         } catch (e) {
             blacklist.push(id);
             continue;
