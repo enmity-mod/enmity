@@ -280,7 +280,7 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
         const previous = common.Moment?.locale();
 
         if (!modules[id].isInitialized) try {
-            if (parseInt(window['nativeModuleProxy'].InfoDictionaryManager.Build) <= 56811) {
+            if (parseInt(window['nativeModuleProxy'].InfoDictionaryManager.Version) < 223) {
                 const orig = Function.prototype.toString;
                 Object.defineProperty(Function.prototype, 'toString', {
                     value: orig,
