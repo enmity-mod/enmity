@@ -151,6 +151,7 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                                 setEnabled(value);
                                 Toasts.open({
                                     content: `${dataName} has been ${value ? 'enabled' : 'disabled'}.`,
+                                    source: getIDByName('Check')
                                 });
                 
                                 if (value) {
