@@ -284,7 +284,7 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
             Object.defineProperty(Function.prototype, 'toString', {
                 value: orig,
                 configurable: true,
-                writable: false
+                writable: true
             });
 
             __r(id as any as number);
