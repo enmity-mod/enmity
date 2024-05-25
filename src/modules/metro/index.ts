@@ -280,26 +280,15 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
         const previous = common.Moment?.locale();
 
         if (!modules[id].isInitialized) try {
-            if (parseInt(window['nativeModuleProxy'].InfoDictionaryManager.Version) < 223) {
-                const orig = Function.prototype.toString;
-                Object.defineProperty(Function.prototype, 'toString', {
-                    value: orig,
-                    configurable: true,
-                    writable: false
-                });
+            const orig = Function.prototype.toString;
 
-                __r(id as any as number);
+            __r(id as any as number);
 
-                Object.defineProperty(Function.prototype, 'toString', {
-                    value: orig,
-                    configurable: true,
-                    writable: true
-                });
-            } else {
-                __r(id as any as number);
-
-                Function.prototype.toString = origToString;
-            }
+            Object.defineProperty(Function.prototype, 'toString', {
+                value: orig,
+                configurable: true,
+                writable: true
+            });
         } catch (e) {
             blacklist.push(id);
             continue;
