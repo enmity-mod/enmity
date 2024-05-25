@@ -281,11 +281,6 @@ export function getModule(filter, { all = false, traverse = false, defaultExport
 
         if (!modules[id].isInitialized) try {
             const orig = Function.prototype.toString;
-            Object.defineProperty(Function.prototype, 'toString', {
-                value: orig,
-                configurable: true,
-                writable: true
-            });
 
             __r(id as any as number);
 
