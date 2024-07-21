@@ -6,7 +6,7 @@
 
 <div align='center'>
    <h3>Enmity</h3>
-   Main code for Enmity.
+   Enmity is a project built on top of @discord to provide plug-ins and themes along with access to internal Discord functionality.
 
    Installation guide can be found [here](https://github.com/enmity-mod/enmity/blob/main/docs/install.md).
    Developer guide can be found [here](https://github.com/enmity-mod/enmity/blob/main/docs/developers.md).
