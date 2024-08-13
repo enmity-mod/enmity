@@ -22,7 +22,11 @@ function registerCommands(caller: string, cmds: Command[]): void {
     }
 
     for (const command in cmds) {
-        const builtInCommands = Commands.getBuiltInCommands(ApplicationCommandType.Chat, true, false);
+        let builtInCommands: Command[] = Commands.getBuiltInCommands([ApplicationCommandType.Chat], true, false);
+        // Fall back to old non-array-wrapped behavior on < 243.0
+        if (!builtInCommands.length) {
+            builtInCommands = Commands.getBuiltInCommands(ApplicationCommandType.Chat, true, false);
+        }
         builtInCommands.sort((a, b) => parseInt(b.id) - parseInt(a.id));
 
         const lastCommand = builtInCommands[builtInCommands.length - 1];
