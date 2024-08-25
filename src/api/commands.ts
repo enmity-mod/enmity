@@ -61,6 +61,7 @@ export function unregisterCommands(caller: string): void {
 
 function initialize() {
     Patcher.after(Commands, 'getBuiltInCommands', (_, [type], res) => {
-        if (type === ApplicationCommandType.Chat) return [...res, ...commands];
+        if (type === ApplicationCommandType.Chat || (Array.isArray(type) && type.includes(ApplicationCommandType.Chat)))
+            return [...res, ...commands];
     });
 }
