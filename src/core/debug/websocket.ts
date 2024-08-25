@@ -1,6 +1,6 @@
 import { getIDByName } from '@api/assets';
 import { Toasts } from '@metro/common';
-import Settings from '@api/settings';
+import * as Settings from '@api/settings';
 import { getByName } from '@metro';
 
 declare const nativeLoggingHook: (message: string, level: number) => void;
@@ -87,5 +87,3 @@ export function sendMessage(message: string): void {
     socket.send(message);
   }
 }
-
-export default { initialize, sendMessage, connectWebsocket, socket };

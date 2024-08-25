@@ -1,8 +1,8 @@
 import { Settings } from '@metro/common';
-import WebSocket from '@core/debug/websocket';
-import CorePatches from '@core/patches';
-import Commands from '@core/commands';
-import API from '@api';
+import * as WebSocket from '@core/debug/websocket';
+import * as CorePatches from '@core/patches';
+import * as Commands from '@core/commands';
+import * as API from '@api';
 
 export function initialize(): void {
   WebSocket.initialize();
@@ -15,5 +15,3 @@ export function initialize(): void {
     alert("Your Enmity Tweak/IPA is out of date! Please update soon. You can ignore this warning, we will only show this once.")
   }
 }
-
-export default { initialize };

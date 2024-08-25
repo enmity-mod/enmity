@@ -37,7 +37,7 @@ export enum Type {
   After = 'after',
 }
 
-const patches: Patch[] = [];
+export const patches: Patch[] = [];
 
 function getPatchesByCaller(id: string) {
   if (!id) return [];
@@ -60,7 +60,7 @@ function getPatchesByCaller(id: string) {
   return _patches;
 }
 
-function unpatchAll(caller: string): void {
+export function unpatchAll(caller: string): void {
   const patches = getPatchesByCaller(caller);
   if (!patches.length) return;
 
@@ -240,28 +240,28 @@ function patch<F extends Fn>(caller: string, mdl: Record<string, any> | Function
   return patch.unpatch;
 }
 
-function before<
+export function before<
   M extends Record<P, Fn>,
   P extends PropOf<M>
 >(caller: string, mdl: M, func: P, callback: BeforeOverwrite<M[P]>, once: boolean = false): () => void {
   return patch(caller, mdl, func, callback, Type.Before, once);
 }
 
-function instead<
+export function instead<
   M extends Record<P, Fn>,
   P extends PropOf<M>
 >(caller: string, mdl: M, func: P, callback: InsteadOverwrite<M[P]>, once: boolean = false): () => void {
   return patch(caller, mdl, func, callback, Type.Instead, once);
 }
 
-function after<
+export function after<
   M extends Record<P, Fn>,
   P extends PropOf<M>
 >(caller: string, mdl: M, func: P, callback: AfterOverwrite<M[P]>, once: boolean = false): () => void {
   return patch(caller, mdl, func, callback, Type.After, once);
 }
 
-function create(name: string) {
+export function create(name: string) {
   return {
     getPatchesByCaller,
     before<
@@ -285,21 +285,3 @@ function create(name: string) {
     unpatchAll: () => unpatchAll(name),
   };
 }
-
-export {
-  create,
-  before,
-  instead,
-  after,
-  unpatchAll,
-  patches
-};
-
-export default {
-  create,
-  before,
-  instead,
-  after,
-  unpatchAll,
-  patches
-};

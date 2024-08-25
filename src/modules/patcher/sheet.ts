@@ -1,10 +1,10 @@
 import { getByProps } from '@metro';
 
-import patcher from '.';
+import * as patcher from '.';
 
 const Patcher = patcher.create('enmity-sheet-patcher');
 
-const patches = {};
+export const patches = {};
 
 const Opener = getByProps('openLazy');
 Patcher.before(Opener, 'openLazy', (_, [component, sheet]) => {
@@ -85,12 +85,3 @@ function validateArguments(caller: string, sheet: string, callback: (self?: any,
     throw new TypeError('third argument callback does not exist or is not of type function');
   }
 }
-
-export default {
-  patches,
-  unpatchAll,
-  instead,
-  create,
-  before,
-  after
-};

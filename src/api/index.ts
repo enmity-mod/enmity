@@ -30,5 +30,3 @@ export function initialize(): void {
 
 	Components.Image.prefetch('https://enmity-mod.github.io/assets/icon.png');
 }
-
-export default { API, initialize };

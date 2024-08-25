@@ -1,6 +1,6 @@
 import { SettingsStore } from 'enmity/api/settings';
 import { Dispatcher, Flux, React } from '@metro/common';
-import Manager from './store';
+import * as Manager from './store';
 
 interface FluxDispatch {
   file: string;
@@ -173,15 +173,3 @@ export function connectStores(component: React.ComponentType, file: string): Rea
 
   return Flux.connectStores([Manager.store], () => ({ settings: makeStore(file) }))(component);
 }
-
-export default {
-  connectComponent,
-  connectStores,
-  unsubscribe,
-  subscribe,
-  makeStore,
-  listeners,
-  toggle,
-  get,
-  set
-};

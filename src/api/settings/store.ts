@@ -49,5 +49,3 @@ const Events: Record<string, (...args) => any> = {
 export const store = new Flux.Store(Dispatcher, Events);
 
 store.addChangeListener(Lodash.debounce(() => Settings.set({ enmity: settings }), 200));
-
-export default { store, getAll, getSetting, get };

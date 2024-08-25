@@ -1,6 +1,6 @@
 import type { Asset } from 'enmity/api/assets';
 import { Assets } from '@metro/common';
-import Patcher from '@patcher';
+import * as Patcher from '@patcher';
 
 interface Assets {
   [id: string]: Asset;
@@ -44,5 +44,3 @@ export const Icons = new Proxy({}, {
     return getIDByName(name);
   }
 })
-
-export default { assets, getByName, getByID, getIDByName };

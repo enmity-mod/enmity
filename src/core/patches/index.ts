@@ -25,5 +25,3 @@ export function initialize(): void {
 
     Object.entries(patches).forEach(entry => handlePatch(...entry));
 }
-
-export default { initialize };

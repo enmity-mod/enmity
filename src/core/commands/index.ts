@@ -19,5 +19,3 @@ export function initialize(): void {
 
   registerCommands('enmity', commands);
 }
-
-export default { initialize };

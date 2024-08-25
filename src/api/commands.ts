@@ -14,7 +14,7 @@ try {
     console.error('Failed to patch commands: ', e.message);
 }
 
-function registerCommands(caller: string, cmds: Command[]): void {
+export function registerCommands(caller: string, cmds: Command[]): void {
     if (!caller || typeof caller !== 'string') {
         throw new TypeError('first argument caller must be of type string');
     } else if (!cmds || !Array.isArray(cmds)) {
@@ -50,7 +50,7 @@ function registerCommands(caller: string, cmds: Command[]): void {
     commands.push(...cmds);
 }
 
-function unregisterCommands(caller: string): void {
+export function unregisterCommands(caller: string): void {
     if (!caller || typeof caller !== 'string') {
         throw new TypeError('first argument caller must be of type string');
     }
@@ -64,5 +64,3 @@ function initialize() {
         if (type === ApplicationCommandType.Chat) return [...res, ...commands];
     });
 }
-
-export { registerCommands, unregisterCommands };

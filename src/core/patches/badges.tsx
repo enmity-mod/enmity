@@ -2,7 +2,7 @@ import { View, Image, TouchableOpacity } from '@components';
 import { BadgesDomain, Times } from '@data/constants';
 import { Toasts, Theme, React } from '@metro/common';
 import { build, version } from '@api/native';
-import { getByName, getByProps } from '@metro';
+import { getByName } from '@metro';
 import { create } from '@patcher';
 import { wrapInHooks } from '@utilities';
 

@@ -1,5 +1,5 @@
 import '@api/assets';
-import Core from '@core';
+import * as Core from '@core';
 import { Dialog } from '@metro/common';
 
 try {
