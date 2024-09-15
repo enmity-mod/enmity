@@ -34,7 +34,9 @@ export function registerCommands(caller: string, cmds: Command[]): void {
 
         cmds[command] = {
             displayName: cmd.name,
+            untranslatedName: cmd.name,
             displayDescription: cmd.description,
+            untranslatedDescription: cmd.description,
             type: ApplicationCommandType.Chat,
             inputType: ApplicationCommandInputType.BuiltIn,
             id: `${parseInt(lastCommand.id, 10) - 1}`,
