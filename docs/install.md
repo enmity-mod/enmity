@@ -27,6 +27,6 @@ You may be asked whether you want to keep or remove app extensions. Select "Remo
 > - Screensharing
 > - Sharing things to Discord from other apps
 >
-> Unfortunately, there is currently no way to get these extensions to work when sideloading AltStore so you will not be able to use any of the aforementioned features with Enmity. If you want push notifications, then consider sideloading using something else, such as Feather, KravaSign, or TrollStore if your iOS version supports it.
+> Unfortunately, there is currently no way to get these extensions to work when sideloading using AltStore, so you will not be able to use any of the aforementioned features with Enmity. If you want push notifications, then consider sideloading using something else, such as Feather, KravaSign, or TrollStore if your iOS version supports it.
 
 Wait for AltStore to finish installing Enmity, then exit AltStore. Enmity should now be on your home screen.
