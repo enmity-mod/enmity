@@ -8,7 +8,7 @@ import * as Plugins from "@managers/plugins"
 import * as Themes from "@managers/themes"
 import { reload } from '@api/native';
 import { getIDByName } from '@api/assets';
-import { isTablet } from "./modules";
+// import { isTablet } from "./modules";
 
 const { Fonts, ThemeColorMap } = Constants;
 // @ts-expect-error displayName property no longer exists on Theme
@@ -118,7 +118,7 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                         <TouchableOpacity
                             style={styles.delete}
                             onPress={() => {
-                              isTablet() && Navigation.pop();
+                              //isTablet() && Navigation.pop();
 
                               const uninstallData = () => (type === "plugin"
                                 ? Plugins.uninstallPlugin
@@ -138,7 +138,8 @@ export function Card({ data, type }: { data: Plugin | Theme, type: "plugin" | "t
                                   Toasts.open(outcomes[res]);
                                 })
 
-                                isTablet() ? setTimeout(uninstallData) : uninstallData();
+                                // isTablet() ? setTimeout(uninstallData) :
+                                uninstallData();
                             }}
                         >
                             <Image style={styles.trashIcon} source={getIDByName('ic_trash_filled_16px')} />

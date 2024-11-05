@@ -4,7 +4,7 @@ import { StyleSheet, Clipboard, Dialog, Constants, React, Toasts, Navigation } f
 import * as Plugins from "@managers/plugins";
 import * as Themes from "@managers/themes";
 import { reload } from "@api/native";
-import { isTablet } from "./modules";
+// import { isTablet } from "./modules";
 
 const { Fonts, ThemeColorMap } = Constants;
 const styles = StyleSheet.createThemedStyleSheet({
@@ -52,7 +52,7 @@ const showAlert = ({ type, url }: { type: string, url: string; }) => {
 				});
 			}
 
-			isTablet() && Navigation.pop();
+			// isTablet() && Navigation.pop();
 
 			try {
 				const installData = () => (type === "plugin"
@@ -90,7 +90,8 @@ const showAlert = ({ type, url }: { type: string, url: string; }) => {
 						}
 					});
 
-				isTablet() ? setTimeout(installData) : installData();
+				// isTablet() ? setTimeout(installData) :
+				installData();
 			} catch (e) {
 				Toasts.open({ content: e.message });
 			}
