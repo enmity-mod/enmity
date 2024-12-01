@@ -81,13 +81,13 @@ export default function ({ type }: { type: "plugin" | "theme" }) {
   }) : entries;
 
   return (<>
-  {Number(version) <= 256.1 && (
-      <Search
-        style={styles.search}
-        placeholder={`Search ${isPlugin ? "Plugins" : "Themes"}...`}
-        onChangeText={(v) => setSearch(v)}
-      />
-    )}
+  {Search ? (
+    <Search
+      style={styles.search}
+      placeholder={`Search ${isPlugin ? "Plugins" : "Themes"}...`}
+      onChangeText={(v) => setSearch(v)}
+    />
+  ) : null}
     <View style={styles.container}>
       <ScrollView
         style={styles.container}
