@@ -5,6 +5,7 @@ import * as Plugins from "@managers/plugins";
 import * as Themes from "@managers/themes";
 import { Card } from "./Card";
 import { getIDByName } from "@api/assets";
+import { version } from "@api/native";
 
 const { Fonts, ThemeColorMap } = Constants;
 const styles = StyleSheet.createThemedStyleSheet({
@@ -80,11 +81,13 @@ export default function ({ type }: { type: "plugin" | "theme" }) {
   }) : entries;
 
   return (<>
-    <Search
-      style={styles.search}
-      placeholder={`Search ${isPlugin ? "Plugins" : "Themes"}...`}
-      onChangeText={v => setSearch(v)}
-    />
+  {Number(version) <= 256.1 && (
+      <Search
+        style={styles.search}
+        placeholder={`Search ${isPlugin ? "Plugins" : "Themes"}...`}
+        onChangeText={(v) => setSearch(v)}
+      />
+    )}
     <View style={styles.container}>
       <ScrollView
         style={styles.container}
