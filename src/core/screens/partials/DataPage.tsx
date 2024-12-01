@@ -80,11 +80,14 @@ export default function ({ type }: { type: "plugin" | "theme" }) {
   }) : entries;
 
   return (<>
-    <Search
-      style={styles.search}
-      placeholder={`Search ${isPlugin ? "Plugins" : "Themes"}...`}
-      onChangeText={v => setSearch(v)}
-    />
+    {Search &&
+      <Search
+        style={styles.search}
+        placeholder={`Search ${isPlugin ? "Plugins" : "Themes"}...`}
+        onChangeText={v => setSearch(v)}
+      />
+    }
+   
     <View style={styles.container}>
       <ScrollView
         style={styles.container}
